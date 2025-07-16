@@ -4,15 +4,11 @@
     align-items: center;
     padding: 0.5rem 1rem;
 
-    .boton-estudiante {
-        background-color: #007bff;
-        color: #f3f8ff;
-        border-radius: 10px;
-        padding: 10px;
-        cursor: pointer;
+    h1 {
+        font-size: 40px;
     }
 
-    .usuario {
-        font-weight: 700;
+    h2 {
+        font-size: 30px;
     }
 }
