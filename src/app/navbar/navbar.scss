@@ -1,25 +1,33 @@
 header {
+    margin: 10px;
     nav {
         display: flex;
         justify-content: space-around;
         align-items: center;
 
-        h2 {
-            font-size: 40px;
-        }
+        .navbar {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 2px solid green;
+            padding: 10px;
 
-        .contenedor-menu {
+            h2 {
+                font-size: 40px;
+            }
+
             ul {
                 display: flex;
-                flex-direction: row;
+                flex-direction: column;
                 justify-content: center;
                 align-items: center;
-                gap: 2rem;
-                
+                gap: 1rem;
+                padding: 0;
+
                 li {
                     list-style: none;
                 }
-                }
+            }
         }
     }
 }
