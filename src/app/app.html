@@ -1,1 +1,8 @@
-<app-home></app-home>
+<div class="container">
+  <app-toolbar class="toolbar"></app-toolbar>
+  <app-navbar class="navbar"></app-navbar>
+  <div class="content">
+    {{ students | json }}
+    <app-students-table [students]="students"></app-students-table>
+  </div>
+</div>
