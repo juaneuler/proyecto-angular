@@ -1,0 +1,18 @@
+.toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 1rem;
+
+    .boton-estudiante {
+        background-color: #007bff;
+        color: #f3f8ff;
+        border-radius: 10px;
+        padding: 10px;
+        cursor: pointer;
+    }
+
+    .usuario {
+        font-weight: 700;
+    }
+}

@@ -1,1 +1,11 @@
-<p>student works!</p>
+<!-- Usamos el ngIf para mostrar la persona si existe, y sino, tira error -->
+<div *ngIf="Persona; else otro" class="estudiante-tarjeta">
+    <p>Nombre: {{ Persona.nombre }}</p>
+    <p>Apellido: {{ Persona.apellido }}</p>
+    <p>Edad: {{ Persona.edad }}</p>
+    <p>Dirección: {{ Persona.direccion }}</p>
+</div>
+
+<ng-template #otro>
+    <p>No se encontró el usuario. Por favor, intente de nuevo más tarde</p>
+</ng-template>

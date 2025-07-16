@@ -1,0 +1,25 @@
+header {
+    nav {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+
+        h2 {
+            font-size: 40px;
+        }
+
+        .contenedor-menu {
+            ul {
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+                align-items: center;
+                gap: 2rem;
+                
+                li {
+                    list-style: none;
+                }
+                }
+        }
+    }
+}

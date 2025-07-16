@@ -1,0 +1,20 @@
+.home-grid {
+    display: grid;
+    grid-template-areas: 
+    "navbar navbar"
+    "toolbar toolbar"
+    "student student";
+    grid-gap: 1rem;
+}
+
+app-navbar {
+    grid-area: navbar;
+}
+
+app-toolbar {
+    grid-area: toolbar;
+}
+
+app-student {
+    grid-area: student;
+}

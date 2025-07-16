@@ -1,0 +1,3 @@
+<input [(ngModel)]="nuevoNombre" />
+<button (click)="guardar()">Guardar</button>
+<span *ngIf="empleado.nombre === nuevoNombre"> {{ empleado.nombre }}</span>

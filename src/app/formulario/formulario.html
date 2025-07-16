@@ -1,0 +1,32 @@
+<form [formGroup]="formulario" (ngSubmit)="enviar()">
+    <label>
+        Nombre:
+        <input formControlName="nombre" />
+        <span *ngIf="formulario.get('nombre')?.invalid && formulario.get('nombre')?.touched">
+            El nombre debe tener al menos 3 caracteres!
+        </span>
+    </label>
+    <br />
+    <label>
+        Apellido:
+        <input formControlName="apellido" />
+        <span *ngIf="formulario.get('apellido')?.invalid && formulario.get('apellido')?.touched">
+            El apellido debe tener al menos 3 caracteres!
+        </span>
+    </label>
+    <br />
+    <label>
+        Ocupación:
+        <input formControlName="ocupacion" />
+        <span *ngIf="formulario.get('ocupacion')?.invalid && formulario.get('ocupacion')?.touched">
+            La ocupación debe tener al menos 3 caracteres!
+        </span>
+    </label>
+    <br />
+    <button type="submit" [disabled]="formulario.invalid">Enviar</button>
+</form>
+
+<div *ngIf="datosGuardados">
+    <h2>Datos enviados:</h2>
+    <p>{{ datosGuardados | json }}</p>
+</div>
