@@ -27,6 +27,12 @@ header {
 
                 li {
                     list-style: none;
+                    cursor: pointer;
+                    transition: color 1s;
+
+                    &:hover {
+                        color: blue;
+                    }
                 }
             }
         }

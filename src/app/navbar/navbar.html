@@ -1,12 +1,12 @@
 <header>
     <nav>
         <div class="navbar">
-            <h2 appBigtitle>Acciones</h2>
+            <h2 appBigtitle>Lista de acciones</h2>
             <ul>
-                <li>Ver lista estudiantes</li>
-                <li>Agregar</li>
-                <li>Eliminar</li>
-                <li>Modificar</li>
+                <li (click)="navigate('students')">Ver lista</li>
+                <li (click)="navigate('add')">Agregar estudiante</li>
+                <li (click)="navigate('delete')">Eliminar estudiante</li>
+                <li (click)="navigate('edit')">Modificar datos</li>
             </ul>
         </div>
     </nav>
