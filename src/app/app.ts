@@ -5,10 +5,11 @@ import { Student } from '../shared/entities';
 import { Navbar } from './navbar/navbar';
 import { Toolbar } from './toolbar/toolbar';
 import { StudentsTable } from "./students-table/students-table";
+import { AddForm } from "./add-form/add-form";
 
 @Component({
   selector: 'app-root',
-  imports: [CommonModule, Navbar, Toolbar, StudentsTable],
+  imports: [CommonModule, Navbar, Toolbar, StudentsTable, AddForm],
   templateUrl: './app.html',
   styleUrl: './app.scss',
 })
@@ -21,5 +22,9 @@ export class App implements OnInit {
     this.http.get<Student[]>('/mocks/students.json').subscribe((data) => {
       this.students = data;
     });
+  }
+
+  addStudent(student: Student) {
+    this.students = [...this.students, student]
   }
 }
