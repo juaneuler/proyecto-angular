@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
+import { Bigtitle } from '../../shared/directives/bigtitle';
 
 @Component({
   selector: 'app-navbar',
-  imports: [],
+  imports: [Bigtitle],
   templateUrl: './navbar.html',
   styleUrl: './navbar.scss'
 })
