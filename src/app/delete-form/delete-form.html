@@ -1,0 +1,27 @@
+<div class="delete-form">
+    <h2>Eliminar Estudiante</h2>
+    <form [formGroup]="studentForm" (ngSubmit)="onDelete()">
+        <div class="form-group">
+            <label for="dni">DNI:</label>
+            <input type="text" id="dni" formControlName="dni">
+            <div *ngIf="studentForm.get('dni')?.invalid && studentForm.get('dni')?.touched" class="error">
+               Ingresar el número de DNI es requerido
+            </div>
+        </div>
+
+
+        <ng-template #noStudent>
+            <div class="error">No hay un estudiante anotado con ese DNI</div>
+        </ng-template>
+
+        <div class="form-group">
+            <label for="descripcion">Motivo de la baja:</label>
+            <input type="text" id="descripcion" formControlName="descripcion">
+            <div *ngIf="studentForm.get('descripcion')?.invalid && studentForm.get('descripcion')?.touched"
+                class="error">
+                Ingresar el motivo por el cual se da de baja es requerido
+            </div>
+        </div>
+
+        <button [disabled]="studentForm.invalid" type="submit" class="boton-borrar">Eliminar Estudiante</button>
+    </form>
