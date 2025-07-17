@@ -2,7 +2,7 @@
   <app-toolbar class="toolbar"></app-toolbar>
   <app-navbar class="navbar"></app-navbar>
   <div class="content">
-    {{ students | json }}
     <app-students-table [students]="students"></app-students-table>
   </div>
+  <app-add-form (studentAdded)="addStudent($event)"></app-add-form>
 </div>
