@@ -1,29 +1,26 @@
 <table mat-table [dataSource]="students" class="mat-elevation-z8">
 
-  <!--- Note that these columns can be defined in any order.
-        The actual rendered columns are set as a property on the row definition" -->
-
-  <!-- Full Name Column -->
+  <!-- Nombre completo -->
   <ng-container matColumnDef="fullname">
-    <th mat-header-cell *matHeaderCellDef> Full Name </th>
+    <th mat-header-cell *matHeaderCellDef> Nombre Completo </th>
     <td mat-cell *matCellDef="let element"> {{element.name | fullname:element.surname }} </td>
   </ng-container>
 
-  <!-- Age Column -->
+  <!-- Edad -->
   <ng-container matColumnDef="age">
-    <th mat-header-cell *matHeaderCellDef> Age </th>
+    <th mat-header-cell *matHeaderCellDef> Edad </th>
     <td mat-cell *matCellDef="let element"> {{element.age}} </td>
   </ng-container>
 
-  <!-- DNI Column -->
+  <!-- DNI -->
   <ng-container matColumnDef="dni">
     <th mat-header-cell *matHeaderCellDef> DNI </th>
     <td mat-cell *matCellDef="let element"> {{element.dni}} </td>
   </ng-container>
 
-  <!-- Average Column -->
+  <!-- Promedio -->
   <ng-container matColumnDef="average">
-    <th mat-header-cell *matHeaderCellDef> Average </th>
+    <th mat-header-cell *matHeaderCellDef> Promedio </th>
     <td mat-cell *matCellDef="let element"> {{element.average}} </td>
   </ng-container>
 
