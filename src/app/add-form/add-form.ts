@@ -1,16 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import {
-  ReactiveFormsModule,
-  FormBuilder,
-  FormGroup,
-  Validators,
-} from '@angular/forms';
+import {ReactiveFormsModule, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import { Student } from '../../shared/entities';
+import { Bigtitle } from '../../shared/directives/bigtitle';
 
 @Component({
   selector: 'app-add-form',
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, Bigtitle],
   templateUrl: './add-form.html',
   styleUrl: './add-form.scss',
 })
