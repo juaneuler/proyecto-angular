@@ -1,8 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import {ReactiveFormsModule, FormBuilder, FormGroup, Validators} from '@angular/forms';
+import { Component, EventEmitter, OnInit, Output, inject } from '@angular/core';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Student } from '../../shared/entities';
 import { Bigtitle } from '../../shared/directives/bigtitle';
+import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-add-form',
@@ -11,7 +12,10 @@ import { Bigtitle } from '../../shared/directives/bigtitle';
   styleUrl: './add-form.scss',
 })
 export class AddForm implements OnInit {
+  private _snackBar = inject(MatSnackBar);
+
   studentForm!: FormGroup;
+
   @Output() studentAdded = new EventEmitter<Student>();
 
   constructor(private fb: FormBuilder) {}
@@ -32,9 +36,23 @@ export class AddForm implements OnInit {
   onSubmit() {
     console.log('Formulario enviado!');
     this.studentAdded.emit(this.studentForm.value as Student);
+    this.showAddedSuccesfully();
+    this.onReset();
   }
 
   onReset() {
     this.studentForm.reset();
+  }
+
+  horizontalPosition: MatSnackBarHorizontalPosition = 'center';
+  verticalPosition: MatSnackBarVerticalPosition = 'top';
+
+  showAddedSuccesfully() {
+    const message = 'Estudiante agregado exitosamente!';
+    const action = 'Cerrar';
+    this._snackBar.open(message, action, {
+      horizontalPosition: this.horizontalPosition,
+      verticalPosition: this.verticalPosition,
+    });
   }
 }
