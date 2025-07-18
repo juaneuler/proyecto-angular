@@ -1,6 +1,8 @@
 <div class="delete-form">
     <h2 appBigtitle>Eliminar Estudiante</h2>
+
     <form [formGroup]="studentForm" (ngSubmit)="onDelete()">
+        
         <div class="form-group">
             <label for="dni">DNI:</label>
             <input type="text" id="dni" formControlName="dni">
