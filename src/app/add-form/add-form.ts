@@ -33,11 +33,19 @@ export class AddForm implements OnInit {
     });
   }
 
+  loading = false;
+
   onSubmit() {
-    console.log('Formulario enviado!');
-    this.studentAdded.emit(this.studentForm.value as Student);
-    this.showAddedSuccesfully();
-    this.onReset();
+    if (this.studentForm.invalid) return;
+
+    this.loading = true;
+
+    setTimeout(() => {
+      this.studentAdded.emit(this.studentForm.value as Student);
+      this.showAddedSuccesfully();
+      this.onReset();
+      this.loading = false;
+    }, 1000);
   }
 
   onReset() {

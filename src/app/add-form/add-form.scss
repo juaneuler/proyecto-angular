@@ -54,6 +54,10 @@
 
         .boton-submit {
             background-color: #1db954;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.5rem;
 
             &:hover:not(:disabled) {
                 background-color: #2e7d32;
