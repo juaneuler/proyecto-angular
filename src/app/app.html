@@ -11,6 +11,9 @@
     <ng-container *ngIf="activeSection === 'delete'">
       <app-delete-form (studentDeleted)="deleteStudent($event)"></app-delete-form>
     </ng-container>
+    <ng-container *ngIf="activeSection === 'edit'">
+      <app-edit-form [students]="students" (studentEdited)="editStudent($event)"></app-edit-form>
+    </ng-container>
   </div>
 
 </div>

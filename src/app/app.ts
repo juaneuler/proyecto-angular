@@ -7,10 +7,11 @@ import { Toolbar } from './toolbar/toolbar';
 import { StudentsTable } from "./students-table/students-table";
 import { AddForm } from "./add-form/add-form";
 import { DeleteForm } from './delete-form/delete-form';
+import { EditForm } from "./edit-form/edit-form";
 
 @Component({
   selector: 'app-root',
-  imports: [CommonModule, Navbar, Toolbar, StudentsTable, AddForm, DeleteForm],
+  imports: [CommonModule, Navbar, Toolbar, StudentsTable, AddForm, DeleteForm, EditForm],
   templateUrl: './app.html',
   styleUrl: './app.scss',
 })
@@ -27,11 +28,19 @@ export class App implements OnInit {
   }
 
   addStudent(student: Student) {
-    this.students = [...this.students, student]
+    this.students = [...this.students, {...student, dni: Number(student.dni)}]
   }
 
   deleteStudent(dni: string) {
     const studentsList = this.students = this.students.filter(student => student.dni.toString() !== dni);
     this.students = [...studentsList];
   }
+
+  editStudent(editedStudent: Student) {
+  this.students = this.students.map(student =>
+    student.dni === Number(editedStudent.dni)
+      ? { ...editedStudent, dni: Number(editedStudent.dni) }
+      : student
+  );
+}
 }
