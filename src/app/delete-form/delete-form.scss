@@ -47,12 +47,17 @@
 
         .boton-borrar {
             padding: 0.6rem 1.2rem;
-            background-color: #d32f2f;
+            background-color: #e4405f;
             color: white;
             border: none;
             border-radius: 4px;
             margin-top: 1rem;
             cursor: pointer;
+            transition: background-color 0.3s ease;
+
+            &:hover:not(:disabled) {
+                background-color: #d32f2f;
+            }
 
             &:disabled {
                 background-color: #ccc;

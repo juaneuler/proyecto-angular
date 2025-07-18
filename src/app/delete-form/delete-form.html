@@ -1,5 +1,5 @@
 <div class="delete-form">
-    <h2>Eliminar Estudiante</h2>
+    <h2 appBigtitle>Eliminar Estudiante</h2>
     <form [formGroup]="studentForm" (ngSubmit)="onDelete()">
         <div class="form-group">
             <label for="dni">DNI:</label>
@@ -8,7 +8,6 @@
                Ingresar el número de DNI es requerido
             </div>
         </div>
-
 
         <ng-template #noStudent>
             <div class="error">No hay un estudiante anotado con ese DNI</div>
