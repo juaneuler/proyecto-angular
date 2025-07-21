@@ -5,7 +5,7 @@
         
         <div class="form-group">
             <label for="dni">DNI:</label>
-            <input type="text" id="dni" formControlName="dni">
+            <input type="number" id="dni" formControlName="dni" min="0" step="1">
             <div *ngIf="studentForm.get('dni')?.invalid && studentForm.get('dni')?.touched" class="error">
                Ingresar el número de DNI es requerido
             </div>
