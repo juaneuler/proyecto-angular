@@ -33,7 +33,7 @@ export class App implements OnInit {
   }
 
   deleteStudent(dni: string) {
-  const index = this.students.findIndex(student => student.dni.toString() === dni);
+  const index = this.students.findIndex(student => student.dni === Number(dni));
 
   if (index !== -1) {
     this.students.splice(index, 1);
