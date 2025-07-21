@@ -5,9 +5,9 @@
 
         <div class="form-group">
             <label for="dni">DNI:</label>
-            <input type="text" id="dni" formControlName="dni" placeholder="Ingrese su DNI">
+            <input type="number" id="dni" formControlName="dni" placeholder="Ingrese su DNI" min="0" step="1">
             <div *ngIf="studentForm.get('dni')?.invalid && studentForm.get('dni')?.touched" class="error">
-                Ingresar el número de DNI es requerido
+                Ingresar el número de DNI es requerido, y debe tener 7 u 8 dígitos
             </div>
         </div>
 

@@ -22,7 +22,10 @@ export class AddForm implements OnInit {
 
   ngOnInit() {
     this.studentForm = this.fb.group({
-      dni: ['', Validators.required],
+      dni: ['', [
+    Validators.required,
+    Validators.pattern(/^[1-9]\d{6,7}$/) // Esto lo agrego para que en DNI ingresado tenga si o si entre 7 y 8 dígitos, y que no empiece con 0
+    ]],
       name: ['', Validators.required],
       surname: ['', Validators.required],
       age: ['', [Validators.required, Validators.min(0)]],
