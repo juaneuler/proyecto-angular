@@ -32,13 +32,22 @@ export class EditForm implements OnInit {
 
   ngOnInit(): void {
     this.searchForm = new FormGroup({
-      dni: new FormControl('', Validators.required),
+      dni: new FormControl('', [ Validators.required, Validators.pattern(/^[1-9]\d{6,7}$/)]),
     });
 
     this.editForm = this.fb.group({
       name: ['', Validators.required],
       surname: ['', Validators.required],
       age: ['', [Validators.required, Validators.min(0)]],
+      average: [
+    '',
+    [
+      Validators.required,
+      Validators.min(0),
+      Validators.max(10),
+      Validators.pattern(/^\d+(\.\d{1,2})?$/) // Esto es para que solo se puedan poner hasta 2 decimales
+    ]
+  ]
     });
   }
 
@@ -52,6 +61,7 @@ export class EditForm implements OnInit {
         name: student.name,
         surname: student.surname,
         age: student.age,
+        average: student.average
       });
     } else {
       this._snackBar.open('Estudiante no encontrado.', 'Cerrar', {
