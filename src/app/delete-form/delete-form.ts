@@ -22,7 +22,7 @@ export class DeleteForm implements OnInit {
 
   ngOnInit(): void {
     this.studentForm = new FormGroup({
-      dni: new FormControl('', [Validators.required, Validators.pattern(/^[1-9]\d{6,7}$/),]),
+      dni: new FormControl('', Validators.required),
       descripcion: new FormControl('', Validators.required),
     });
   }
