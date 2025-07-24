@@ -2,12 +2,17 @@
     <h2 appBigtitle>Eliminar Estudiante</h2>
 
     <form [formGroup]="studentForm" (ngSubmit)="onDelete()">
-        
+
         <div class="form-group">
             <label for="dni">DNI:</label>
             <input type="number" id="dni" formControlName="dni" min="0" step="1">
-            <div *ngIf="studentForm.get('dni')?.invalid && studentForm.get('dni')?.touched" class="error">
-               Ingresar el número de DNI es requerido
+            <div *ngIf="studentForm.get('dni')?.touched && studentForm.get('dni')?.invalid" class="error">
+                <div *ngIf="studentForm.get('dni')?.errors?.['required']">
+                    Ingresar el número de DNI es obligatorio.
+                </div>
+                <div *ngIf="studentForm.get('dni')?.errors?.['pattern']">
+                    El DNI debe tener entre 7 y 8 dígitos y no puede comenzar con 0.
+                </div>
             </div>
         </div>
 

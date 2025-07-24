@@ -21,9 +21,9 @@ export class DeleteForm implements OnInit {
   constructor(private fb: FormBuilder) {}
 
   ngOnInit(): void {
-    this.studentForm = new FormGroup({
-      dni: new FormControl('', Validators.required),
-      descripcion: new FormControl('', Validators.required),
+    this.studentForm = this.fb.group({
+      dni: ['', [Validators.required, Validators.pattern(/^[1-9]\d{6,7}$/)]],
+      descripcion: ['', Validators.required],
     });
   }
 
