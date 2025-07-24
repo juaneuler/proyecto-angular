@@ -3,7 +3,7 @@ import { Component, EventEmitter, OnInit, Output, inject } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Student } from '../../shared/entities';
 import { Bigtitle } from '../../shared/directives/bigtitle';
-import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
+import { SnackbarNotification } from '../../shared/services/snackbar-notification';
 
 @Component({
   selector: 'app-add-form',
@@ -12,7 +12,7 @@ import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition
   styleUrl: './add-form.scss',
 })
 export class AddForm implements OnInit {
-  private _snackBar = inject(MatSnackBar);
+  private snackbarNotification = inject(SnackbarNotification);
 
   studentForm!: FormGroup;
 
@@ -28,11 +28,8 @@ export class AddForm implements OnInit {
     ]],
       name: ['', Validators.required],
       surname: ['', Validators.required],
-      age: ['', [Validators.required, Validators.min(0)]],
-      average: [
-        '',
-        [Validators.required, Validators.min(0), Validators.max(10)],
-      ],
+      age: ['', [Validators.required, Validators.min(1), Validators.pattern(/^\d+$/)]],
+      average: ['', [Validators.required, Validators.min(0.1), Validators.max(10)]],
     });
   }
 
@@ -55,15 +52,7 @@ export class AddForm implements OnInit {
     this.studentForm.reset();
   }
 
-  horizontalPosition: MatSnackBarHorizontalPosition = 'center';
-  verticalPosition: MatSnackBarVerticalPosition = 'top';
-
   showAddedSuccesfully() {
-    const message = 'Estudiante agregado exitosamente!';
-    const action = 'Cerrar';
-    this._snackBar.open(message, action, {
-      horizontalPosition: this.horizontalPosition,
-      verticalPosition: this.verticalPosition,
-    });
+    this.snackbarNotification.success('Estudiante agregado exitosamente!');
   }
 }
