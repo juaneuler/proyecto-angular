@@ -1,12 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
-import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { Student } from '../../shared/entities';
 import { Bigtitle } from '../../shared/directives/bigtitle';
+import { SnackbarNotification } from '../../shared/services/snackbar-notification';
 
 @Component({
   selector: 'app-edit-form',
@@ -16,7 +16,9 @@ import { Bigtitle } from '../../shared/directives/bigtitle';
 })
 
 export class EditForm implements OnInit {
-  private _snackBar = inject(MatSnackBar);
+
+  private snackbarNotification = inject(SnackbarNotification);
+
   @Output() studentEdited = new EventEmitter<Student>();
 
   searchForm!: FormGroup;
@@ -24,9 +26,6 @@ export class EditForm implements OnInit {
   selectedStudent: Student | null = null;
 
   @Input() students: Student[] = [];
-
-  horizontalPosition: MatSnackBarHorizontalPosition = 'center';
-  verticalPosition: MatSnackBarVerticalPosition = 'top';
 
   constructor(private fb: FormBuilder) {}
 
@@ -64,10 +63,7 @@ export class EditForm implements OnInit {
         average: student.average
       });
     } else {
-      this._snackBar.open('Estudiante no encontrado.', 'Cerrar', {
-        horizontalPosition: this.horizontalPosition,
-        verticalPosition: this.verticalPosition,
-      });
+      this.snackbarNotification.error('Estudiante no encontrado.');
       this.selectedStudent = null;
     }
   }
@@ -80,11 +76,7 @@ export class EditForm implements OnInit {
       };
 
       this.studentEdited.emit(editedStudent);
-      this._snackBar.open('Estudiante editado con éxito!', 'Cerrar', {
-        horizontalPosition: this.horizontalPosition,
-        verticalPosition: this.verticalPosition,
-      });
-
+      this.snackbarNotification.success('Estudiante editado con éxito!');
       this.onReset();
     }
   }
