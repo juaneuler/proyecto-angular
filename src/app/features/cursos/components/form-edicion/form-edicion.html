@@ -1,0 +1,57 @@
+<div class="edit-form">
+  <h2 appBigtitle>Editar Curso</h2>
+
+  <form [formGroup]="searchForm" (ngSubmit)="onSearch()" class="form">
+    <div class="form-group">
+      <label for="code">Buscar por Código:</label>
+      <input type="text" id="code" formControlName="code" placeholder="Ingrese el código del curso">
+      <div *ngIf="searchForm.get('code')?.touched && searchForm.get('code')?.invalid" class="error">
+        <div *ngIf="searchForm.get('code')?.hasError('required')">El código es obligatorio.</div>
+        <div *ngIf="searchForm.get('code')?.hasError('minlength') || searchForm.get('code')?.hasError('maxlength')">
+          El código debe tener entre 3 y 6 caracteres.
+        </div>
+      </div>
+    </div>
+
+    <button type="submit" [disabled]="searchForm.invalid" class="boton-submit">Buscar</button>
+    <button type="button" (click)="onReset()" class="boton-reset">Limpiar</button>
+    <a [routerLink]="['/', routes.Cursos]" class="boton-volver">Volver a la lista</a>
+  </form>
+
+  <hr *ngIf="selectedCourse" />
+
+  <!-- Formulario de edición de curso -->
+  <form *ngIf="selectedCourse" [formGroup]="editForm" (ngSubmit)="onEdit()" class="form">
+    <div class="form-group">
+      <label for="name">Nombre:</label>
+      <input type="text" id="name" formControlName="name" placeholder="Editar nombre del curso">
+      <div *ngIf="editForm.get('name')?.touched && editForm.get('name')?.invalid" class="error">
+        El nombre es obligatorio.
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="code">Código:</label>
+      <input type="text" id="code" formControlName="code" placeholder="Ej: NG105">
+      <div *ngIf="editForm.get('code')?.touched && editForm.get('code')?.invalid" class="error">
+        El código es obligatorio.
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="credits">Créditos:</label>
+      <input type="number" id="credits" formControlName="credits" min="1" max="10" step="1"
+        placeholder="Cantidad de créditos">
+      <div *ngIf="editForm.get('credits')?.touched && editForm.get('credits')?.invalid" class="error">
+        <div *ngIf="editForm.get('credits')?.hasError('required')">Los créditos son obligatorios.</div>
+        <div *ngIf="editForm.get('credits')?.hasError('min') || editForm.get('credits')?.hasError('max')">
+          El valor debe estar entre 1 y 10.
+        </div>
+      </div>
+    </div>
+
+    <button type="submit" [disabled]="editForm.invalid" class="boton-submit">Guardar Cambios</button>
+    <button type="button" (click)="onReset()" class="boton-reset">Cancelar</button>
+    <a [routerLink]="['/', routes.Cursos]" class="boton-volver">Volver a la lista</a>
+  </form>
+</div>
