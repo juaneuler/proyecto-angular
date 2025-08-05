@@ -1,16 +1,14 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component } from '@angular/core';
+import { RouterModule } from '@angular/router';
 import { Bigtitle } from '../../shared/directives/bigtitle';
+import { AppRoutes } from '../../shared/enums/routes';
 
 @Component({
   selector: 'app-navbar',
-  imports: [Bigtitle],
+  imports: [Bigtitle, RouterModule],
   templateUrl: './navbar.html',
   styleUrl: './navbar.scss',
 })
 export class Navbar {
-  @Output() activeSection = new EventEmitter<string>();
-
-  navigate(section: string) {
-    this.activeSection.emit(section);
-  }
+  readonly AppRoutes = AppRoutes;
 }

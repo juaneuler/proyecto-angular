@@ -1,5 +1,6 @@
 header {
     margin: 10px;
+
     nav {
         display: flex;
         justify-content: space-around;
@@ -27,11 +28,30 @@ header {
 
                 li {
                     list-style: none;
+                }
+
+                a {
                     cursor: pointer;
-                    transition: color 1s;
+                    color: white;
+                    background-color: #007bff;
+                    text-decoration: none;
+                    padding: 0.6rem 1.2rem;
+                    border-radius: 4px;
+                    display: inline-block;
+                    transition: background-color 0.3s ease, color 0.3s ease;
+                    width: 140px;
+                    text-align: center;
+                    box-sizing: border-box;
 
                     &:hover {
-                        color: #007bff;
+                        background-color: #0056b3;
+                        color: white;
+                        text-decoration: none;
+                    }
+
+                    &:focus {
+                        outline: 2px solid #0056b3;
+                        outline-offset: 2px;
                     }
                 }
             }

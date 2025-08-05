@@ -1,13 +1,13 @@
 <header>
-    <nav>
-        <div class="navbar">
-            <h2 appBigtitle>Lista de acciones</h2>
-            <ul>
-                <li (click)="navigate('students')">Ver lista</li>
-                <li (click)="navigate('add')">Agregar estudiante</li>
-                <li (click)="navigate('delete')">Eliminar estudiante</li>
-                <li (click)="navigate('edit')">Modificar datos</li>
-            </ul>
-        </div>
-    </nav>
+  <nav>
+    <div class="navbar">
+      <h2 appBigtitle>A dónde querés ir?</h2>
+      <ul>
+        <li><a [routerLink]="[AppRoutes.Home]">Home</a></li>
+        <li><a [routerLink]="[AppRoutes.Alumnos]">Ver lista de estudiantes</a></li>
+        <li><a [routerLink]="[AppRoutes.Cursos]">Ver lista de cursos</a></li>
+        <li><a [routerLink]="[AppRoutes.Inscripciones]">Ver lista de inscripciones</a></li>
+      </ul>
+    </div>
+  </nav>
 </header>
