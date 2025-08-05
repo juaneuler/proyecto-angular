@@ -1,0 +1,76 @@
+{
+  "courses": [
+    {
+      "name": "Desarrollo Web",
+      "code": "DW101",
+      "credits": 4,
+      "id": "dw01"
+    },
+    {
+      "name": "JavaScript",
+      "code": "JS102",
+      "credits": 5,
+      "id": "js02"
+    },
+    {
+      "name": "React",
+      "code": "RE103",
+      "credits": 5,
+      "id": "re03"
+    },
+    {
+      "name": "WordPress",
+      "code": "WP104",
+      "credits": 3,
+      "id": "wp04"
+    },
+    {
+      "name": "Angular",
+      "code": "NG105",
+      "credits": 6,
+      "id": "ng05"
+    }
+  ],
+  "students": [
+    {
+      "name": "Lucía",
+      "surname": "Gómez",
+      "age": 20,
+      "dni": 40345678,
+      "average": 8.5,
+      "id": "40345678"
+    },
+    {
+      "name": "Martín",
+      "surname": "Pérez",
+      "age": 22,
+      "dni": 39234567,
+      "average": 7.8,
+      "id": "39234567"
+    },
+    {
+      "name": "Camila",
+      "surname": "Rodríguez",
+      "age": 19,
+      "dni": 41321567,
+      "average": 9.2,
+      "id": "41321567"
+    },
+    {
+      "name": "Julián",
+      "surname": "Fernández",
+      "age": 21,
+      "dni": 38456234,
+      "average": 6.9,
+      "id": "38456234"
+    },
+    {
+      "name": "Valentina",
+      "surname": "López",
+      "age": 23,
+      "dni": 37654321,
+      "average": 8.1,
+      "id": "37654321"
+    }
+  ]
+}
