@@ -1,23 +1,34 @@
-# Proyecto Angular - Gestión de Alumnos
+# Proyecto Angular - Gestión de Alumnos, Cursos e Inscripciones
 
-Este proyecto es una aplicación desarrollada con Angular para el curso de Coderhouse, que permite realizar operaciones CRUD (Crear, Leer, Actualizar y Borrar) sobre una lista de alumnos. Incluye formularios reactivos, validaciones, uso de Angular Material y notificaciones.
+Este proyecto es una aplicación desarrollada con **Angular 20**, orientada a la gestión de estudiantes, cursos e inscripciones. Fue realizado como parte del curso de Angular en Coderhouse.
 
-## Funcionalidades
+## 🧠 Funcionalidades
 
-- Listado de alumnos con Angular Material Table
-- Alta, baja y modificación de alumnos
-- Formularios reactivos con validaciones
-- Búsqueda por DNI para editar alumno
-- Notificaciones con `MatSnackBar`
-- Uso de mock JSON como fuente de datos
+- CRUD de **alumnos**.
+- CRUD de **cursos**.
+- Gestión de **inscripciones** (alta, baja y edición).
+- Rutas individuales para cada formulario (alta, edición).
+- Estilos personalizados con **SASS**.
+- Uso de **Reactive Forms** con validaciones.
+- Componentes reutilizables y estructurados.
+- Consumo de datos desde servicios en memoria (`BehaviorSubject`).
+- Notificaciones con **Angular Material Snackbar**.
+- Navegación con Angular Router.
+- Simulación de Backend con `db.json` para alumnos y cursos
+- Uso de rutas tipadas con `enum` para mayor seguridad
+- Estructura de features: cada entidad (alumnos, cursos, inscripciones) organizada en su propia carpeta
 
-## Tecnologías
+## 🔧 Tecnologías usadas
 
-- Angular CLI
-- Angular Material
-- Bootstrap
+- Angular 20
 - TypeScript
-- SASS
+- RxJS
+- Angular Material (tablas, formularios, snackbars)
+- Bootstrap 5
+- JSON Server (`db.json` para simular API REST)
+- SASS (con estructura anidada)
+- Reactive Forms
+- HTML5 + CSS3
 
 ## Cómo ejecutar el proyecto?
 
@@ -28,4 +39,10 @@ Este proyecto es una aplicación desarrollada con Angular para el curso de Coder
 
 ## Autor
 
-Juan Euler
+Desarrollado por **Juan Euler** como entrega 2 del curso de Angular en Coderhouse.
+
+- 📁 Repositorio: [proyecto-angular](https://github.com/juaneuler/proyecto-angular)
+- 🌐 Portfolio: [portfolio-juan-euler.netlify.app](https://portfolio-juan-euler.netlify.app)
+- 💼 LinkedIn: [linkedin.com/in/juan-euler](https://www.linkedin.com/in/juan-euler/)
+- 💻 GitHub: [github.com/juaneuler](https://github.com/juaneuler)
+- 📧 Contacto: [juaneuler@hotmail.com](mailto:juaneuler@hotmail.com)
