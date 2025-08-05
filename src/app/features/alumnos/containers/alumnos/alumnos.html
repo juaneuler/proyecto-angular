@@ -1,0 +1,15 @@
+<div *ngIf="!loading; else loadingTpl">
+  <app-students-table [students]="students"></app-students-table>
+
+  <nav class="acciones-navbar">
+    <a [routerLink]="[AppRoutes.AlumnosAgregar]">Agregar estudiante</a>
+    <a [routerLink]="[AppRoutes.AlumnosEditar]">Modificar datos</a>
+    <a [routerLink]="[AppRoutes.AlumnosEliminar]">Eliminar estudiante</a>
+  </nav>
+
+  <router-outlet></router-outlet>
+</div>
+
+<ng-template #loadingTpl>
+  <p>Cargando alumnos...</p>
+</ng-template>
