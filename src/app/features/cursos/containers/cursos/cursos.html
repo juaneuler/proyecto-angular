@@ -1,0 +1,15 @@
+<div *ngIf="!loading; else loadingTpl">
+  <app-courses-table [courses]="courses"></app-courses-table>
+
+  <nav class="acciones-navbar">
+    <a [routerLink]="[AppRoutes.CursosAgregar]">Agregar curso</a>
+    <a [routerLink]="[AppRoutes.CursosEditar]">Modificar curso</a>
+    <a [routerLink]="[AppRoutes.CursosEliminar]">Eliminar curso</a>
+  </nav>
+
+  <router-outlet></router-outlet>
+</div>
+
+<ng-template #loadingTpl>
+  <p>Cargando cursos...</p>
+</ng-template>
