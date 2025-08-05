@@ -1,0 +1,33 @@
+<div class="edit-form">
+    <h2 appBigtitle>Modificar Inscripción</h2>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <mat-form-field appearance="fill">
+            <mat-label>Alumno</mat-label>
+            <mat-select formControlName="alumnoDNI">
+                <mat-option *ngFor="let alumno of alumnos$ | async" [value]="alumno.dni.toString()">
+                    {{ alumno.name }} {{ alumno.surname }} (DNI: {{ alumno.dni }})
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+
+
+        <mat-form-field appearance="fill" class="field">
+            <mat-label>Nuevo curso</mat-label>
+            <mat-select formControlName="nuevoCursoCodigo">
+                <mat-option *ngFor="let curso of cursos$ | async" [value]="curso.code"
+                    [disabled]="curso.code === inscripcionActual?.cursoCodigo">
+                    {{ curso.name }}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <button mat-raised-button color="primary" type="submit" [disabled]="
+    form.invalid || 
+    form.get('nuevoCursoCodigo')?.value === inscripcionActual?.cursoCodigo
+  ">
+            Modificar inscripción
+        </button>
+
+    </form>
+</div>
