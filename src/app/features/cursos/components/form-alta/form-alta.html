@@ -1,0 +1,43 @@
+<div class="add-course-form">
+  <h2 appBigtitle>Añadir Curso</h2>
+
+  <form [formGroup]="courseForm" (ngSubmit)="onSubmit()" class="form">
+
+    <div class="form-group">
+      <label for="name">Nombre:</label>
+      <input type="text" id="name" formControlName="name" placeholder="Nombre del curso">
+      <div *ngIf="courseForm.get('name')?.touched && courseForm.get('name')?.invalid" class="error">
+        El nombre es obligatorio.
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="code">Código:</label>
+      <input type="text" id="code" formControlName="code" placeholder="Ej: NG105">
+      <div *ngIf="courseForm.get('code')?.touched && courseForm.get('code')?.invalid" class="error">
+        Código requerido (ej: NG105).
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="credits">Créditos:</label>
+      <input type="number" id="credits" formControlName="credits" placeholder="Cantidad de créditos">
+      <div *ngIf="courseForm.get('credits')?.touched && courseForm.get('credits')?.invalid" class="error">
+        Créditos entre 1 y 10.
+      </div>
+    </div>
+
+    <button type="submit" [disabled]="courseForm.invalid || loading" class="boton-submit">
+      <ng-container *ngIf="!loading">Añadir Curso</ng-container>
+      <div *ngIf="loading" class="spinner-border spinner-border-sm text-light" role="status">
+        <span class="visually-hidden">Cargando...</span>
+      </div>
+    </button>
+
+    <button type="button" (click)="onReset()" class="boton-reset">
+      Limpiar Formulario
+    </button>
+
+    <a [routerLink]="['/', routes.Cursos]" class="boton-volver">Volver a la lista</a>
+  </form>
+</div>
