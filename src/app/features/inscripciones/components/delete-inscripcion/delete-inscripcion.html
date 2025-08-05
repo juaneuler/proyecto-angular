@@ -1,0 +1,25 @@
+<h2 appBigtitle>Dar de baja una inscripción</h2>
+
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="form">
+  <mat-form-field appearance="fill" class="form-field">
+    <mat-label>Alumno</mat-label>
+    <mat-select formControlName="alumnoDNI">
+      <mat-option *ngFor="let alumno of alumnosInscriptos$ | async" [value]="alumno.dni">
+        {{ alumno.name }} {{ alumno.surname }} (DNI: {{ alumno.dni }})
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field appearance="fill" class="form-field">
+    <mat-label>Curso a dar de baja</mat-label>
+    <mat-select formControlName="cursoCodigo">
+      <mat-option *ngFor="let curso of cursosAlumno$ | async" [value]="curso.code">
+        {{ curso.name }} (Código: {{ curso.code }})
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <button mat-raised-button color="warn" type="submit" [disabled]="form.invalid">
+    Eliminar inscripción
+  </button>
+</form>
