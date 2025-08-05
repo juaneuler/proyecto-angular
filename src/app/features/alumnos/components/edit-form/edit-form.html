@@ -1,0 +1,69 @@
+<div class="edit-form">
+  <h2 appBigtitle>Editar Estudiante</h2>
+
+  <!-- Formulario para buscar estudiante -->
+  <form [formGroup]="searchForm" (ngSubmit)="onSearch()" class="form">
+    <div class="form-group">
+      <label for="dni">Buscar por DNI:</label>
+      <input type="number" id="dni" formControlName="dni" placeholder="Ingrese el DNI del estudiante" min="0" step="1">
+      <div *ngIf="searchForm.get('dni')?.touched && searchForm.get('dni')?.errors" class="error">
+        <div *ngIf="searchForm.get('dni')?.hasError('required')">Ingresar el DNI es requerido</div>
+        <div *ngIf="searchForm.get('dni')?.hasError('pattern')">El DNI debe tener 7 u 8 dígitos y no comenzar con 0
+        </div>
+      </div>
+    </div>
+
+    <button type="submit" [disabled]="searchForm.invalid" class="boton-submit">Buscar</button>
+    <button type="button" (click)="onReset()" class="boton-reset">Limpiar</button>
+    <a [routerLink]="['/', routes.Alumnos]" class="boton-volver">Volver a la lista</a>
+  </form>
+
+  <!-- Separador entre los 2 formularios -->
+  <hr *ngIf="selectedStudent" />
+
+  <!-- Formulario para editar el estudiante encontrado -->
+  <form *ngIf="selectedStudent" [formGroup]="editForm" (ngSubmit)="onEdit()" class="form">
+    <div class="form-group">
+      <label for="name">Nombre:</label>
+      <input type="text" id="name" formControlName="name" placeholder="Editar nombre">
+      <div *ngIf="editForm.get('name')?.invalid && editForm.get('name')?.touched" class="error">
+        Ingresar el nombre es obligatorio
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="surname">Apellido:</label>
+      <input type="text" id="surname" formControlName="surname" placeholder="Editar apellido">
+      <div *ngIf="editForm.get('surname')?.invalid && editForm.get('surname')?.touched" class="error">
+        Ingresar el apellido es obligatorio
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="age">Edad:</label>
+      <input type="number" id="age" formControlName="age" placeholder="Editar edad">
+      <div *ngIf="editForm.get('age')?.touched && editForm.get('age')?.errors" class="error">
+        <div *ngIf="editForm.get('age')?.hasError('required')">Ingresar la edad es obligatorio</div>
+        <div *ngIf="editForm.get('age')?.hasError('min')">La edad ingresada debe ser mayor a 0</div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="average">Promedio:</label>
+      <input type="number" id="average" formControlName="average" placeholder="Editar promedio" min="0" max="10"
+        step="0.01" />
+      <div *ngIf="editForm.get('average')?.touched && editForm.get('average')?.errors" class="error">
+        <div *ngIf="editForm.get('average')?.hasError('required')">Ingresar el promedio es obligatorio</div>
+        <div *ngIf="editForm.get('average')?.hasError('min') || editForm.get('average')?.hasError('max')">
+          El promedio debe estar entre 0 y 10
+        </div>
+        <div *ngIf="editForm.get('average')?.hasError('pattern')">Solo se permiten hasta 2 decimales</div>
+      </div>
+    </div>
+
+
+    <button type="submit" [disabled]="editForm.invalid" class="boton-submit">Guardar Cambios</button>
+    <button type="button" (click)="onReset()" class="boton-reset">Cancelar</button>
+    <a [routerLink]="['/', routes.Alumnos]" class="boton-volver">Volver a la lista</a>
+  </form>
+</div>
