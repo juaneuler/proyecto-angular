@@ -1,0 +1,25 @@
+<h2 appBigtitle>Inscribir alumno a curso</h2>
+
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="form">
+  <mat-form-field appearance="fill" class="form-field">
+    <mat-label>Alumno</mat-label>
+    <mat-select formControlName="alumnoDNI">
+      <mat-option *ngFor="let alumno of alumnos$ | async" [value]="alumno.dni">
+        {{ alumno.name }} {{ alumno.surname }} (DNI: {{ alumno.dni }})
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field appearance="fill" class="form-field">
+    <mat-label>Curso</mat-label>
+    <mat-select formControlName="cursoCodigo">
+      <mat-option *ngFor="let curso of cursos$ | async" [value]="curso.code">
+        {{ curso.name }} (Código: {{ curso.code }})
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid">
+    Inscribir Alumno
+  </button>
+</form>
