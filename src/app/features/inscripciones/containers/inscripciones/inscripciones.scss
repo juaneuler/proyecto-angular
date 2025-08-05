@@ -1,0 +1,50 @@
+.acciones-navbar {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+
+    a {
+        padding: 0.6rem 1.2rem;
+        border-radius: 4px;
+        cursor: pointer;
+        color: white;
+        text-decoration: none;
+        display: inline-block;
+        transition: background-color 0.3s ease;
+
+        &:hover {
+            filter: brightness(0.9);
+            text-decoration: none;
+        }
+
+        &:focus {
+            outline: 2px solid #1db954;
+            outline-offset: 2px;
+        }
+
+        &:nth-child(1) {
+            background-color: #1db954;
+
+            &:hover {
+                background-color: #2e7d32;
+            }
+        }
+
+        &:nth-child(2) {
+            background-color: #1976d2;
+
+            &:hover {
+                background-color: #135ba1;
+            }
+        }
+
+        &:nth-child(3) {
+            background-color: #e4405f;
+
+            &:hover {
+                background-color: #d32f2f;
+            }
+        }
+    }
+}

@@ -1,0 +1,18 @@
+<div *ngIf="inscripcionesDetalladas$ | async as data; else loadingTpl">
+
+  <app-inscriptions-table [inscriptions]="data"></app-inscriptions-table>
+
+  <nav class="acciones-navbar">
+    <a [routerLink]="[AppRoutes.InscripcionesAgregar]">Agregar inscripción</a>
+    <a [routerLink]="[AppRoutes.InscripcionesEditar]">Modificar inscripción</a>
+    <a [routerLink]="[AppRoutes.InscripcionesEliminar]">Eliminar inscripción</a>
+  </nav>
+
+  <router-outlet></router-outlet>
+</div>
+
+<ng-template #loadingTpl>
+  <div>
+    <p>Cargando inscripciones...</p>
+  </div>
+</ng-template>
