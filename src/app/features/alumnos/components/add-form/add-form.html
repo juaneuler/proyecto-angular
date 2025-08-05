@@ -1,0 +1,80 @@
+<div class="add-form">
+    <h2 appBigtitle>Añadir Estudiante</h2>
+
+    <form [formGroup]="studentForm" (ngSubmit)="onSubmit()" class="form">
+
+        <div class="form-group">
+            <label for="dni">DNI:</label>
+            <input type="number" id="dni" formControlName="dni" placeholder="Ingrese su DNI" min="0" step="1">
+            <div *ngIf="studentForm.get('dni')?.touched && studentForm.get('dni')?.invalid" class="error">
+                <div *ngIf="studentForm.get('dni')?.errors?.['required']">
+                    Ingresar el número de DNI es obligatorio
+                </div>
+                <div *ngIf="studentForm.get('dni')?.errors?.['pattern']">
+                    El DNI debe tener entre 7 y 8 dígitos y no puede comenzar con 0.
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="name">Nombre:</label>
+            <input type="text" id="name" formControlName="name" placeholder="Ingrese su nombre">
+            <div *ngIf="studentForm.get('name')?.invalid && studentForm.get('name')?.touched" class="error">
+                Ingresar un nombre es requerido
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="name">Apellido:</label>
+            <input type="text" id="surname" formControlName="surname" placeholder="Ingrese su apellido">
+            <div *ngIf="studentForm.get('surname')?.invalid && studentForm.get('surname')?.touched" class="error">
+                Ingresar un apellido es requerido
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="age">Edad:</label>
+            <input type="number" id="age" formControlName="age" placeholder="Ingrese su edad">
+            <div *ngIf="studentForm.get('age')?.touched && studentForm.get('age')?.invalid" class="error">
+                <div *ngIf="studentForm.get('age')?.errors?.['required']">
+                    Ingresar su edad es obligatorio.
+                </div>
+                <div *ngIf="studentForm.get('age')?.errors?.['min']">
+                    La edad debe ser mayor a 0.
+                </div>
+                <div *ngIf="studentForm.get('age')?.errors?.['pattern']">
+                    La edad debe ser un número entero sin decimales.
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="average">Promedio:</label>
+            <input type="number" id="average" formControlName="average" placeholder="Ingrese su promedio">
+            <div *ngIf="studentForm.get('average')?.touched && studentForm.get('average')?.invalid" class="error">
+                <div *ngIf="studentForm.get('average')?.errors?.['required']">
+                    Ingresar el promedio es obligatorio.
+                </div>
+                <div *ngIf="studentForm.get('average')?.errors?.['min']">
+                    El promedio debe ser mayor a 0.
+                </div>
+                <div *ngIf="studentForm.get('average')?.errors?.['max']">
+                    El promedio no puede ser mayor a 10.
+                </div>
+            </div>
+        </div>
+
+        <button type="submit" [disabled]="studentForm.invalid || loading" class="boton-submit">
+            <ng-container *ngIf="!loading">Añadir Estudiante</ng-container>
+            <div *ngIf="loading" class="spinner-border spinner-border-sm text-light" role="status">
+                <span class="visually-hidden">Cargando...</span>
+            </div>
+        </button>
+
+        <button type="button" (click)="onReset()" class="boton-reset">
+            Limpiar Formulario
+        </button>
+
+        <a [routerLink]="['/', routes.Alumnos]" class="boton-volver">Volver a la lista</a>
+    </form>
+</div>
