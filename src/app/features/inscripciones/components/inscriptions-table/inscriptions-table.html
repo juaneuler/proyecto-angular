@@ -1,0 +1,43 @@
+<div *ngIf="dataSource.data.length > 0; else noDataTpl">
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+    <!-- DNI Alumno -->
+    <ng-container matColumnDef="alumnoDNI">
+      <th mat-header-cell *matHeaderCellDef> DNI Alumno </th>
+      <td mat-cell *matCellDef="let element"> {{element.alumnoDNI}} </td>
+    </ng-container>
+
+    <!-- Nombre -->
+    <ng-container matColumnDef="alumnoNombre">
+      <th mat-header-cell *matHeaderCellDef> Nombre </th>
+      <td mat-cell *matCellDef="let element"> {{element.alumnoNombre}} </td>
+    </ng-container>
+
+    <!-- Apellido -->
+    <ng-container matColumnDef="alumnoApellido">
+      <th mat-header-cell *matHeaderCellDef> Apellido </th>
+      <td mat-cell *matCellDef="let element"> {{element.alumnoApellido}} </td>
+    </ng-container>
+
+    <!-- Código Curso -->
+    <ng-container matColumnDef="cursoCodigo">
+      <th mat-header-cell *matHeaderCellDef> Código Curso </th>
+      <td mat-cell *matCellDef="let element"> {{element.cursoCodigo}} </td>
+    </ng-container>
+
+    <!-- Nombre Curso -->
+    <ng-container matColumnDef="cursoNombre">
+      <th mat-header-cell *matHeaderCellDef> Nombre Curso </th>
+      <td mat-cell *matCellDef="let element"> {{element.cursoNombre}} </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+</div>
+
+<ng-template #noDataTpl>
+  <div class="no-data-message">
+    <p appBigtitle>No hay alumnos inscriptos a ningún curso</p>
+  </div>
+</ng-template>
