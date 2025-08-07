@@ -20,7 +20,18 @@
             <label for="name">Nombre:</label>
             <input type="text" id="name" formControlName="name" placeholder="Ingrese su nombre">
             <div *ngIf="studentForm.get('name')?.invalid && studentForm.get('name')?.touched" class="error">
-                Ingresar un nombre es requerido
+                <div *ngIf="studentForm.get('name')?.errors?.['required']">
+                    Ingresar un nombre es requerido.
+                </div>
+                <div *ngIf="studentForm.get('name')?.errors?.['minlength']">
+                    El nombre debe tener al menos 2 caracteres.
+                </div>
+                <div *ngIf="studentForm.get('name')?.errors?.['maxlength']">
+                    El nombre no puede exceder los 50 caracteres.
+                </div>
+                <div *ngIf="studentForm.get('name')?.errors?.['pattern']">
+                    El nombre solo puede contener letras.
+                </div>
             </div>
         </div>
 
@@ -29,6 +40,15 @@
             <input type="text" id="surname" formControlName="surname" placeholder="Ingrese su apellido">
             <div *ngIf="studentForm.get('surname')?.invalid && studentForm.get('surname')?.touched" class="error">
                 Ingresar un apellido es requerido
+            </div>
+            <div *ngIf="studentForm.get('surname')?.errors?.['minlength']">
+                El apellido debe tener al menos 2 caracteres.
+            </div>
+            <div *ngIf="studentForm.get('surname')?.errors?.['maxlength']">
+                El apellido no puede exceder los 50 caracteres.
+            </div>
+            <div *ngIf="studentForm.get('surname')?.errors?.['pattern']">
+                El apellido solo puede contener letras.
             </div>
         </div>
 
