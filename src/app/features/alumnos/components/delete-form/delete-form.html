@@ -25,7 +25,15 @@
             <input type="text" id="descripcion" formControlName="descripcion">
             <div *ngIf="studentForm.get('descripcion')?.invalid && studentForm.get('descripcion')?.touched"
                 class="error">
-                Ingresar el motivo por el cual se da de baja es requerido
+                <div *ngIf="studentForm.get('descripcion')?.errors?.['required']">
+                    Ingresar el motivo por el cual se da de baja es requerido.
+                </div>
+                <div *ngIf="studentForm.get('descripcion')?.errors?.['minlength']">
+                    El motivo de la baja debe tener al menos 10 caracteres.
+                </div>
+                <div *ngIf="studentForm.get('descripcion')?.errors?.['maxlength']">
+                    El motivo de la baja no puede exceder los 50 caracteres.
+                </div>
             </div>
         </div>
 
