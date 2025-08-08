@@ -76,7 +76,7 @@
                     Ingresar el promedio es obligatorio.
                 </div>
                 <div *ngIf="studentForm.get('average')?.errors?.['min']">
-                    El promedio debe ser mayor a 0.
+                    El promedio debe ser mayor a 1.
                 </div>
                 <div *ngIf="studentForm.get('average')?.errors?.['max']">
                     El promedio no puede ser mayor a 10.

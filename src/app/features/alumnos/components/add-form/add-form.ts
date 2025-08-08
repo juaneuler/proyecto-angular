@@ -28,6 +28,14 @@ export class AddForm implements OnInit {
   constructor(private fb: FormBuilder, private alumnosState: AlumnosState) {}
 
   ngOnInit() {
+    // Definimos un array de validadores para los campos de texto, así los reutilizamos en Nombre y Apellido
+    const TEXT_INPUT_VALIDATORS = [
+      Validators.required,
+      Validators.minLength(2),
+      Validators.maxLength(50),
+      Validators.pattern(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]*$/),
+    ];
+
     this.studentForm = this.fb.group({
       dni: [
         '',
@@ -36,37 +44,23 @@ export class AddForm implements OnInit {
           Validators.pattern(/^[1-9]\d{6,7}$/), // DNI con 7 u 8 dígitos, y no puede empezar con 0
         ],
       ],
-      name: [
-        '',
-        [
-          Validators.required,
-          Validators.minLength(2), // Longitud mínima de 2 caracteres
-          Validators.maxLength(50), // Longitud máxima de 50 caraceteres
-          Validators.pattern(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]*$/), // Solo letras, espacios y tildes
-        ],
-      ],
-      surname: [
-        '',
-        [
-          Validators.required,
-          Validators.minLength(2),  // Longitud mínima de 2 caracteres
-          Validators.maxLength(50), // Longitud máxima de 50 caracteres
-          Validators.pattern(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]*$/),  // Solo letras, espacios y tildes
-        ],
-      ],
+      name: ['', TEXT_INPUT_VALIDATORS],
+      surname: ['', TEXT_INPUT_VALIDATORS],
       age: [
         '',
         [
-        Validators.required, 
-        Validators.min(1),  // Que la edad sea al menos 1 año
-        Validators.pattern(/^\d+$/)],
+          Validators.required,
+          Validators.min(1), // Que la edad sea al menos 1 año
+          Validators.pattern(/^\d+$/),
+        ],
       ],
       average: [
         '',
         [
-          Validators.required, 
-          Validators.min(1),  // Que el promedio sea siempre superior a 1
-          Validators.max(10)],  // Que el promedio sea como máximo 10
+          Validators.required,
+          Validators.min(1), // Que el promedio sea siempre superior a 1
+          Validators.max(10),
+        ], // Que el promedio sea como máximo 10
       ],
     });
   }
