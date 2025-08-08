@@ -1,6 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, inject } from '@angular/core';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  ReactiveFormsModule,
+  FormBuilder,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { Bigtitle } from '../../../../../shared/directives/bigtitle';
 import { SnackbarNotification } from '../../../../../shared/services/snackbar-notification';
 import { CursosState } from '../../cursos-estado';
@@ -20,16 +25,29 @@ export class FormAlta implements OnInit {
 
   courseForm!: FormGroup;
 
-  constructor(
-    private fb: FormBuilder,
-    private cursosState: CursosState
-  ) {}
+  constructor(private fb: FormBuilder, private cursosState: CursosState) {}
 
   ngOnInit() {
     this.courseForm = this.fb.group({
-      code: ['', [Validators.required]],
-      name: ['', [Validators.required]],
-      credits: ['', [Validators.required, Validators.min(1), Validators.pattern(/^\d+$/)]],
+      code: ['', [Validators.required, Validators.pattern(/^[A-Z]{2}\d{3}$/)]], // El código debe tener 2 letras seguidas de 3 números
+      name: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(3), // Mínimo 3 caracteres
+          Validators.maxLength(50), // Máximo 50 caracteres
+          Validators.pattern(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s\d]*$/), // No se pueden usar caracteres especiales
+        ],
+      ],
+      credits: [
+        '',
+        [
+          Validators.required,
+          Validators.min(1),  // Mínimo 1 crédito
+          Validators.max(10), // Máximo 10 créditos
+          Validators.pattern(/^\d+$/),
+        ],
+      ],
     });
   }
 

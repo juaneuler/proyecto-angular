@@ -7,7 +7,11 @@
       <label for="name">Nombre:</label>
       <input type="text" id="name" formControlName="name" placeholder="Nombre del curso">
       <div *ngIf="courseForm.get('name')?.touched && courseForm.get('name')?.invalid" class="error">
-        El nombre es obligatorio.
+        <div *ngIf="courseForm.get('name')?.hasError('required')">El nombre es obligatorio.</div>
+        <div *ngIf="courseForm.get('name')?.hasError('minlength')">El nombre debe tener al menos 3 caracteres.</div>
+        <div *ngIf="courseForm.get('name')?.hasError('maxlength')">El nombre no puede exceder los 50 caracteres.</div>
+        <div *ngIf="courseForm.get('name')?.hasError('pattern')">El nombre solo puede contener letras, números y
+          espacios.</div>
       </div>
     </div>
 
@@ -15,7 +19,9 @@
       <label for="code">Código:</label>
       <input type="text" id="code" formControlName="code" placeholder="Ej: NG105">
       <div *ngIf="courseForm.get('code')?.touched && courseForm.get('code')?.invalid" class="error">
-        Código requerido (ej: NG105).
+        <div *ngIf="courseForm.get('code')?.hasError('required')">El código es requerido.</div>
+        <div *ngIf="courseForm.get('code')?.hasError('pattern')">El código debe tener el formato "NG105" (dos letras y
+          tres números).</div>
       </div>
     </div>
 
@@ -23,7 +29,10 @@
       <label for="credits">Créditos:</label>
       <input type="number" id="credits" formControlName="credits" placeholder="Cantidad de créditos">
       <div *ngIf="courseForm.get('credits')?.touched && courseForm.get('credits')?.invalid" class="error">
-        Créditos entre 1 y 10.
+        <div *ngIf="courseForm.get('credits')?.hasError('required')">La cantidad de créditos es obligatoria.</div>
+        <div *ngIf="courseForm.get('credits')?.hasError('min')">Los créditos deben ser al menos 1.</div>
+        <div *ngIf="courseForm.get('credits')?.hasError('max')">Los créditos no pueden ser más de 10.</div>
+        <div *ngIf="courseForm.get('credits')?.hasError('pattern')">Solo se permiten números enteros.</div>
       </div>
     </div>
 
