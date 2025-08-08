@@ -26,14 +26,13 @@ import { AppRoutes } from '../../../../../shared/enums/routes';
     MatInputModule,
     MatButtonModule,
     Bigtitle,
-    RouterModule
+    RouterModule,
   ],
   templateUrl: './edit-form.html',
   styleUrl: './edit-form.scss',
 })
 export class EditForm implements OnInit {
-
-  readonly routes = AppRoutes
+  readonly routes = AppRoutes;
 
   private alumnosState = inject(AlumnosState);
   private snackbarNotification = inject(SnackbarNotification);
@@ -49,22 +48,26 @@ export class EditForm implements OnInit {
   ngOnInit(): void {
     this.students = this.alumnosState.getStudents();
 
-    this.searchForm = new FormGroup({
-      dni: new FormControl('', [
-        Validators.required,
-        Validators.pattern(/^[1-9]\d{6,7}$/),
-      ]),
+    this.searchForm = this.fb.group({
+      dni: ['', [Validators.required, Validators.pattern(/^[1-9]\d{6,7}$/)]],
     });
 
+    // Array de validadores para los campos de texto de nombre y apellido
+    const TEXT_INPUT_VALIDATORS = [
+      Validators.required,
+      Validators.minLength(3),
+      Validators.maxLength(50),
+    ];
+
     this.editForm = this.fb.group({
-      name: ['', Validators.required],
-      surname: ['', Validators.required],
-      age: ['', [Validators.required, Validators.min(0)]],
+      name: ['', TEXT_INPUT_VALIDATORS],
+      surname: ['', TEXT_INPUT_VALIDATORS],
+      age: ['', [Validators.required, Validators.min(1)]],
       average: [
         '',
         [
           Validators.required,
-          Validators.min(0),
+          Validators.min(1),
           Validators.max(10),
           Validators.pattern(/^\d+(\.\d{1,2})?$/), // Esto es para que solo se puedan poner hasta 2 decimales
         ],

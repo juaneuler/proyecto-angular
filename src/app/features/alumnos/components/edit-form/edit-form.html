@@ -27,7 +27,9 @@
       <label for="name">Nombre:</label>
       <input type="text" id="name" formControlName="name" placeholder="Editar nombre">
       <div *ngIf="editForm.get('name')?.invalid && editForm.get('name')?.touched" class="error">
-        Ingresar el nombre es obligatorio
+        <div *ngIf="editForm.get('name')?.hasError('required')">Ingresar el nombre es obligatorio</div>
+        <div *ngIf="editForm.get('name')?.hasError('minlength')">El nombre debe tener al menos 3 caracteres</div>
+        <div *ngIf="editForm.get('name')?.hasError('maxlength')">El nombre no puede exceder los 50 caracteres</div>
       </div>
     </div>
 
@@ -35,7 +37,9 @@
       <label for="surname">Apellido:</label>
       <input type="text" id="surname" formControlName="surname" placeholder="Editar apellido">
       <div *ngIf="editForm.get('surname')?.invalid && editForm.get('surname')?.touched" class="error">
-        Ingresar el apellido es obligatorio
+        <div *ngIf="editForm.get('surname')?.hasError('required')">Ingresar el apellido es obligatorio</div>
+        <div *ngIf="editForm.get('surname')?.hasError('minlength')">El apellido debe tener al menos 3 caracteres</div>
+        <div *ngIf="editForm.get('surname')?.hasError('maxlength')">El apellido no puede exceder los 50 caracteres</div>
       </div>
     </div>
 
@@ -44,7 +48,7 @@
       <input type="number" id="age" formControlName="age" placeholder="Editar edad">
       <div *ngIf="editForm.get('age')?.touched && editForm.get('age')?.errors" class="error">
         <div *ngIf="editForm.get('age')?.hasError('required')">Ingresar la edad es obligatorio</div>
-        <div *ngIf="editForm.get('age')?.hasError('min')">La edad ingresada debe ser mayor a 0</div>
+        <div *ngIf="editForm.get('age')?.hasError('min')">La edad ingresada debe ser al menos 1 año</div>
       </div>
     </div>
 
@@ -54,9 +58,8 @@
         step="0.01" />
       <div *ngIf="editForm.get('average')?.touched && editForm.get('average')?.errors" class="error">
         <div *ngIf="editForm.get('average')?.hasError('required')">Ingresar el promedio es obligatorio</div>
-        <div *ngIf="editForm.get('average')?.hasError('min') || editForm.get('average')?.hasError('max')">
-          El promedio debe estar entre 0 y 10
-        </div>
+        <div *ngIf="editForm.get('average')?.hasError('min')">El promedio mínimo es 1</div>
+        <div *ngIf="editForm.get('average')?.hasError('max')">El promedio máximo es 10</div>
         <div *ngIf="editForm.get('average')?.hasError('pattern')">Solo se permiten hasta 2 decimales</div>
       </div>
     </div>
