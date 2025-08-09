@@ -19,6 +19,10 @@
     </mat-select>
   </mat-form-field>
 
+  <div *ngIf="form.hasError('alreadyInscribed')" class="error">
+    Este alumno ya está inscrito en este curso! Debe elegir otro diferente para continuar
+  </div>
+
   <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid">
     Inscribir Alumno
   </button>
