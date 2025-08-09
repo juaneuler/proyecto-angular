@@ -16,6 +16,8 @@ import { CursosState } from '../../../cursos/cursos-estado';
 import { InscripcionesEstadoService } from '../../inscripciones-estado';
 import { SnackbarNotification } from '../../../../../shared/services/snackbar-notification';
 import { Bigtitle } from '../../../../../shared/directives/bigtitle';
+import { AppRoutes } from '../../../../../shared/enums/routes';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-delete-inscripcion',
@@ -26,11 +28,14 @@ import { Bigtitle } from '../../../../../shared/directives/bigtitle';
     MatSelectModule,
     MatButtonModule,
     Bigtitle,
+    RouterModule
   ],
   templateUrl: './delete-inscripcion.html',
   styleUrl: './delete-inscripcion.scss',
 })
 export class DeleteInscripcion implements OnInit {
+  readonly routes = AppRoutes
+
   form: FormGroup;
   alumnosInscriptos$: Observable<Student[]>;
   cursosAlumno$: Observable<Course[]>;
