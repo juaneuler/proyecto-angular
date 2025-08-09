@@ -25,7 +25,7 @@ import { Bigtitle } from '../../../../../shared/directives/bigtitle';
     MatFormFieldModule,
     MatSelectModule,
     MatButtonModule,
-    Bigtitle
+    Bigtitle,
   ],
   templateUrl: './delete-inscripcion.html',
   styleUrl: './delete-inscripcion.scss',
@@ -86,9 +86,15 @@ export class DeleteInscripcion implements OnInit {
   onSubmit(): void {
     if (this.form.valid) {
       const { alumnoDNI, cursoCodigo } = this.form.value;
-      this.inscripcionesState.eliminarInscripcion(alumnoDNI.toString(), cursoCodigo);
+      this.inscripcionesState.eliminarInscripcion(
+        alumnoDNI.toString(),
+        cursoCodigo
+      );
       this.snackbar.success('Inscripción eliminada con éxito');
       this.form.reset();
+      // Estas dos líneas permiten resetear los selectores y que no marquen error
+      this.form.markAsPristine();
+      this.form.markAsUntouched();
     }
   }
 }
