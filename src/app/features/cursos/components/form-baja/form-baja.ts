@@ -1,6 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, inject } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  Validators,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -40,11 +45,14 @@ export class FormBaja implements OnInit {
         '',
         [
           Validators.required,
-          Validators.minLength(3),
-          Validators.maxLength(6),
+          Validators.pattern(/^[A-Z]{2}\d{3}$/), // Mismo patrón de validación para que seamos coherentes a la hora de definir el código del curso
         ],
       ],
-      descripcion: ['', Validators.required],
+      descripcion: ['', [
+        Validators.required,
+        Validators.minLength(10), // Mínimo 10 caracteres para el motivo de baja
+        Validators.maxLength(50), // Máximo 10 caracteres para el motivo de baja
+      ]],
     });
   }
 
@@ -57,7 +65,9 @@ export class FormBaja implements OnInit {
         this.snackbarNotification.success('Curso eliminado con éxito!');
         this.onReset();
       } else {
-        this.snackbarNotification.error('No se encontró ningún curso con ese código.');
+        this.snackbarNotification.error(
+          'No se encontró ningún curso con ese código.'
+        );
       }
     }
   }

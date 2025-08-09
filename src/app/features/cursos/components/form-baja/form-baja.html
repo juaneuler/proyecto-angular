@@ -8,8 +8,8 @@
       <input type="text" id="code" formControlName="code" placeholder="Ingrese el código del curso">
       <div *ngIf="courseForm.get('code')?.touched && courseForm.get('code')?.invalid" class="error">
         <div *ngIf="courseForm.get('code')?.errors?.['required']">El código es obligatorio.</div>
-        <div *ngIf="courseForm.get('code')?.errors?.['minlength'] || courseForm.get('code')?.errors?.['maxlength']">
-          El código debe tener entre 3 y 6 caracteres.
+        <div *ngIf="courseForm.get('code')?.errors?.['pattern']">
+          El código debe tener el formato "XX000" (dos letras mayúsculas y tres números).
         </div>
       </div>
     </div>
@@ -18,7 +18,11 @@
       <label for="descripcion">Motivo de la baja:</label>
       <input type="text" id="descripcion" formControlName="descripcion" placeholder="Motivo de la baja">
       <div *ngIf="courseForm.get('descripcion')?.invalid && courseForm.get('descripcion')?.touched" class="error">
-        El motivo es obligatorio.
+        <div *ngIf="courseForm.get('descripcion')?.errors?.['required']">El motivo es obligatorio.</div>
+        <div *ngIf="courseForm.get('descripcion')?.errors?.['minlength']">El motivo debe tener al menos 10 caracteres.
+        </div>
+        <div *ngIf="courseForm.get('descripcion')?.errors?.['maxlength']">El motivo no puede exceder los 50 caracteres.
+        </div>
       </div>
     </div>
 
