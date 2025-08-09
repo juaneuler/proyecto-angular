@@ -48,35 +48,46 @@ export class FormEdicion implements OnInit {
   ngOnInit(): void {
     this.courses = this.cursosState.getCursos();
 
-    this.searchForm = new FormGroup({
-      code: new FormControl('', [
-        Validators.required,
-        Validators.minLength(3),
-        Validators.maxLength(6),
-      ]),
+    this.searchForm = this.fb.group({
+      code: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern(/^[A-Z]{2}\d{3}$/), // Definimos el patrón que va a tener el código del curso para mantener coherencia entre todos los formularios
+        ],
+      ],
     });
 
     this.editForm = this.fb.group({
-      name: ['', Validators.required],
-      code: ['', Validators.required],
+      name: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(3),
+          Validators.maxLength(50),
+          Validators.pattern(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s\d]*$/),
+        ],
+      ],
+      code: ['', [Validators.required, Validators.pattern(/^[A-Z]{2}\d{3}$/)]],
       credits: [
         '',
-        [Validators.required, Validators.min(1), Validators.max(10)],
+        [
+          Validators.required,
+          Validators.min(1),
+          Validators.max(10),
+          Validators.pattern(/^\d+$/),
+        ],
       ],
     });
   }
 
   onSearch() {
-    const code = this.searchForm.value.code;
-    if (!code) {
-      this.snackbarNotification.error(
-        'Por favor, ingrese un código para buscar.'
-      );
+    if (this.searchForm.invalid) {
       return;
     }
 
-    const trimmedCode = code.trim();
-    const course = this.courses.find((c) => c.code === trimmedCode);
+    const code = this.searchForm.value.code.trim();
+    const course = this.courses.find((c) => c.code === code);
 
     if (course) {
       this.selectedCourse = course;

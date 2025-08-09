@@ -7,8 +7,8 @@
       <input type="text" id="code" formControlName="code" placeholder="Ingrese el código del curso">
       <div *ngIf="searchForm.get('code')?.touched && searchForm.get('code')?.invalid" class="error">
         <div *ngIf="searchForm.get('code')?.hasError('required')">El código es obligatorio.</div>
-        <div *ngIf="searchForm.get('code')?.hasError('minlength') || searchForm.get('code')?.hasError('maxlength')">
-          El código debe tener entre 3 y 6 caracteres.
+        <div *ngIf="searchForm.get('code')?.hasError('pattern')">
+          El código debe tener el formato "XX000" (dos letras mayúsculas y tres números).
         </div>
       </div>
     </div>
@@ -26,7 +26,10 @@
       <label for="name">Nombre:</label>
       <input type="text" id="name" formControlName="name" placeholder="Editar nombre del curso">
       <div *ngIf="editForm.get('name')?.touched && editForm.get('name')?.invalid" class="error">
-        El nombre es obligatorio.
+        <div *ngIf="editForm.get('name')?.hasError('required')">El nombre es obligatorio.</div>
+        <div *ngIf="editForm.get('name')?.hasError('minlength')">El nombre debe tener al menos 3 caracteres.</div>
+        <div *ngIf="editForm.get('name')?.hasError('maxlength')">El nombre no puede exceder los 50 caracteres.</div>
+        <div *ngIf="editForm.get('name')?.hasError('pattern')">Solo se permiten letras, números y espacios.</div>
       </div>
     </div>
 
@@ -34,7 +37,8 @@
       <label for="code">Código:</label>
       <input type="text" id="code" formControlName="code" placeholder="Ej: NG105">
       <div *ngIf="editForm.get('code')?.touched && editForm.get('code')?.invalid" class="error">
-        El código es obligatorio.
+        <div *ngIf="editForm.get('code')?.hasError('required')">El código es obligatorio.</div>
+        <div *ngIf="editForm.get('code')?.hasError('pattern')">El código debe tener el formato "XX000".</div>
       </div>
     </div>
 
@@ -44,9 +48,9 @@
         placeholder="Cantidad de créditos">
       <div *ngIf="editForm.get('credits')?.touched && editForm.get('credits')?.invalid" class="error">
         <div *ngIf="editForm.get('credits')?.hasError('required')">Los créditos son obligatorios.</div>
-        <div *ngIf="editForm.get('credits')?.hasError('min') || editForm.get('credits')?.hasError('max')">
-          El valor debe estar entre 1 y 10.
-        </div>
+        <div *ngIf="editForm.get('credits')?.hasError('min')">Los créditos deben ser al menos 1.</div>
+        <div *ngIf="editForm.get('credits')?.hasError('max')">Los créditos no pueden exceder de 10.</div>
+        <div *ngIf="editForm.get('credits')?.hasError('pattern')">Solo se permiten números enteros.</div>
       </div>
     </div>
 
