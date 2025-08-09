@@ -19,6 +19,14 @@ export class InscripcionesEstadoService {
     );
   }
 
+  // Se agregó una función para que no se pueda modificar una inscrpción eligiendo el curso que ya tiene
+  checkIfIsSameCourse(
+    nuevoCursoCodigo: string,
+    inscripcionActual: Inscription
+  ): boolean {
+    return nuevoCursoCodigo === inscripcionActual.cursoCodigo;
+  }
+
   inscribirAlumno(dni: string, codigoCurso: string): void {
     const actuales = this.inscripcionesSubject.value;
     const nueva: Inscription = {
