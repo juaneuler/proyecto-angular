@@ -86,6 +86,9 @@ export class AddInscripcion implements OnInit {
       this.inscripcionesState.inscribirAlumno(alumnoDNI, cursoCodigo);
       this.form.reset();
       this.snackbarNotification.success('Alumno inscripto con éxito!');
+      // Estas líneas son para evitar que los selectores marquen error al enviar una inscripcion
+      this.form.markAsPristine();
+      this.form.markAsUntouched();
     }
   }
 }
