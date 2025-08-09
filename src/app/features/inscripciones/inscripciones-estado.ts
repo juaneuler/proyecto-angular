@@ -1,10 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import {
-  Inscription,
-  CambioInscripcion,
-  Student,
-} from '../../../shared/entities';
+import { Inscription, CambioInscripcion } from '../../../shared/entities';
 
 @Injectable({
   providedIn: 'root',
@@ -15,6 +11,13 @@ export class InscripcionesEstadoService {
     this.inscripcionesSubject.asObservable();
 
   constructor() {}
+
+  // Se agregó una función para que el servicio valide si un alumno ya está anotado a un curso, y evitar que haya dos inscripciones de un alumno al mismo curso
+  checkIfAlreadyInscribed(dni: string, codigoCurso: string): boolean {
+    return this.inscripcionesSubject.value.some(
+      (i) => i.alumnoDNI === dni.toString() && i.cursoCodigo === codigoCurso
+    );
+  }
 
   inscribirAlumno(dni: string, codigoCurso: string): void {
     const actuales = this.inscripcionesSubject.value;
