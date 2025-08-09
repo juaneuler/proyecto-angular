@@ -25,6 +25,8 @@ import { CursosState } from '../../../cursos/cursos-estado';
 import { InscripcionesEstadoService } from '../../inscripciones-estado';
 import { SnackbarNotification } from '../../../../../shared/services/snackbar-notification';
 import { Bigtitle } from '../../../../../shared/directives/bigtitle';
+import { AppRoutes } from '../../../../../shared/enums/routes';
+import { RouterModule } from '@angular/router';
 
 // Esta es la función para validar
 const sameCourseValidator = (
@@ -59,11 +61,14 @@ const sameCourseValidator = (
     MatSelectModule,
     MatButtonModule,
     Bigtitle,
+    RouterModule
   ],
   templateUrl: './edit-inscripcion.html',
   styleUrl: './edit-inscripcion.scss',
 })
 export class EditInscripcion implements OnInit {
+  readonly routes = AppRoutes
+
   form: FormGroup;
   alumnos$: Observable<Student[]>;
   cursos$: Observable<Course[]>;
