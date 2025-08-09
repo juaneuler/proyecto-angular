@@ -4,6 +4,9 @@ import {
   FormGroup,
   ReactiveFormsModule,
   Validators,
+  AbstractControl,
+  ValidationErrors,
+  ValidatorFn,
 } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -23,6 +26,30 @@ import { InscripcionesEstadoService } from '../../inscripciones-estado';
 import { SnackbarNotification } from '../../../../../shared/services/snackbar-notification';
 import { Bigtitle } from '../../../../../shared/directives/bigtitle';
 
+// Esta es la función para validar
+const sameCourseValidator = (
+  inscripcionesEstadoService: InscripcionesEstadoService,
+  inscripcionActual: Inscription | null
+): ValidatorFn => {
+  return (form: AbstractControl): ValidationErrors | null => {
+    const nuevoCursoCodigo = form.get('nuevoCursoCodigo')?.value;
+
+    // Si no hay inscripción actual o no hay curso nuevo, no validamos
+    if (!inscripcionActual || !nuevoCursoCodigo) {
+      return null;
+    }
+
+    // Usamos el método del servicio para ejecutar la lógica de negocio
+    const isSameCourse = inscripcionesEstadoService.checkIfIsSameCourse(
+      nuevoCursoCodigo,
+      inscripcionActual
+    );
+
+    // Devolvemos el error si fuera necesario
+    return isSameCourse ? { sameCourse: true } : null;
+  };
+};
+
 @Component({
   selector: 'app-edit-inscripcion',
   imports: [
@@ -31,7 +58,7 @@ import { Bigtitle } from '../../../../../shared/directives/bigtitle';
     MatFormFieldModule,
     MatSelectModule,
     MatButtonModule,
-    Bigtitle
+    Bigtitle,
   ],
   templateUrl: './edit-inscripcion.html',
   styleUrl: './edit-inscripcion.scss',
@@ -94,21 +121,25 @@ export class EditInscripcion implements OnInit {
             tap((actual) => {
               this.inscripcionActual = actual;
               if (actual) {
-                if (
-                  this.form.get('nuevoCursoCodigo')?.value !==
-                  actual.cursoCodigo
-                ) {
-                  this.form.patchValue(
-                    { nuevoCursoCodigo: actual.cursoCodigo },
-                    { emitEvent: false }
-                  );
-                }
+                // Aplicamos el validador, pasándole la inscripción actual y el servicio
+                this.form.setValidators(
+                  sameCourseValidator(
+                    this.inscripcionesState,
+                    this.inscripcionActual
+                  )
+                );
+                this.form.patchValue(
+                  { nuevoCursoCodigo: actual.cursoCodigo },
+                  { emitEvent: false }
+                );
               } else {
+                this.form.clearValidators();
                 this.form.patchValue(
                   { nuevoCursoCodigo: '' },
                   { emitEvent: false }
                 );
               }
+              this.form.updateValueAndValidity();
             })
           )
         )
@@ -122,11 +153,6 @@ export class EditInscripcion implements OnInit {
       const nuevoCursoCodigo = this.form.value.nuevoCursoCodigo;
       const { alumnoDNI, cursoCodigo } = this.inscripcionActual;
 
-      if (cursoCodigo === nuevoCursoCodigo) {
-        this.snackbarNotification.error('El curso seleccionado es el mismo.');
-        return;
-      }
-
       const cambio: CambioInscripcion = {
         anterior: { alumnoDNI: alumnoDNI.toString(), cursoCodigo },
         nueva: {
@@ -138,6 +164,9 @@ export class EditInscripcion implements OnInit {
       this.inscripcionesState.modificarInscripcion(cambio);
       this.snackbarNotification.success('Inscripción modificada correctamente');
       this.form.reset();
+      // Añadimos estas líneas para una limpieza completa
+      this.form.markAsPristine();
+      this.form.markAsUntouched();
       this.inscripcionActual = null;
     }
   }
