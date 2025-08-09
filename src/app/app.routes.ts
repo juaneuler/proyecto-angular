@@ -13,6 +13,7 @@ import { Inscripciones } from './features/inscripciones/containers/inscripciones
 import { AddInscripcion } from './features/inscripciones/components/add-inscripcion/add-inscripcion';
 import { EditInscripcion } from './features/inscripciones/components/edit-inscripcion/edit-inscripcion';
 import { DeleteInscripcion } from './features/inscripciones/components/delete-inscripcion/delete-inscripcion';
+import { NotFound } from './not-found/not-found';
 
 export const routes: Routes = [
   {
@@ -46,4 +47,5 @@ export const routes: Routes = [
       { path: AppRoutes.InscripcionesEliminar, component: DeleteInscripcion },
     ],
   },
+  { path: '**', component: NotFound },
 ];
