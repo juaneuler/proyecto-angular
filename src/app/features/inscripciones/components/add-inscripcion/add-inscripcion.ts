@@ -19,6 +19,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
 import { Bigtitle } from '../../../../../shared/directives/bigtitle';
 import { SnackbarNotification } from '../../../../../shared/services/snackbar-notification';
+import { AppRoutes } from '../../../../../shared/enums/routes';
+import { RouterModule } from '@angular/router';
 
 // Definimos la función para validar por fuera del componente
 const alreadyInscribedValidator = (
@@ -50,11 +52,14 @@ const alreadyInscribedValidator = (
     MatButtonModule,
     MatSelectModule,
     Bigtitle,
+    RouterModule
   ],
   templateUrl: './add-inscripcion.html',
   styleUrl: './add-inscripcion.scss',
 })
 export class AddInscripcion implements OnInit {
+  readonly routes = AppRoutes
+
   form: FormGroup;
   alumnos$: Observable<Student[]>;
   cursos$: Observable<Course[]>;
