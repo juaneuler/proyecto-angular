@@ -12,6 +12,7 @@ export enum AppRoutes {
   InscripcionesAgregar = 'agregar',
   InscripcionesEditar = 'modificar',
   InscripcionesEliminar = 'borrar',
+  Unauthorized = 'unauthorized',
 }
 
 export enum ApiRoutes {
