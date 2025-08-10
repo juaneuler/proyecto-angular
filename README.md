@@ -7,7 +7,7 @@ Este proyecto es una aplicación desarrollada con **Angular 20**, orientada a la
 - CRUD de **alumnos**.
 - CRUD de **cursos**.
 - Gestión de **inscripciones** (alta, baja y edición).
-- Rutas individuales para cada formulario (alta, edición).
+- Rutas individuales para cada formulario (alta, edición y baja).
 - Estilos personalizados con **SASS**.
 - Uso de **Reactive Forms** con validaciones.
 - Componentes reutilizables y estructurados.
@@ -17,6 +17,9 @@ Este proyecto es una aplicación desarrollada con **Angular 20**, orientada a la
 - Simulación de Backend con `db.json` para alumnos y cursos
 - Uso de rutas tipadas con `enum` para mayor seguridad
 - Estructura de features: cada entidad (alumnos, cursos, inscripciones) organizada en su propia carpeta
+- **Lazy Loading en rutas principales** para optimizar el rendimiento de la carga inicial.
+- Implementación de un `Guard` para proteger las rutas principales por permisos de administrador.
+- **Ruta y componente de "Acceso Denegado"** para manejar usuarios sin los permisos adecuados
 
 ## 🔧 Tecnologías usadas
 
