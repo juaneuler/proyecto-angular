@@ -65,7 +65,12 @@
     </div>
 
 
-    <button type="submit" [disabled]="editForm.invalid" class="boton-submit">Guardar Cambios</button>
+    <button type="submit" [disabled]="editForm.invalid || loading" class="boton-submit">
+      <ng-container *ngIf="!loading">Guardar Cambios</ng-container>
+      <div *ngIf="loading" class="spinner-border spinner-border-sm text-light" role="status">
+        <span class="visually-hidden">Cargando...</span>
+      </div>
+    </button>
     <button type="button" (click)="onReset()" class="boton-reset">Cancelar</button>
     <a [routerLink]="['/', routes.Alumnos]" class="boton-volver">Volver a la lista</a>
   </form>

@@ -43,6 +43,8 @@ export class EditForm implements OnInit {
 
   students: Student[] = [];
 
+  loading = false;
+
   constructor(private fb: FormBuilder) {}
 
   ngOnInit(): void {
@@ -88,21 +90,26 @@ export class EditForm implements OnInit {
         average: student.average,
       });
     } else {
-      this.snackbarNotification.error('Estudiante no encontrado.');
+      this.snackbarNotification.error('Estudiante no encontrado');
       this.selectedStudent = null;
     }
   }
 
   onEdit() {
     if (this.editForm.valid && this.selectedStudent) {
-      const editedStudent: Student = {
-        ...this.selectedStudent,
-        ...this.editForm.value,
-      };
+      this.loading = true;
 
-      this.alumnosState.editStudent(editedStudent);
-      this.snackbarNotification.success('Estudiante editado con éxito!');
-      this.onReset();
+      setTimeout(() => {
+        const editedStudent: Student = {
+          ...this.selectedStudent,
+          ...this.editForm.value,
+        };
+
+        this.alumnosState.editStudent(editedStudent);
+        this.snackbarNotification.success('Estudiante editado con éxito!');
+        this.onReset();
+        this.loading = false; //
+      }, 1000);
     }
   }
 
