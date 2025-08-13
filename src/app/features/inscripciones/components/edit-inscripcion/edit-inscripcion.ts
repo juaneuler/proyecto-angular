@@ -61,13 +61,13 @@ const sameCourseValidator = (
     MatSelectModule,
     MatButtonModule,
     Bigtitle,
-    RouterModule
+    RouterModule,
   ],
   templateUrl: './edit-inscripcion.html',
   styleUrl: './edit-inscripcion.scss',
 })
 export class EditInscripcion implements OnInit {
-  readonly routes = AppRoutes
+  readonly routes = AppRoutes;
 
   form: FormGroup;
   alumnos$: Observable<Student[]>;
@@ -93,12 +93,9 @@ export class EditInscripcion implements OnInit {
       this.inscripcionesState.inscripciones$,
     ]).pipe(
       map(([alumnos, inscripciones]) => {
-        console.log('Alumnos:', alumnos);
-        console.log('Inscripciones:', inscripciones);
         const filtrados = alumnos.filter((alumno) =>
           inscripciones.some((ins) => Number(ins.alumnoDNI) === alumno.dni)
         );
-        console.log('Alumnos inscriptos filtrados:', filtrados);
         return filtrados;
       })
     );
@@ -116,8 +113,6 @@ export class EditInscripcion implements OnInit {
           this.inscripciones$.pipe(
             map((inscripciones) => {
               if (!dni) return null;
-              console.log('Buscando inscripción para DNI:', dni);
-              console.log('Inscripciones:', inscripciones);
               return (
                 inscripciones.find((i) => i.alumnoDNI === dni.toString()) ||
                 null
@@ -153,7 +148,6 @@ export class EditInscripcion implements OnInit {
   }
 
   onSubmit(): void {
-    console.log('Submit edit:', this.form.value, this.inscripcionActual);
     if (this.form.valid && this.inscripcionActual) {
       const nuevoCursoCodigo = this.form.value.nuevoCursoCodigo;
       const { alumnoDNI, cursoCodigo } = this.inscripcionActual;
