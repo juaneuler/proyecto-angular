@@ -43,6 +43,8 @@ export class FormEdicion implements OnInit {
 
   courses: Course[] = [];
 
+  loading = false;
+
   constructor(private fb: FormBuilder) {}
 
   ngOnInit(): void {
@@ -104,14 +106,19 @@ export class FormEdicion implements OnInit {
 
   onEdit() {
     if (this.editForm.valid && this.selectedCourse) {
-      const editedCourse: Course = {
-        ...this.selectedCourse,
-        ...this.editForm.value,
-      };
+      this.loading = true;
 
-      this.cursosState.editCurso(editedCourse);
-      this.snackbarNotification.success('Curso editado con éxito!');
-      this.onReset();
+      setTimeout(() => {
+        const editedCourse: Course = {
+          ...this.selectedCourse,
+          ...this.editForm.value,
+        };
+
+        this.cursosState.editCurso(editedCourse);
+        this.snackbarNotification.success('Curso editado con éxito!');
+        this.onReset();
+        this.loading = false;
+      }, 1000);
     }
   }
 
