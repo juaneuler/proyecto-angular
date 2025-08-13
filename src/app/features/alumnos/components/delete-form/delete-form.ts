@@ -37,6 +37,8 @@ export class DeleteForm implements OnInit {
 
   studentForm!: FormGroup;
 
+  loading = false;
+
   constructor(private fb: FormBuilder) {}
 
   ngOnInit(): void {
@@ -55,17 +57,22 @@ export class DeleteForm implements OnInit {
 
   onDelete() {
     if (this.studentForm.valid) {
-      const dni = Number(this.studentForm.value.dni);
-      const success = this.alumnosState.deleteStudent(dni);
+      this.loading = true;
 
-      if (success) {
-        this.snackbarNotification.success('Estudiante eliminado con éxito!');
-        this.onReset();
-      } else {
-        this.snackbarNotification.error(
-          'No se encontró ningún estudiante con ese DNI.'
-        );
-      }
+      setTimeout(() => {
+        const dni = Number(this.studentForm.value.dni);
+        const success = this.alumnosState.deleteStudent(dni);
+
+        if (success) {
+          this.snackbarNotification.success('Estudiante eliminado con éxito!');
+          this.onReset();
+        } else {
+          this.snackbarNotification.error(
+            'No se encontró ningún estudiante con ese DNI'
+          );
+        }
+        this.loading = false;
+      }, 1000);
     }
   }
 
