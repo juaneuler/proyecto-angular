@@ -37,6 +37,8 @@ export class FormBaja implements OnInit {
 
   courseForm!: FormGroup;
 
+  loading = false;
+
   constructor(private fb: FormBuilder) {}
 
   ngOnInit(): void {
@@ -48,27 +50,35 @@ export class FormBaja implements OnInit {
           Validators.pattern(/^[A-Z]{2}\d{3}$/), // Mismo patrón de validación para que seamos coherentes a la hora de definir el código del curso
         ],
       ],
-      descripcion: ['', [
-        Validators.required,
-        Validators.minLength(10), // Mínimo 10 caracteres para el motivo de baja
-        Validators.maxLength(50), // Máximo 10 caracteres para el motivo de baja
-      ]],
+      descripcion: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(10), // Mínimo 10 caracteres para el motivo de baja
+          Validators.maxLength(50), // Máximo 10 caracteres para el motivo de baja
+        ],
+      ],
     });
   }
 
   onDelete() {
     if (this.courseForm.valid) {
-      const code = this.courseForm.value.code.trim();
-      const success = this.cursosState.deleteCurso(code);
+      this.loading = true;
 
-      if (success) {
-        this.snackbarNotification.success('Curso eliminado con éxito!');
-        this.onReset();
-      } else {
-        this.snackbarNotification.error(
-          'No se encontró ningún curso con ese código.'
-        );
-      }
+      setTimeout(() => {
+        const code = this.courseForm.value.code.trim();
+        const success = this.cursosState.deleteCurso(code);
+
+        if (success) {
+          this.snackbarNotification.success('Curso eliminado con éxito!');
+          this.onReset();
+        } else {
+          this.snackbarNotification.error(
+            'No se encontró ningún curso con ese código'
+          );
+        }
+        this.loading = false;
+      }, 1000);
     }
   }
 

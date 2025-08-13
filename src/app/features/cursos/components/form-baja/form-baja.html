@@ -26,7 +26,12 @@
       </div>
     </div>
 
-    <button [disabled]="courseForm.invalid" type="submit" class="boton-borrar">Eliminar Curso</button>
+    <button type="submit" [disabled]="courseForm.invalid || loading" class="boton-borrar">
+      <ng-container *ngIf="!loading">Eliminar Curso</ng-container>
+      <div *ngIf="loading" class="spinner-border spinner-border-sm text-light" role="status">
+        <span class="visually-hidden">Cargando...</span>
+      </div>
+    </button>
 
     <a [routerLink]="['/', routes.Cursos]" class="boton-volver">Volver a la lista</a>
   </form>
