@@ -2,7 +2,7 @@
 
 Este proyecto es una aplicación desarrollada con **Angular 20**, orientada a la gestión de estudiantes, cursos e inscripciones. Fue realizado como parte del curso de Angular en Coderhouse.
 
-## 🧠 Funcionalidades
+## Funcionalidades
 
 - CRUD de **alumnos**.
 - CRUD de **cursos**.
@@ -21,7 +21,7 @@ Este proyecto es una aplicación desarrollada con **Angular 20**, orientada a la
 - Implementación de un `Guard` para proteger las rutas principales por permisos de administrador.
 - **Ruta y componente de "Acceso Denegado"** para manejar usuarios sin los permisos adecuados
 
-## 🔧 Tecnologías usadas
+## Tecnologías usadas
 
 - Angular 20
 - TypeScript
