@@ -53,6 +53,5 @@ export class InscripcionesEstadoService {
     );
 
     this.inscripcionesSubject.next([...sinAntigua, nueva]);
-    console.log('Inscripciones actualizadas:', this.inscripcionesSubject.value);
   }
 }
