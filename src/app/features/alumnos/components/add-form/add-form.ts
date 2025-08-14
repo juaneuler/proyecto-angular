@@ -11,6 +11,7 @@ import { SnackbarNotification } from '../../../../../shared/services/snackbar-no
 import { AlumnosState } from '../../alumnos-estado';
 import { RouterModule } from '@angular/router';
 import { AppRoutes } from '../../../../../shared/enums/routes';
+import { StudentToAdd } from '../../../../../shared/entities';
 
 @Component({
   selector: 'app-add-form',
@@ -73,10 +74,26 @@ export class AddForm implements OnInit {
     this.loading = true;
 
     setTimeout(() => {
-      this.alumnosState.addStudent(this.studentForm.value);
-      this.showAddedSuccesfully();
-      this.onReset();
-      this.loading = false;
+      const formValue = this.studentForm.value;
+      const studentToAdd: StudentToAdd = {
+        ...formValue,
+        dni: Number(formValue.dni),
+        age: Number(formValue.age),
+        average: Number(formValue.average),
+        customId: String(formValue.dni),
+      };
+
+      this.alumnosState.addStudent(studentToAdd).subscribe({
+        next: () => {
+          this.showAddedSuccesfully();
+          this.onReset();
+          this.loading = false;
+        },
+        error: () => {
+          this.snackbarNotification.error('Error al agregar el estudiante');
+          this.loading = false;
+        },
+      });
     }, 1000);
   }
 
