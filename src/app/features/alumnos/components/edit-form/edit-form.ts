@@ -105,10 +105,17 @@ export class EditForm implements OnInit {
           ...this.editForm.value,
         };
 
-        this.alumnosState.editStudent(editedStudent);
-        this.snackbarNotification.success('Estudiante editado con éxito!');
-        this.onReset();
-        this.loading = false; //
+        this.alumnosState.editStudent(editedStudent).subscribe({
+          next: () => {
+            this.snackbarNotification.success('Estudiante editado con éxito!');
+            this.onReset();
+            this.loading = false;
+          },
+          error: () => {
+            this.snackbarNotification.error('Error al editar el estudiante');
+            this.loading = false;
+          },
+        });
       }, 1000);
     }
   }
