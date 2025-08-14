@@ -5,6 +5,16 @@ export interface Student {
     dni: number;
     average: number;
     id: string;
+    customId: string;
+}
+
+export interface StudentToAdd {
+  dni: number;
+  name: string;
+  surname: string,
+  age: number,
+  average: number;
+  customId: string;
 }
 
 export interface Course {
