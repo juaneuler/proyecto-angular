@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { AlumnosFetch } from './../../alumnos-fetch';
 import { AlumnosState } from '../../alumnos-estado';
 import { Student } from '../../../../../shared/entities';
 import { CommonModule } from '@angular/common';
@@ -19,16 +18,11 @@ export class Alumnos implements OnInit {
 
   readonly AppRoutes = AppRoutes;
 
-  constructor(
-    private alumnosFetch: AlumnosFetch,
-    private alumnosState: AlumnosState
-  ) {}
+  constructor(private alumnosState: AlumnosState) {}
 
   ngOnInit(): void {
-    const currentState = this.alumnosState['studentsSubject'].getValue();
-    if (!currentState || currentState.length === 0) {
-      this.alumnosFetch.getAlumnos().subscribe((data) => {
-        this.alumnosState.setStudents(data);
+    if (!this.alumnosState.getStudents().length) {
+      this.alumnosState.loadStudents().subscribe(() => {
         this.loading = false;
       });
     } else {
