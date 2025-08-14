@@ -1,50 +1,81 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { Student } from '../../../shared/entities';
-import { AlumnosFetch } from './alumnos-fetch';
+import { BehaviorSubject, Observable, tap, of, throwError } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { Student, StudentToAdd } from '../../../shared/entities';
 
 @Injectable({ providedIn: 'root' })
 export class AlumnosState {
   private studentsSubject = new BehaviorSubject<Student[]>([]);
   students$: Observable<Student[]> = this.studentsSubject.asObservable();
 
-  constructor(private alumnosFetch: AlumnosFetch) {}
+  private apiUrl = 'https://689d0c47ce755fe69787bae6.mockapi.io/sistema-gestion/students';
 
-  loadStudents() {
-    this.alumnosFetch.getAlumnos().subscribe((students) => {
-      this.studentsSubject.next(students);
-    });
+  constructor(private http: HttpClient) {}
+
+  loadStudents(): Observable<Student[]> {
+    return this.http.get<Student[]>(this.apiUrl).pipe(
+      tap((students) => {
+        this.studentsSubject.next(students);
+      })
+    );
   }
 
-  setStudents(students: Student[]) {
-    this.studentsSubject.next(students);
+  addStudent(newStudent: StudentToAdd): Observable<Student> {
+    return this.http.post<Student>(this.apiUrl, newStudent).pipe(
+      tap((createdStudent) => {
+        const currentStudents = this.studentsSubject.getValue();
+        this.studentsSubject.next([...currentStudents, createdStudent]);
+      })
+    );
   }
 
-  addStudent(newStudent: Student) {
-    const current = this.studentsSubject.getValue();
-    this.studentsSubject.next([...current, newStudent]);
-  }
-
-  editStudent(edited: Student) {
-    const updated = this.studentsSubject
+  editStudent(editedStudent: Student): Observable<Student> {
+    const studentToUpdate = this.studentsSubject
       .getValue()
-      .map((s) => (s.dni === edited.dni ? edited : s));
-    this.studentsSubject.next(updated);
-  }
+      .find(s => s.customId === editedStudent.customId);
 
-  deleteStudent(dni: number): boolean {
-    const current = this.studentsSubject.getValue();
-    const updated = current.filter((s) => s.dni !== dni);
-
-    if (updated.length === current.length) {
-      return false;
+    if (!studentToUpdate) {
+      return throwError(() => new Error('No se encontró el estudiante para actualizar.'));
     }
 
-    this.studentsSubject.next(updated);
-    return true;
+    const url = `${this.apiUrl}/${studentToUpdate.id}`;
+
+    return this.http.put<Student>(url, editedStudent).pipe(
+      tap((updatedStudentFromServer) => {
+        const currentStudents = this.studentsSubject.getValue();
+        const updatedList = currentStudents.map((s) =>
+          s.customId === updatedStudentFromServer.customId ? updatedStudentFromServer : s
+        );
+        this.studentsSubject.next(updatedList);
+      })
+    );
+  }
+
+  deleteStudent(customId: string): Observable<unknown> {
+    const studentToDelete = this.studentsSubject
+      .getValue()
+      .find(s => s.customId === customId);
+
+    if (!studentToDelete) {
+        return throwError(() => new Error('No se encontró el estudiante para eliminar.'));
+    }
+
+    const url = `${this.apiUrl}/${studentToDelete.id}`;
+
+    return this.http.delete(url).pipe(
+      tap(() => {
+        const currentStudents = this.studentsSubject.getValue();
+        const updatedList = currentStudents.filter((s) => s.customId !== customId);
+        this.studentsSubject.next(updatedList);
+      })
+    );
   }
 
   getStudents(): Student[] {
     return this.studentsSubject.getValue();
+  }
+  
+  setStudents(students: Student[]) {
+    this.studentsSubject.next(students);
   }
 }
