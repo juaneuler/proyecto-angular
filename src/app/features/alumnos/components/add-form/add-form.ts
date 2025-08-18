@@ -73,28 +73,26 @@ export class AddForm implements OnInit {
 
     this.loading = true;
 
-    setTimeout(() => {
-      const formValue = this.studentForm.value;
-      const studentToAdd: StudentToAdd = {
-        ...formValue,
-        dni: Number(formValue.dni),
-        age: Number(formValue.age),
-        average: Number(formValue.average),
-        customId: String(formValue.dni),
-      };
+    const formValue = this.studentForm.value;
+    const studentToAdd: StudentToAdd = {
+      ...formValue,
+      dni: Number(formValue.dni),
+      age: Number(formValue.age),
+      average: Number(formValue.average),
+      customId: String(formValue.dni),
+    };
 
-      this.alumnosState.addStudent(studentToAdd).subscribe({
-        next: () => {
-          this.showAddedSuccesfully();
-          this.onReset();
-          this.loading = false;
-        },
-        error: () => {
-          this.snackbarNotification.error('Error al agregar el estudiante');
-          this.loading = false;
-        },
-      });
-    }, 1000);
+    this.alumnosState.addStudent(studentToAdd).subscribe({
+      next: () => {
+        this.showAddedSuccesfully();
+        this.onReset();
+        this.loading = false;
+      },
+      error: (err: unknown) => {
+        this.snackbarNotification.error('Error al agregar el estudiante');
+        this.loading = false;
+      },
+    });
   }
 
   onReset() {
