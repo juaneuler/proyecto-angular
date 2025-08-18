@@ -1,5 +1,15 @@
 <section class="home">
   <h1>Bienvenido al sistema de gestión de alumnos!</h1>
   <h2>Hecho con Angular para el curso de Coderhouse</h2>
-  <p>Usá la barra de navegación para comenzar.</p>
+  
+  <!-- Mensaje condicional según el estado de login -->
+  <div *ngIf="(authService.user$ | async) as user; else notLoggedIn">
+    <p class="instruction">Hola, <strong>{{ user.username }}</strong>! Para comenzar, navegá usando la barra lateral!</p>
+    <p class="user-role">Tu rol actual es: <strong>{{ user.role }}</strong></p>
+  </div>
+  
+  <ng-template #notLoggedIn>
+    <p class="instruction">Para comenzar, logueate haciendo click en <strong>'Login'</strong></p>
+    <p class="help-text">Necesitás acceder para utilizar todas las funcionalidades.</p>
+  </ng-template>
 </section>

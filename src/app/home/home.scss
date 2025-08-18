@@ -7,6 +7,7 @@
   background: linear-gradient(135deg, #a0c1b8, #f0f4f8);
   color: #334e68;
   text-align: center;
+  min-height: 70vh;
 
   h1 {
     font-size: 3rem;
@@ -29,5 +30,43 @@
     max-width: 450px;
     line-height: 1.5;
     color: #334e68;
+  }
+  
+  // Nuevas clases para los mensajes condicionales
+  .instruction {
+    background-color: rgba(255, 255, 255, 0.6);
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    font-size: 1.3rem;
+    color: #1f3a93;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-left: 4px solid #1f3a93;
+    
+    strong {
+      color: #0e2256;
+      font-weight: 700;
+    }
+  }
+  
+  .user-role {
+    font-size: 1.1rem;
+    background-color: rgba(160, 193, 184, 0.3);
+    padding: 0.7rem 1.5rem;
+    border-radius: 20px;
+    display: inline-block;
+    
+    strong {
+      color: #145c4e;
+      font-weight: 600;
+    }
+  }
+  
+  .help-text {
+    margin-top: 1rem;
+    font-size: 1rem;
+    color: #486581;
+    font-style: italic;
+    opacity: 0.9;
   }
 }
