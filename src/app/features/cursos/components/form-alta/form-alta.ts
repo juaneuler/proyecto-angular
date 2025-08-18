@@ -11,6 +11,7 @@ import { SnackbarNotification } from '../../../../../shared/services/snackbar-no
 import { CursosState } from '../../cursos-estado';
 import { RouterModule } from '@angular/router';
 import { AppRoutes } from '../../../../../shared/enums/routes';
+import { Course } from '../../../../../shared/entities';
 
 @Component({
   selector: 'app-form-alta',
@@ -29,22 +30,22 @@ export class FormAlta implements OnInit {
 
   ngOnInit() {
     this.courseForm = this.fb.group({
-      code: ['', [Validators.required, Validators.pattern(/^[A-Z]{2}\d{3}$/)]], // El código debe tener 2 letras seguidas de 3 números
+      code: ['', [Validators.required, Validators.pattern(/^[A-Z]{2}\d{3}$/)]],
       name: [
         '',
         [
           Validators.required,
-          Validators.minLength(3), // Mínimo 3 caracteres
-          Validators.maxLength(50), // Máximo 50 caracteres
-          Validators.pattern(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s\d]*$/), // No se pueden usar caracteres especiales
+          Validators.minLength(3),
+          Validators.maxLength(50),
+          Validators.pattern(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s\d]*$/),
         ],
       ],
       credits: [
         '',
         [
           Validators.required,
-          Validators.min(1),  // Mínimo 1 crédito
-          Validators.max(10), // Máximo 10 créditos
+          Validators.min(1),
+          Validators.max(10),
           Validators.pattern(/^\d+$/),
         ],
       ],
@@ -58,12 +59,24 @@ export class FormAlta implements OnInit {
 
     this.loading = true;
 
-    setTimeout(() => {
-      this.cursosState.addCurso(this.courseForm.value);
-      this.showAddedSuccessfully();
-      this.onReset();
-      this.loading = false;
-    }, 1000);
+    const formValue = this.courseForm.value;
+    const courseToAdd: Course = {
+      ...formValue,
+      credits: Number(formValue.credits),
+      customId: String(formValue.code).toLowerCase(),
+    };
+
+    this.cursosState.addCurso(courseToAdd).subscribe({
+      next: () => {
+        this.showAddedSuccessfully();
+        this.onReset();
+        this.loading = false;
+      },
+      error: (err: unknown) => {
+        this.snackbarNotification.error('Ocurrió un error al agregar el curso');
+        this.loading = false;
+      },
+    });
   }
 
   onReset() {
