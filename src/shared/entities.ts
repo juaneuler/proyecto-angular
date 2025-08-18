@@ -22,11 +22,13 @@ export interface Course {
     code: string;
     credits: number;
     id: string;
+    customId: string;
 }
 
 export interface Inscription {
     alumnoDNI: string;
     cursoCodigo: string;
+    id?: string;
 }
 
 export interface CambioInscripcion {
@@ -46,4 +48,10 @@ export interface InscripcionDetalle {
   alumnoApellido: string;
   cursoCodigo: string;
   cursoNombre: string;
+}
+
+export interface User {
+  id: string;
+  nombre: string;
+  rol: 'admin' | 'usuario';
 }
