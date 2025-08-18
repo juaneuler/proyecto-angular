@@ -12,7 +12,7 @@ import { Bigtitle } from '../../../../../shared/directives/bigtitle';
   selector: 'app-usuarios',
   imports: [UsersTable, AsyncPipe, CommonModule, RouterModule, Bigtitle],
   templateUrl: './usuarios.html',
-  styleUrl: './usuarios.scss'
+  styleUrl: './usuarios.scss',
 })
 export class Usuarios implements OnInit {
   users$: Observable<User[]>;
@@ -23,8 +23,6 @@ export class Usuarios implements OnInit {
   }
 
   ngOnInit(): void {
-    this.usuariosState.loadUsers().subscribe( users => {
-      console.log("usuarios cargados:", users);
-    });
+    this.usuariosState.loadUsers().subscribe();
   }
 }
