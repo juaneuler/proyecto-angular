@@ -1,0 +1,56 @@
+<div class="add-form">
+  <h2 appBigtitle>Agregar Usuario</h2>
+
+  <form [formGroup]="userForm" (ngSubmit)="onSubmit()" class="form">
+    <div class="form-group">
+      <mat-form-field appearance="outline">
+        <mat-label>Nombre</mat-label>
+        <input matInput type="text" formControlName="nombre" placeholder="Ingrese el nombre" />
+        <mat-error *ngIf="userForm.get('nombre')?.touched && userForm.get('nombre')?.invalid">
+          <span *ngIf="userForm.get('nombre')?.errors?.['required']">
+            El nombre es obligatorio.
+          </span>
+          <span *ngIf="userForm.get('nombre')?.errors?.['minlength']">
+            El nombre debe tener al menos 3 caracteres.
+          </span>
+          <span *ngIf="userForm.get('nombre')?.errors?.['maxlength']">
+            El nombre no puede exceder los 30 caracteres.
+          </span>
+          <span *ngIf="userForm.get('nombre')?.errors?.['pattern']">
+            El nombre solo puede contener letras.
+          </span>
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="form-group">
+      <mat-form-field appearance="outline">
+        <mat-label>Rol</mat-label>
+        <mat-select formControlName="rol">
+          <mat-option *ngFor="let rol of roles" [value]="rol">
+            {{ rol }}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="userForm.get('rol')?.touched && userForm.get('rol')?.invalid">
+          <span *ngIf="userForm.get('rol')?.errors?.['required']">
+            El rol es obligatorio.
+          </span>
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <button type="submit" [disabled]="userForm.invalid || loading" class="boton-submit">
+      <ng-container *ngIf="!loading">Agregar Usuario</ng-container>
+      <div *ngIf="loading" class="spinner-border spinner-border-sm text-light" role="status">
+        <span class="visually-hidden">Cargando...</span>
+      </div>
+    </button>
+
+    <button type="button" (click)="onReset()" class="boton-reset">
+      Limpiar Formulario
+    </button>
+
+    <a [routerLink]="['/', routes.Usuarios]" class="boton-volver">Volver a la lista</a>
+
+  </form>
+</div>
