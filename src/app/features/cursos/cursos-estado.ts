@@ -1,50 +1,93 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Injectable, inject } from '@angular/core';
+import { BehaviorSubject, Observable, tap, of, throwError } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 import { Course } from '../../../shared/entities';
-import { CursosFetch } from './cursos-fetch';
+import { ApiRoutes } from '../../../shared/enums/routes';
 
 @Injectable({ providedIn: 'root' })
 export class CursosState {
   private cursosSubject = new BehaviorSubject<Course[]>([]);
   cursos$: Observable<Course[]> = this.cursosSubject.asObservable();
 
-  constructor(private cursosFetch: CursosFetch) {}
+  private apiUrl =
+    'https://689d0c47ce755fe69787bae6.mockapi.io/sistema-gestion/courses';
 
-  loadCursos() {
-    this.cursosFetch.getCursos().subscribe((cursos) => {
-      this.cursosSubject.next(cursos);
-    });
+  private http = inject(HttpClient);
+
+  constructor() {}
+
+  loadCursos(): Observable<Course[]> {
+    return this.http.get<Course[]>(this.apiUrl).pipe(
+      tap((courses) => {
+        this.cursosSubject.next(courses);
+      })
+    );
   }
 
-  setCursos(cursos: Course[]) {
-    this.cursosSubject.next(cursos);
+  addCurso(newCourse: Course): Observable<Course> {
+    return this.http.post<Course>(this.apiUrl, newCourse).pipe(
+      tap((createdCourse) => {
+        const currentCourses = this.cursosSubject.getValue();
+        this.cursosSubject.next([...currentCourses, createdCourse]);
+      })
+    );
   }
 
-  addCurso(nuevo: Course) {
-    const current = this.cursosSubject.getValue();
-    this.cursosSubject.next([...current, nuevo]);
-  }
-
-  editCurso(editado: Course) {
-    const updated = this.cursosSubject
+  editCurso(edited: Course): Observable<Course> {
+    const courseToUpdate = this.cursosSubject
       .getValue()
-      .map((c) => (c.id === editado.id ? editado : c));
-    this.cursosSubject.next(updated);
-  }
+      .find((c) => c.customId === edited.customId);
 
-  deleteCurso(code: string): boolean {
-    const current = this.cursosSubject.getValue();
-    const updated = current.filter((c) => c.code !== code);
-
-    if (updated.length === current.length) {
-      return false;
+    if (!courseToUpdate) {
+      return throwError(
+        () => new Error('No se encontró el curso para actualizar.')
+      );
     }
 
-    this.cursosSubject.next(updated);
-    return true;
+    const url = `${this.apiUrl}/${courseToUpdate.id}`;
+
+    return this.http.put<Course>(url, edited).pipe(
+      tap((updatedCourseFromServer) => {
+        const currentCourses = this.cursosSubject.getValue();
+        const updatedList = currentCourses.map((c) =>
+          c.customId === updatedCourseFromServer.customId
+            ? updatedCourseFromServer
+            : c
+        );
+        this.cursosSubject.next(updatedList);
+      })
+    );
   }
 
-  getCursos(): Course[] {
-    return this.cursosSubject.getValue();
+  deleteCurso(customId: string): Observable<void> {
+    const courseToDelete = this.cursosSubject
+      .getValue()
+      .find((c) => c.customId === customId);
+
+    if (!courseToDelete) {
+      return throwError(
+        () => new Error('No se encontró el curso para eliminar.')
+      );
+    }
+
+    const url = `${this.apiUrl}/${courseToDelete.id}`;
+
+    return this.http.delete<void>(url).pipe(
+      tap(() => {
+        const currentCourses = this.cursosSubject.getValue();
+        const updatedList = currentCourses.filter(
+          (c) => c.customId !== customId
+        );
+        this.cursosSubject.next(updatedList);
+      })
+    );
   }
+
+  getCourses(): Course[] {
+      return this.cursosSubject.getValue();
+    }
+    
+  setCourses(courses: Course[]) {
+      this.cursosSubject.next(courses);
+    }
 }
