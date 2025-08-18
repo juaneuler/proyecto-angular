@@ -53,6 +53,32 @@ header {
                         outline: 2px solid #0056b3;
                         outline-offset: 2px;
                     }
+                    
+                    // Estilos específicos para login (verde)
+                    &.login-btn {
+                        background-color: #28a745;
+                        
+                        &:hover {
+                            background-color: #218838;
+                        }
+                        
+                        &:focus {
+                            outline-color: #218838;
+                        }
+                    }
+                    
+                    // Estilos específicos para logout (rojo)
+                    &.logout-btn {
+                        background-color: #dc3545;
+                        
+                        &:hover {
+                            background-color: #c82333;
+                        }
+                        
+                        &:focus {
+                            outline-color: #c82333;
+                        }
+                    }
                 }
             }
         }
