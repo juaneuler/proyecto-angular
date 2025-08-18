@@ -10,7 +10,7 @@ export class Bigtitle {
     private renderer: Renderer2
   ) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.renderer.setStyle(this.el.nativeElement, 'font-size', '20px');
   }
 }
