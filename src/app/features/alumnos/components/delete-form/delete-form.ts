@@ -59,36 +59,31 @@ export class DeleteForm implements OnInit {
     if (this.studentForm.valid) {
       this.loading = true;
 
-      setTimeout(() => {
-        const dni = Number(this.studentForm.value.dni);
+      const dni = Number(this.studentForm.value.dni);
+      const student = this.alumnosState
+        .getStudents()
+        .find((s) => s.dni === dni);
 
-        const student = this.alumnosState
-          .getStudents()
-          .find((s) => s.dni === dni);
-
-        if (student) {
-          this.alumnosState.deleteStudent(student.customId).subscribe({
-            next: () => {
-              this.snackbarNotification.success(
-                'Estudiante eliminado con éxito!'
-              );
-              this.onReset();
-              this.loading = false;
-            },
-            error: () => {
-              this.snackbarNotification.error(
-                'Error al eliminar el estudiante'
-              );
-              this.loading = false;
-            },
-          });
-        } else {
-          this.snackbarNotification.error(
-            'No se encontró ningún estudiante con ese DNI'
-          );
-          this.loading = false;
-        }
-      }, 1000);
+      if (student) {
+        this.alumnosState.deleteStudent(student.customId).subscribe({
+          next: () => {
+            this.snackbarNotification.success(
+              'Estudiante eliminado con éxito!'
+            );
+            this.onReset();
+            this.loading = false;
+          },
+          error: (err: unknown) => {
+            this.snackbarNotification.error('Error al eliminar el estudiante');
+            this.loading = false;
+          },
+        });
+      } else {
+        this.snackbarNotification.error(
+          'No se encontró ningún estudiante con ese DNI'
+        );
+        this.loading = false;
+      }
     }
   }
 
