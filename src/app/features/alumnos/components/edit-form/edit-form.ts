@@ -95,30 +95,28 @@ export class EditForm implements OnInit {
     }
   }
 
-  onEdit() {
-    if (this.editForm.valid && this.selectedStudent) {
-      this.loading = true;
+onEdit() {
+  if (this.editForm.valid && this.selectedStudent) {
+    this.loading = true;
 
-      setTimeout(() => {
-        const editedStudent: Student = {
-          ...this.selectedStudent,
-          ...this.editForm.value,
-        };
+    const editedStudent: Student = {
+      ...this.selectedStudent,
+      ...this.editForm.value,
+    };
 
-        this.alumnosState.editStudent(editedStudent).subscribe({
-          next: () => {
-            this.snackbarNotification.success('Estudiante editado con éxito!');
-            this.onReset();
-            this.loading = false;
-          },
-          error: () => {
-            this.snackbarNotification.error('Error al editar el estudiante');
-            this.loading = false;
-          },
-        });
-      }, 1000);
-    }
+    this.alumnosState.editStudent(editedStudent).subscribe({
+      next: () => {
+        this.snackbarNotification.success('Estudiante editado con éxito!');
+        this.onReset();
+        this.loading = false;
+      },
+      error: (err: unknown) => {
+        this.snackbarNotification.error('Error al editar el estudiante');
+        this.loading = false;
+      },
+    });
   }
+}
 
   onReset() {
     this.searchForm.reset();
