@@ -1,0 +1,61 @@
+<div class="edit-form">
+  <h2 appBigtitle>Editar Usuario</h2>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="form">
+    <!-- Selector de usuario -->
+    <div class="form-group">
+      <mat-form-field appearance="outline">
+        <mat-label>Seleccionar Usuario</mat-label>
+        <mat-select formControlName="userId">
+          <mat-option *ngFor="let user of users$ | async" [value]="user.id">
+            {{ user.nombre }}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="form.get('userId')?.touched && form.get('userId')?.invalid">
+          Debe seleccionar un usuario.
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <!-- Selector de rol (aparece solo si hay un usuario seleccionado) -->
+    <div class="form-group" *ngIf="selectedUser">
+      <mat-form-field appearance="outline">
+        <mat-label>Rol</mat-label>
+        <mat-select formControlName="rol">
+          <mat-option *ngFor="let rol of roles" [value]="rol">
+            {{ rol }}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="form.get('rol')?.touched && form.get('rol')?.invalid">
+          Debe seleccionar un rol.
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <!-- Mensaje de ayuda -->
+    <div class="help-text" *ngIf="selectedUser">
+      <p>Usuario seleccionado: <strong>{{ selectedUser.nombre }}</strong></p>
+      <p>Rol actual: <strong>{{ selectedUser.rol }}</strong></p>
+    </div>
+
+    <!-- Botones de acción -->
+    <div class="actions">
+      <button type="submit"
+        [disabled]="form.invalid || loading || (selectedUser && selectedUser.rol === form.value.rol)"
+        class="boton-submit">
+        <ng-container *ngIf="!loading">Guardar Cambios</ng-container>
+        <div *ngIf="loading" class="spinner-border spinner-border-sm text-light" role="status">
+          <span class="visually-hidden">Cargando...</span>
+        </div>
+      </button>
+
+      <button type="button" (click)="onReset()" class="boton-reset">
+        Limpiar formulario
+      </button>
+
+      <a [routerLink]="['/', routes.Usuarios]" class="boton-volver">
+        Volver a la lista
+      </a>
+    </div>
+  </form>
+</div>
