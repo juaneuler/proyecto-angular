@@ -13,6 +13,11 @@ export enum AppRoutes {
   InscripcionesEditar = 'modificar',
   InscripcionesEliminar = 'borrar',
   Unauthorized = 'unauthorized',
+  Login = 'login',
+  Usuarios = 'usuarios',
+  UsuariosAgregar = 'agregar',
+  UsuariosEditar = 'editar',
+  UsuariosEliminar = 'eliminar'
 }
 
 export enum ApiRoutes {
