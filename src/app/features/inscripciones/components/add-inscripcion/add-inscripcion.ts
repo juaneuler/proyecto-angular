@@ -22,7 +22,6 @@ import { SnackbarNotification } from '../../../../../shared/services/snackbar-no
 import { AppRoutes } from '../../../../../shared/enums/routes';
 import { RouterModule } from '@angular/router';
 
-// Definimos la función para validar por fuera del componente
 const alreadyInscribedValidator = (
   inscripcionesEstadoService: InscripcionesEstadoService
 ): ValidatorFn => {
@@ -52,13 +51,13 @@ const alreadyInscribedValidator = (
     MatButtonModule,
     MatSelectModule,
     Bigtitle,
-    RouterModule
+    RouterModule,
   ],
   templateUrl: './add-inscripcion.html',
   styleUrl: './add-inscripcion.scss',
 })
 export class AddInscripcion implements OnInit {
-  readonly routes = AppRoutes
+  readonly routes = AppRoutes;
 
   form: FormGroup;
   alumnos$: Observable<Student[]>;
@@ -76,7 +75,6 @@ export class AddInscripcion implements OnInit {
         alumnoDNI: ['', Validators.required],
         cursoCodigo: ['', Validators.required],
       },
-      // Aplicamos el validador a nivel de FormGroup
       { validators: alreadyInscribedValidator(this.inscripcionesState) }
     );
     this.alumnos$ = this.alumnosState.students$;
@@ -88,12 +86,19 @@ export class AddInscripcion implements OnInit {
   onSubmit(): void {
     if (this.form.valid) {
       const { alumnoDNI, cursoCodigo } = this.form.value;
-      this.inscripcionesState.inscribirAlumno(alumnoDNI, cursoCodigo);
-      this.form.reset();
-      this.snackbarNotification.success('Alumno inscripto con éxito!');
-      // Estas líneas son para evitar que los selectores marquen error al enviar una inscripcion
-      this.form.markAsPristine();
-      this.form.markAsUntouched();
+      this.inscripcionesState
+        .inscribirAlumno(alumnoDNI, cursoCodigo)
+        .subscribe({
+          next: () => {
+            this.snackbarNotification.success('Alumno inscripto con éxito!');
+            this.form.reset();
+            this.form.markAsPristine();
+            this.form.markAsUntouched();
+          },
+          error: (err: unknown) => {
+            this.snackbarNotification.error('Error al inscribir al alumno');
+          },
+        });
     }
   }
 }
