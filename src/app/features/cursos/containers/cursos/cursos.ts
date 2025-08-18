@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, RouterOutlet } from '@angular/router';
 import { CoursesTable } from '../../components/courses-table/courses-table';
-import { CursosFetch } from '../../cursos-fetch';
 import { CursosState } from '../../cursos-estado';
 import { Course } from '../../../../../shared/entities';
 import { AppRoutes } from '../../../../../shared/enums/routes';
@@ -11,7 +10,7 @@ import { AppRoutes } from '../../../../../shared/enums/routes';
   selector: 'app-cursos',
   imports: [CommonModule, RouterModule, RouterOutlet, CoursesTable],
   templateUrl: './cursos.html',
-  styleUrl: './cursos.scss'
+  styleUrl: './cursos.scss',
 })
 export class Cursos implements OnInit {
   courses: Course[] = [];
@@ -19,17 +18,11 @@ export class Cursos implements OnInit {
 
   readonly AppRoutes = AppRoutes;
 
-  constructor(
-    private cursosFetch: CursosFetch,
-    private cursosState: CursosState
-  ) {}
+  constructor(private cursosState: CursosState) {}
 
   ngOnInit(): void {
-    const currentState = this.cursosState['cursosSubject'].getValue();
-
-    if (!currentState || currentState.length === 0) {
-      this.cursosFetch.getCursos().subscribe((data) => {
-        this.cursosState.setCursos(data);
+    if (!this.cursosState.getCourses().length) {
+      this.cursosState.loadCursos().subscribe(() => {
         this.loading = false;
       });
     } else {
