@@ -14,6 +14,7 @@ import { CursosState } from '../../cursos-estado';
 import { SnackbarNotification } from '../../../../../shared/services/snackbar-notification';
 import { RouterModule } from '@angular/router';
 import { AppRoutes } from '../../../../../shared/enums/routes';
+import { Course } from '../../../../../shared/entities';
 
 @Component({
   selector: 'app-form-baja',
@@ -38,24 +39,23 @@ export class FormBaja implements OnInit {
   courseForm!: FormGroup;
 
   loading = false;
+  courses: Course[] = [];
 
   constructor(private fb: FormBuilder) {}
 
   ngOnInit(): void {
+    this.cursosState.cursos$.subscribe((data) => {
+      this.courses = data;
+    });
+
     this.courseForm = this.fb.group({
-      code: [
-        '',
-        [
-          Validators.required,
-          Validators.pattern(/^[A-Z]{2}\d{3}$/), // Mismo patrón de validación para que seamos coherentes a la hora de definir el código del curso
-        ],
-      ],
+      code: ['', [Validators.required, Validators.pattern(/^[A-Z]{2}\d{3}$/)]],
       descripcion: [
         '',
         [
           Validators.required,
-          Validators.minLength(10), // Mínimo 10 caracteres para el motivo de baja
-          Validators.maxLength(50), // Máximo 10 caracteres para el motivo de baja
+          Validators.minLength(10),
+          Validators.maxLength(50),
         ],
       ],
     });
@@ -64,21 +64,27 @@ export class FormBaja implements OnInit {
   onDelete() {
     if (this.courseForm.valid) {
       this.loading = true;
+      const code = this.courseForm.value.code.trim().toUpperCase();
+      const course = this.courses.find((c) => c.code === code);
 
-      setTimeout(() => {
-        const code = this.courseForm.value.code.trim();
-        const success = this.cursosState.deleteCurso(code);
-
-        if (success) {
-          this.snackbarNotification.success('Curso eliminado con éxito!');
-          this.onReset();
-        } else {
-          this.snackbarNotification.error(
-            'No se encontró ningún curso con ese código'
-          );
-        }
+      if (course) {
+        this.cursosState.deleteCurso(course.customId).subscribe({
+          next: () => {
+            this.snackbarNotification.success('Curso eliminado con éxito!');
+            this.onReset();
+            this.loading = false;
+          },
+          error: (err: unknown) => {
+            this.snackbarNotification.error('Error al eliminar el curso');
+            this.loading = false;
+          },
+        });
+      } else {
+        this.snackbarNotification.error(
+          'No se encontró ningún curso con ese código'
+        );
         this.loading = false;
-      }, 1000);
+      }
     }
   }
 
