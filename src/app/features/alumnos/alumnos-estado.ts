@@ -51,7 +51,7 @@ export class AlumnosState {
     );
   }
 
-  deleteStudent(customId: string): Observable<unknown> {
+  deleteStudent(customId: string): Observable<void> {
     const studentToDelete = this.studentsSubject
       .getValue()
       .find(s => s.customId === customId);
@@ -62,7 +62,7 @@ export class AlumnosState {
 
     const url = `${this.apiUrl}/${studentToDelete.id}`;
 
-    return this.http.delete(url).pipe(
+    return this.http.delete<void>(url).pipe(
       tap(() => {
         const currentStudents = this.studentsSubject.getValue();
         const updatedList = currentStudents.filter((s) => s.customId !== customId);
