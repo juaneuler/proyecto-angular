@@ -1,37 +1,51 @@
 # Proyecto Angular - Gestión de Alumnos, Cursos e Inscripciones
 
-Este proyecto es una aplicación desarrollada con **Angular 20**, orientada a la gestión de estudiantes, cursos e inscripciones. Fue realizado como parte del curso de Angular en Coderhouse.
+Este proyecto es una aplicación completa desarrollada con **Angular 20**, que implementa un sistema integral para la gestión de alumnos, cursos, inscripciones y usuarios. Fue desarrollado como entrega 3 para el curso de Angular en Coderhouse.
 
-## Funcionalidades
 
-- CRUD de **alumnos**.
-- CRUD de **cursos**.
-- Gestión de **inscripciones** (alta, baja y edición).
-- Rutas individuales para cada formulario (alta, edición y baja).
-- Estilos personalizados con **SASS**.
-- Uso de **Reactive Forms** con validaciones.
-- Componentes reutilizables y estructurados.
-- Consumo de datos desde servicios en memoria (`BehaviorSubject`).
-- Notificaciones con **Angular Material Snackbar**.
-- Navegación con Angular Router.
-- Simulación de Backend con `db.json` para alumnos y cursos
-- Uso de rutas tipadas con `enum` para mayor seguridad
-- Estructura de features: cada entidad (alumnos, cursos, inscripciones) organizada en su propia carpeta
-- **Lazy Loading en rutas principales** para optimizar el rendimiento de la carga inicial.
-- Implementación de un `Guard` para proteger las rutas principales por permisos de administrador.
-- **Ruta y componente de "Acceso Denegado"** para manejar usuarios sin los permisos adecuados
+## Funcionalidades principales
 
-## Tecnologías usadas
+- **Sistema de autenticación**:
+  - Login con diferentes roles (admin/usuario)
+  - Protección de rutas según permisos
+  - Información contextual en la interfaz según usuario logueado
+
+- **Gestión completa** con operaciones CRUD para:
+  - Alumnos
+  - Cursos
+  - Inscripciones
+  - Usuarios (nuevo!)
+
+- **Experiencia de usuario mejorada**:
+  - Toolbar dinámico que muestra título contextual según la ruta
+  - Manejo de "sin datos" en todas las tablas
+  - Footer con información del proyecto
+  - Navegación personalizada según estado de autenticación
+
+## Características técnicas
+
+- **Arquitectura por módulos** con Lazy Loading para optimizar rendimiento
+- **Comunicación con API REST** (Mock API) para todas las entidades
+- **Formularios Reactivos** con validaciones avanzadas
+- **Tipado estricto** en toda la aplicación (sin uso de `any`)
+- **Directivas personalizadas** para mejorar la presentación
+- **Pipes para transformación** de datos (ej: nombres completos)
+- **Servicios con estado** utilizando BehaviorSubject y Observables
+- **Guards** para proteger rutas según rol de usuario
+- **Notificaciones** con Angular Material Snackbar
+- **Testing unitario** con Karma y Jasmine
+
+## Tecnologías utilizadas
 
 - Angular 20
-- TypeScript
-- RxJS
-- Angular Material (tablas, formularios, snackbars)
-- Bootstrap 5
-- JSON Server (`db.json` para simular API REST)
-- SASS (con estructura anidada)
-- Reactive Forms
-- HTML5 + CSS3
+- TypeScript (con tipado estricto)
+- RxJS para programación reactiva
+- Angular Material (tablas, formularios, inputs, selects)
+- SASS para estilos estructurados
+- Mock API para simulación de backend
+- Karma y Jasmine para testing
+- Git y GitHub para control de versiones
+
 
 ## Cómo ejecutar el proyecto?
 
