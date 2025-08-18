@@ -1,4 +1,15 @@
-<div class="toolbar">
-    <h1>Sistema de Gestión de Alumnos</h1>
-    <h2 appBigtitle>Juan Euler</h2>
-</div>
+<mat-toolbar color="primary" class="toolbar">
+  <!-- Fila de arriba -->
+  <mat-toolbar-row>
+    <!-- Izquierda -->
+    <span class="app-title">Sistema de gestión de alumnos</span>
+
+    <!-- Centro -->
+    <span class="route-title">Ruta actual: {{ pageTitle }}</span>
+
+    <!-- Derecha -->
+    <span class="user-info">
+      Usuario logueado: {{ currentUser?.role ?? 'Invitado' }}
+    </span>
+  </mat-toolbar-row>
+</mat-toolbar>
