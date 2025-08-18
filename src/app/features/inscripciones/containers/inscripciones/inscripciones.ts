@@ -12,12 +12,7 @@ import { CursosState } from '../../../cursos/cursos-estado';
 
 @Component({
   selector: 'app-inscripciones',
-  imports: [
-    CommonModule,
-    RouterLink,
-    RouterOutlet,
-    InscriptionsTable,
-  ],
+  imports: [CommonModule, RouterLink, RouterOutlet, InscriptionsTable],
   templateUrl: './inscripciones.html',
   styleUrl: './inscripciones.scss',
 })
@@ -33,6 +28,10 @@ export class Inscripciones implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.alumnosState.loadStudents().subscribe();
+    this.cursosState.loadCursos().subscribe();
+    this.inscripcionesEstado.loadInscripciones().subscribe();
+
     this.inscripcionesDetalladas$ = combineLatest([
       this.inscripcionesEstado.inscripciones$,
       this.alumnosState.students$,
@@ -40,7 +39,9 @@ export class Inscripciones implements OnInit {
     ]).pipe(
       map(([inscripciones, alumnos, cursos]) => {
         return inscripciones.map((insc) => {
-          const alumno = alumnos.find((a) => a.dni.toString() === insc.alumnoDNI);
+          const alumno = alumnos.find(
+            (a) => a.dni.toString() === insc.alumnoDNI
+          );
           const curso = cursos.find((c) => c.code === insc.cursoCodigo);
 
           return {
