@@ -28,7 +28,6 @@ import { Bigtitle } from '../../../../../shared/directives/bigtitle';
 import { AppRoutes } from '../../../../../shared/enums/routes';
 import { RouterModule } from '@angular/router';
 
-// Esta es la función para validar
 const sameCourseValidator = (
   inscripcionesEstadoService: InscripcionesEstadoService,
   inscripcionActual: Inscription | null
@@ -36,18 +35,15 @@ const sameCourseValidator = (
   return (form: AbstractControl): ValidationErrors | null => {
     const nuevoCursoCodigo = form.get('nuevoCursoCodigo')?.value;
 
-    // Si no hay inscripción actual o no hay curso nuevo, no validamos
     if (!inscripcionActual || !nuevoCursoCodigo) {
       return null;
     }
 
-    // Usamos el método del servicio para ejecutar la lógica de negocio
     const isSameCourse = inscripcionesEstadoService.checkIfIsSameCourse(
       nuevoCursoCodigo,
       inscripcionActual
     );
 
-    // Devolvemos el error si fuera necesario
     return isSameCourse ? { sameCourse: true } : null;
   };
 };
@@ -160,13 +156,20 @@ export class EditInscripcion implements OnInit {
         },
       };
 
-      this.inscripcionesState.modificarInscripcion(cambio);
-      this.snackbarNotification.success('Inscripción modificada correctamente');
-      this.form.reset();
-      // Añadimos estas líneas para una limpieza completa
-      this.form.markAsPristine();
-      this.form.markAsUntouched();
-      this.inscripcionActual = null;
+      this.inscripcionesState.modificarInscripcion(cambio).subscribe({
+        next: () => {
+          this.snackbarNotification.success(
+            'Inscripción modificada correctamente'
+          );
+          this.form.reset();
+          this.form.markAsPristine();
+          this.form.markAsUntouched();
+          this.inscripcionActual = null;
+        },
+        error: (err: unknown) => {
+          this.snackbarNotification.error('Error al modificar la inscripción');
+        },
+      });
     }
   }
 }
