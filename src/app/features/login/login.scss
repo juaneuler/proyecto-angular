@@ -1,0 +1,75 @@
+.login-container {
+  max-width: 400px;
+  margin: 2rem auto;
+  padding: 1.5rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background: #fafafa;
+
+  h2 {
+    margin-bottom: 1rem;
+    text-align: center;
+  }
+
+  .credentials {
+    background: #eef;
+    border: 1px solid #99c;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+    border-radius: 4px;
+    font-size: 0.9rem;
+  }
+
+  label {
+    display: block;
+    margin-top: 0.5rem;
+  }
+
+  input {
+    width: 100%;
+    padding: 0.4rem;
+    margin-top: 0.2rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1rem;
+
+    button {
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 4px;
+      color: white;
+      cursor: pointer;
+      transition: background 0.2s ease;
+
+      &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+    }
+
+    .btn-login {
+      background-color: #1db954;
+
+      &:hover:not(:disabled) {
+        background-color: #2e7d32;
+      }
+    }
+
+    .btn-logout {
+      background-color: #e4405f;
+
+      &:hover:not(:disabled) {
+        background-color: #d32f2f;
+      }
+    }
+  }
+
+  .error {
+    color: red;
+    margin-top: 0.5rem;
+  }
+}

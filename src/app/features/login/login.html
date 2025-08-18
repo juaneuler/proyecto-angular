@@ -1,0 +1,45 @@
+<div class="login-container">
+    <h2>Iniciar sesión</h2>
+
+    <!-- Muestro los datos de login para hacer más fácil la navegación por la app -->
+    <div class="credentials">
+        <p><strong>Credenciales de prueba:</strong></p>
+        <ul>
+            <li>Admin → <code>admin / admin</code></li>
+            <li>Usuario → <code>user / user</code></li>
+        </ul>
+    </div>
+
+    <!-- Formulario reactivo -->
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <div>
+            <label>Usuario</label>
+            <input type="text" formControlName="username" placeholder="Ingrese usuario" />
+            <div *ngIf="loginForm.get('username')?.invalid && loginForm.get('username')?.touched">
+                Usuario requerido (mínimo 3 caracteres).
+            </div>
+        </div>
+
+        <div>
+            <label>Contraseña</label>
+            <input type="password" formControlName="password" placeholder="Ingrese contraseña" />
+            <div *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
+                Contraseña requerida (mínimo 3 caracteres).
+            </div>
+        </div>
+
+        <div class="actions">
+            <button type="submit" class="btn-login" [disabled]="loginForm.invalid">Login</button>
+            <!-- Botón de logout solo si hay usuario -->
+            <button (click)="logout()" [disabled]="!(user$ | async)" class="btn-logout">
+                Logout
+            </button>
+
+        </div>
+    </form>
+
+    <!-- Error si las credenciales son inválidas -->
+    <p *ngIf="loginError" class="error">
+        Usuario o contraseña incorrectos.
+    </p>
+</div>
