@@ -28,13 +28,13 @@ import { RouterModule } from '@angular/router';
     MatSelectModule,
     MatButtonModule,
     Bigtitle,
-    RouterModule
+    RouterModule,
   ],
   templateUrl: './delete-inscripcion.html',
   styleUrl: './delete-inscripcion.scss',
 })
 export class DeleteInscripcion implements OnInit {
-  readonly routes = AppRoutes
+  readonly routes = AppRoutes;
 
   form: FormGroup;
   alumnosInscriptos$: Observable<Student[]>;
@@ -91,15 +91,19 @@ export class DeleteInscripcion implements OnInit {
   onSubmit(): void {
     if (this.form.valid) {
       const { alumnoDNI, cursoCodigo } = this.form.value;
-      this.inscripcionesState.eliminarInscripcion(
-        alumnoDNI.toString(),
-        cursoCodigo
-      );
-      this.snackbar.success('Inscripción eliminada con éxito');
-      this.form.reset();
-      // Estas dos líneas permiten resetear los selectores y que no marquen error
-      this.form.markAsPristine();
-      this.form.markAsUntouched();
+      this.inscripcionesState
+        .eliminarInscripcion(alumnoDNI.toString(), cursoCodigo)
+        .subscribe({
+          next: () => {
+            this.snackbar.success('Inscripción eliminada con éxito');
+            this.form.reset();
+            this.form.markAsPristine();
+            this.form.markAsUntouched();
+          },
+          error: (err: unknown) => {
+            this.snackbar.error('Error al eliminar la inscripción');
+          },
+        });
     }
   }
 }
