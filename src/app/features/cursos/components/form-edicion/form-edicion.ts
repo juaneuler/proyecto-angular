@@ -3,7 +3,6 @@ import { Component, OnInit, inject } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
-  FormControl,
   Validators,
   ReactiveFormsModule,
 } from '@angular/forms';
@@ -48,16 +47,12 @@ export class FormEdicion implements OnInit {
   constructor(private fb: FormBuilder) {}
 
   ngOnInit(): void {
-    this.courses = this.cursosState.getCursos();
+    this.cursosState.cursos$.subscribe((data) => {
+      this.courses = data;
+    });
 
     this.searchForm = this.fb.group({
-      code: [
-        '',
-        [
-          Validators.required,
-          Validators.pattern(/^[A-Z]{2}\d{3}$/), // Definimos el patrón que va a tener el código del curso para mantener coherencia entre todos los formularios
-        ],
-      ],
+      code: ['', [Validators.required, Validators.pattern(/^[A-Z]{2}\d{3}$/)]],
     });
 
     this.editForm = this.fb.group({
@@ -88,7 +83,7 @@ export class FormEdicion implements OnInit {
       return;
     }
 
-    const code = this.searchForm.value.code.trim();
+    const code = this.searchForm.value.code.trim().toUpperCase();
     const course = this.courses.find((c) => c.code === code);
 
     if (course) {
@@ -108,17 +103,23 @@ export class FormEdicion implements OnInit {
     if (this.editForm.valid && this.selectedCourse) {
       this.loading = true;
 
-      setTimeout(() => {
-        const editedCourse: Course = {
-          ...this.selectedCourse,
-          ...this.editForm.value,
-        };
+      const editedCourse: Course = {
+        ...this.selectedCourse,
+        ...this.editForm.value,
+        customId: this.editForm.value.code.toLowerCase(),
+      };
 
-        this.cursosState.editCurso(editedCourse);
-        this.snackbarNotification.success('Curso editado con éxito!');
-        this.onReset();
-        this.loading = false;
-      }, 1000);
+      this.cursosState.editCurso(editedCourse).subscribe({
+        next: () => {
+          this.snackbarNotification.success('Curso editado con éxito!');
+          this.onReset();
+          this.loading = false;
+        },
+        error: (err: unknown) => {
+          this.snackbarNotification.error('Error al editar el curso');
+          this.loading = false;
+        },
+      });
     }
   }
 
