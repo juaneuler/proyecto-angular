@@ -56,7 +56,7 @@ Este proyecto es una aplicación completa desarrollada con **Angular 20**, que i
 
 ## Autor
 
-Desarrollado por **Juan Euler** como entrega 2 del curso de Angular en Coderhouse.
+Desarrollado por **Juan Euler**
 
 - 📁 Repositorio: [proyecto-angular](https://github.com/juaneuler/proyecto-angular)
 - 🌐 Portfolio: [portfolio-juan-euler.netlify.app](https://portfolio-juan-euler.netlify.app)
