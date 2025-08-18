@@ -1,0 +1,38 @@
+<div class="delete-form">
+  <h2 appBigtitle>Eliminar Usuario</h2>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="form">
+    <!-- Selector de usuario -->
+    <div class="form-group">
+      <mat-form-field appearance="outline">
+        <mat-label>Seleccionar Usuario para Eliminar</mat-label>
+        <mat-select formControlName="userId">
+          <mat-option *ngFor="let user of users$ | async" [value]="user.id">
+            {{ user.nombre }} - {{ user.rol }}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="form.get('userId')?.touched && form.get('userId')?.invalid">
+          Debe seleccionar un usuario para eliminar.
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <!-- Botones de acción -->
+    <div class="actions">
+      <button 
+        type="submit" 
+        [disabled]="form.invalid" 
+        class="boton-submit">
+        Eliminar Usuario
+      </button>
+      
+      <button type="button" (click)="onReset()" class="boton-reset">
+        Limpiar formulario
+      </button>
+      
+      <a [routerLink]="['/', routes.Usuarios]" class="boton-volver">
+        Volver a la lista
+      </a>
+    </div>
+  </form>
+</div>
