@@ -9,6 +9,7 @@ import { InscripcionDetalle } from '../../../../../shared/entities';
 import { InscripcionesEstadoService } from '../../inscripciones-estado';
 import { AlumnosState } from '../../../alumnos/alumnos-estado';
 import { CursosState } from '../../../cursos/cursos-estado';
+import { AuthService } from '../../../../core/auth/auth-service';
 
 @Component({
   selector: 'app-inscripciones',
@@ -24,7 +25,8 @@ export class Inscripciones implements OnInit {
   constructor(
     private inscripcionesEstado: InscripcionesEstadoService,
     private alumnosState: AlumnosState,
-    private cursosState: CursosState
+    private cursosState: CursosState,
+    public authService: AuthService
   ) {}
 
   ngOnInit(): void {

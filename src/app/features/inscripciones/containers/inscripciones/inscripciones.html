@@ -4,8 +4,9 @@
 
   <nav class="acciones-navbar">
     <a [routerLink]="[AppRoutes.InscripcionesAgregar]">Agregar inscripción</a>
-    <a [routerLink]="[AppRoutes.InscripcionesEditar]">Modificar inscripción</a>
-    <a [routerLink]="[AppRoutes.InscripcionesEliminar]">Eliminar inscripción</a>
+    <!-- Solo mostrar estos enlaces si es administrador -->
+    <a *ngIf="(authService.isAdmin$ | async)" [routerLink]="[AppRoutes.InscripcionesEditar]">Modificar inscripción</a>
+    <a *ngIf="(authService.isAdmin$ | async)" [routerLink]="[AppRoutes.InscripcionesEliminar]">Eliminar inscripción</a>
   </nav>
 
   <router-outlet></router-outlet>
