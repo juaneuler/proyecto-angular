@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { StudentsTable } from '../../components/students-table/students-table';
 import { RouterModule, RouterOutlet } from '@angular/router';
 import { AppRoutes } from '../../../../../shared/enums/routes';
+import { AuthService } from '../../../../core/auth/auth-service';
 
 @Component({
   selector: 'app-alumnos',
@@ -18,7 +19,10 @@ export class Alumnos implements OnInit {
 
   readonly AppRoutes = AppRoutes;
 
-  constructor(private alumnosState: AlumnosState) {}
+  constructor(
+    private alumnosState: AlumnosState,
+    public authService: AuthService
+  ) {}
 
   ngOnInit(): void {
     if (!this.alumnosState.getStudents().length) {

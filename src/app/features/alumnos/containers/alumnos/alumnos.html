@@ -3,8 +3,9 @@
 
   <nav class="acciones-navbar">
     <a [routerLink]="[AppRoutes.AlumnosAgregar]">Agregar estudiante</a>
-    <a [routerLink]="[AppRoutes.AlumnosEditar]">Modificar datos</a>
-    <a [routerLink]="[AppRoutes.AlumnosEliminar]">Eliminar estudiante</a>
+    <!-- Solo mostrar estos enlaces si es administrador -->
+    <a *ngIf="(authService.isAdmin$ | async)" [routerLink]="[AppRoutes.AlumnosEditar]">Modificar datos</a>
+    <a *ngIf="(authService.isAdmin$ | async)" [routerLink]="[AppRoutes.AlumnosEliminar]">Eliminar estudiante</a>
   </nav>
 
   <router-outlet></router-outlet>
