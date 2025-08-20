@@ -5,6 +5,7 @@ import { CoursesTable } from '../../components/courses-table/courses-table';
 import { CursosState } from '../../cursos-estado';
 import { Course } from '../../../../../shared/entities';
 import { AppRoutes } from '../../../../../shared/enums/routes';
+import { AuthService } from '../../../../core/auth/auth-service';
 
 @Component({
   selector: 'app-cursos',
@@ -18,7 +19,9 @@ export class Cursos implements OnInit {
 
   readonly AppRoutes = AppRoutes;
 
-  constructor(private cursosState: CursosState) {}
+  constructor(
+    private cursosState: CursosState,
+    public authService: AuthService) {}
 
   ngOnInit(): void {
     if (!this.cursosState.getCourses().length) {
