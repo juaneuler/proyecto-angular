@@ -4,8 +4,12 @@
   <app-users-table [users]="(users$ | async) || []"></app-users-table>
 
   <div class="actions">
-    <a [routerLink]="[AppRoutes.UsuariosAgregar]" class="btn-action">Agregar Usuario</a>
-    <a [routerLink]="[AppRoutes.UsuariosEditar]" class="btn-action">Editar Usuario</a>
-    <a [routerLink]="[AppRoutes.UsuariosEliminar]" class="btn-action">Eliminar Usuario</a>
+    <!-- Todos los botones solo visibles para admin (módulo completo restringido) -->
+    <a *ngIf="(authService.isAdmin$ | async)" [routerLink]="[AppRoutes.UsuariosAgregar]" class="btn-action">Agregar
+      Usuario</a>
+    <a *ngIf="(authService.isAdmin$ | async)" [routerLink]="[AppRoutes.UsuariosEditar]" class="btn-action">Editar
+      Usuario</a>
+    <a *ngIf="(authService.isAdmin$ | async)" [routerLink]="[AppRoutes.UsuariosEliminar]" class="btn-action">Eliminar
+      Usuario</a>
   </div>
 </div>

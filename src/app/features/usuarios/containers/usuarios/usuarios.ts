@@ -7,6 +7,7 @@ import { AsyncPipe, CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { AppRoutes } from '../../../../../shared/enums/routes';
 import { Bigtitle } from '../../../../../shared/directives/bigtitle';
+import { AuthService } from '../../../../core/auth/auth-service';
 
 @Component({
   selector: 'app-usuarios',
@@ -18,7 +19,10 @@ export class Usuarios implements OnInit {
   users$: Observable<User[]>;
   readonly AppRoutes = AppRoutes;
 
-  constructor(private usuariosState: UsuariosState) {
+  constructor(
+    private usuariosState: UsuariosState,
+    public authService: AuthService
+  ) {
     this.users$ = this.usuariosState.users$;
   }
 
