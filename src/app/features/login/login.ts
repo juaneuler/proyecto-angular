@@ -10,6 +10,8 @@ import { CommonModule } from '@angular/common';
 import { AuthService } from '../../core/auth/auth-service';
 import { AuthUser } from '../../core/auth/auth.models';
 import { Observable } from 'rxjs';
+import { Store } from '@ngrx/store';
+import * as AuthSelectors from '../../core/auth/store/auth.selectors';
 
 @Component({
   selector: 'app-login',
@@ -19,37 +21,50 @@ import { Observable } from 'rxjs';
 })
 export class Login implements OnInit {
   loginForm: FormGroup;
-  loginError = false;
   loading = false;
+  loginError = false;
   user$: Observable<AuthUser | null>;
 
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private store: Store
   ) {
     this.loginForm = this.fb.group({
       username: ['', [Validators.required, Validators.minLength(3)]],
       password: ['', [Validators.required, Validators.minLength(3)]],
     });
 
-    this.user$ = this.authService.user$;
+    // Usar el selector de NgRx para obtener el usuario
+    this.user$ = this.store.select(AuthSelectors.selectUser);
   }
 
   ngOnInit(): void {
+    // Redireccionar si ya está logueado
     this.user$.subscribe((user) => {
       if (user) {
         this.router.navigate(['']);
       }
     });
+    
+    // Observar errores y estado de carga
+    this.store.select(AuthSelectors.selectAuthError).subscribe(error => {
+      this.loginError = error;
+    });
+    
+    this.store.select(AuthSelectors.selectAuthLoading).subscribe(isLoading => {
+      this.loading = isLoading;
+    });
   }
 
   onSubmit(): void {
     if (this.loginForm.invalid) return;
-    this.loading = true;
+    
     const { username, password } = this.loginForm.value;
     const ok = this.authService.login({ username, password });
-    this.loading = false;
+    
+    // El error ahora lo maneja el store, pero mantenemos esto por compatibilidad
     this.loginError = !ok;
   }
 
