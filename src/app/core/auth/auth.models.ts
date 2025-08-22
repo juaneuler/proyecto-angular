@@ -3,6 +3,7 @@ export type Role = 'admin' | 'user';
 export interface AuthUser {
   username: string;
   role: Role;
+  token?: string;
 }
 
 export interface Credentials {
