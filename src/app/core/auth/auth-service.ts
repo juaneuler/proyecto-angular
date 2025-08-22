@@ -1,50 +1,75 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, map, Observable } from 'rxjs';
+import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
 import { AuthUser, Credentials, KNOWN_USERS } from './auth.models';
+import * as AuthActions from './store/auth.actions';
+import * as AuthSelectors from './store/auth.selectors';
 
 const STORAGE_KEY = 'auth_user';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private readonly _user$ = new BehaviorSubject<AuthUser | null>(this.loadFromStorage());
+  // Declaramos sin inicializar (lo hacemos en el constructor)
+  readonly user$: Observable<AuthUser | null>;
+  readonly isLoggedIn$: Observable<boolean>;
+  readonly isAdmin$: Observable<boolean>;
 
-  /** Usuario actual (observable) */
-  readonly user$: Observable<AuthUser | null> = this._user$.asObservable();
-
-  /** Está logueado? */
-  readonly isLoggedIn$: Observable<boolean> = this.user$.pipe(map(Boolean));
-
-  /** Es admin? */
-  readonly isAdmin$: Observable<boolean> = this.user$.pipe(
-    map(u => u?.role === 'admin')
-  );
+  constructor(private store: Store, private router: Router) {
+    this.user$ = this.store.select(AuthSelectors.selectUser);
+    this.isLoggedIn$ = this.store.select(AuthSelectors.selectIsLoggedIn);
+    this.isAdmin$ = this.store.select(AuthSelectors.selectIsAdmin);
+    // Cargar usuario desde localStorage si existe
+    const savedUser = this.loadFromStorage();
+    if (savedUser) {
+      this.store.dispatch(AuthActions.loadStoredUser({ user: savedUser }));
+    }
+  }
 
   /** Snapshot sincrónico (útil en guards) */
   get userSnapshot(): AuthUser | null {
-    return this._user$.value;
+    let user: AuthUser | null = null;
+    this.user$.subscribe((u) => (user = u)).unsubscribe();
+    return user;
   }
 
   /** Nombre para Toolbar */
   get displayName(): string {
-    return this._user$.value?.username ?? 'Invitado';
+    return this.userSnapshot?.username ?? 'Invitado';
   }
 
-  /** Intento de login: true si está bien, y false si las credenciales son inválidas */
+  /** Intento de login usando NgRx */
   login({ username, password }: Credentials): boolean {
+    // Disparar acción de login
+    this.store.dispatch(
+      AuthActions.login({ credentials: { username, password } })
+    );
+
+    // Validación con la tabla de conocimiento
     const record = KNOWN_USERS[username];
     if (!record || record.password !== password) {
+      this.store.dispatch(AuthActions.loginFailure());
       return false;
     }
-    const logged: AuthUser = { username, role: record.role };
-    this._user$.next(logged);
-    this.saveToStorage(logged);
+
+    // Login exitoso
+    const user: AuthUser = {
+      username,
+      role: record.role,
+      token: 'mock-token', // Mantenemos el token para compatibilidad
+    };
+
+    this.store.dispatch(AuthActions.loginSuccess({ user }));
+    this.saveToStorage(user);
     return true;
   }
 
-  /** Logout */
+  /** Logout con NgRx */
   logout(): void {
-    this._user$.next(null);
+    this.store.dispatch(AuthActions.logout());
     this.clearStorage();
+    // Redirección al login
+    this.router.navigate(['/login']);
   }
 
   // ─────────────── Persistencia simple ───────────────
@@ -52,13 +77,15 @@ export class AuthService {
   private saveToStorage(user: AuthUser): void {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(user));
-    } catch { /* no-op */ }
+    } catch {
+      /* no-op */
+    }
   }
 
   private loadFromStorage(): AuthUser | null {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
-      return raw ? JSON.parse(raw) as AuthUser : null;
+      return raw ? (JSON.parse(raw) as AuthUser) : null;
     } catch {
       return null;
     }
@@ -67,6 +94,8 @@ export class AuthService {
   private clearStorage(): void {
     try {
       localStorage.removeItem(STORAGE_KEY);
-    } catch { /* no-op */ }
+    } catch {
+      /* no-op */
+    }
   }
 }
