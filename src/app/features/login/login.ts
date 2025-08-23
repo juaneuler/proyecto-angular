@@ -46,24 +46,25 @@ export class Login implements OnInit {
         [
           Validators.required,
           Validators.minLength(3),
-          Validators.maxLength(30),
+          Validators.maxLength(20), // Unificamos con el nombre de usuario
+          Validators.pattern(/^[a-zA-Z0-9!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]+$/), // Permite alfanuméricos y caracteres especiales comunes
         ],
       ],
     });
 
-    // Usar el selector de NgRx para obtener el usuario
+    // Usamos el selector de NgRx para obtener el usuario
     this.user$ = this.store.select(AuthSelectors.selectUser);
   }
 
   ngOnInit(): void {
-    // Redireccionar si ya está logueado
+    // Redireccionamos si ya está logueado
     this.user$.subscribe((user) => {
       if (user) {
         this.router.navigate(['']);
       }
     });
 
-    // Observar errores y estado de carga
+    // Observarmos errores y estado de carga
     this.store.select(AuthSelectors.selectAuthError).subscribe((error) => {
       this.loginError = error;
     });
