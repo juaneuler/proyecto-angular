@@ -1,7 +1,7 @@
 <div class="login-container">
     <h2>Iniciar sesión</h2>
 
-    <!-- Muestro los datos de login para hacer más fácil la navegación por la app -->
+    <!-- Credenciales de prueba -->
     <div class="credentials">
         <p><strong>Credenciales de prueba:</strong></p>
         <ul>
@@ -12,29 +12,55 @@
 
     <!-- Formulario reactivo -->
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-        <div>
+        <div class="form-field">
             <label>Usuario</label>
-            <input type="text" formControlName="username" placeholder="Ingrese usuario" />
-            <div *ngIf="loginForm.get('username')?.invalid && loginForm.get('username')?.touched">
-                Usuario requerido (mínimo 3 caracteres).
+            <input type="text" formControlName="username" placeholder="Ingrese usuario"
+                [ngClass]="{'invalid-input': loginForm.get('username')?.invalid && loginForm.get('username')?.touched}" />
+
+            <!-- Mensajes de error específicos para username -->
+            <div class="error-messages"
+                *ngIf="loginForm.get('username')?.invalid && loginForm.get('username')?.touched">
+                <small *ngIf="loginForm.get('username')?.errors?.['required']">
+                    El usuario es obligatorio.
+                </small>
+                <small *ngIf="loginForm.get('username')?.errors?.['minlength']">
+                    El usuario debe tener al menos 3 caracteres.
+                </small>
+                <small *ngIf="loginForm.get('username')?.errors?.['maxlength']">
+                    El usuario no puede exceder 20 caracteres.
+                </small>
+                <small *ngIf="loginForm.get('username')?.errors?.['pattern']">
+                    El usuario solo puede contener letras, números, guiones y guiones bajos.
+                </small>
             </div>
         </div>
 
-        <div>
+        <div class="form-field">
             <label>Contraseña</label>
-            <input type="password" formControlName="password" placeholder="Ingrese contraseña" />
-            <div *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
-                Contraseña requerida (mínimo 3 caracteres).
+            <input type="password" formControlName="password" placeholder="Ingrese contraseña"
+                [ngClass]="{'invalid-input': loginForm.get('password')?.invalid && loginForm.get('password')?.touched}" />
+
+            <!-- Mensajes de error específicos para password -->
+            <div class="error-messages"
+                *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
+                <small *ngIf="loginForm.get('password')?.errors?.['required']">
+                    La contraseña es obligatoria.
+                </small>
+                <small *ngIf="loginForm.get('password')?.errors?.['minlength']">
+                    La contraseña debe tener al menos 3 caracteres.
+                </small>
+                <small *ngIf="loginForm.get('password')?.errors?.['maxlength']">
+                    La contraseña no puede exceder 30 caracteres.
+                </small>
             </div>
         </div>
 
         <div class="actions">
             <button type="submit" class="btn-login" [disabled]="loginForm.invalid">Login</button>
             <!-- Botón de logout solo si hay usuario -->
-            <button (click)="logout()" [disabled]="!(user$ | async)" class="btn-logout">
+            <button type="button" (click)="logout()" [disabled]="!(user$ | async)" class="btn-logout">
                 Logout
             </button>
-
         </div>
     </form>
 

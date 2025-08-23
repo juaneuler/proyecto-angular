@@ -30,6 +30,28 @@
     padding: 0.4rem;
     margin-top: 0.2rem;
     margin-bottom: 0.5rem;
+
+    &.invalid-input {
+      border: 1px solid #e53935;
+      background-color: rgba(229, 57, 53, 0.05);
+      box-shadow: 0 0 3px rgba(229, 57, 53, 0.3);
+    }
+  }
+
+  .form-field {
+    margin-bottom: 16px;
+  }
+
+  .error-messages {
+    color: #e53935;
+    font-size: 0.85rem;
+    margin-top: -2px;
+    margin-bottom: 8px;
+
+    small {
+      display: block;
+      margin-bottom: 2px;
+    }
   }
 
   .actions {
