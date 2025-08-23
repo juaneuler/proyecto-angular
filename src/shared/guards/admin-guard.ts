@@ -5,21 +5,20 @@ import {
   RouterStateSnapshot,
 } from '@angular/router';
 import { inject } from '@angular/core';
-import { AuthService } from '../../app/core/auth/auth-service';
+import { Store } from '@ngrx/store';
+import * as AuthSelectors from '../../app/core/auth/store/auth.selectors';
 
 export const adminGuard: CanActivateFn = (
   route: ActivatedRouteSnapshot,
   state: RouterStateSnapshot
 ) => {
-  const authService = inject(AuthService);
+  const store = inject(Store);
   const router = inject(Router);
 
-  // Si el usuario logueado es admin, entonces permitimos el acceso
+  // Obtener el valor isAdmin directamente del store usando el selector de NgRx
   let isAdmin = false;
-  authService.user$
-    .subscribe((user) => {
-      isAdmin = !!user && user.role == 'admin';
-    })
+  store.select(AuthSelectors.selectIsAdmin)
+    .subscribe(value => isAdmin = value)
     .unsubscribe();
 
   if (isAdmin) {
