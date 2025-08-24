@@ -12,6 +12,7 @@ import { AlumnosState } from '../../alumnos-estado';
 import { RouterModule } from '@angular/router';
 import { AppRoutes } from '../../../../../shared/enums/routes';
 import { StudentToAdd } from '../../../../../shared/entities';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-add-form',
@@ -66,12 +67,12 @@ export class AddForm implements OnInit {
     });
   }
 
-  loading = false;
+loading$ = new BehaviorSubject<boolean>(false);
 
   onSubmit() {
     if (this.studentForm.invalid) return;
 
-    this.loading = true;
+  this.loading$.next(true);
 
     const formValue = this.studentForm.value;
     const studentToAdd: StudentToAdd = {
@@ -86,11 +87,11 @@ export class AddForm implements OnInit {
       next: () => {
         this.showAddedSuccesfully();
         this.onReset();
-        this.loading = false;
+      this.loading$.next(false);
       },
       error: (err: unknown) => {
         this.snackbarNotification.error('Error al agregar el estudiante');
-        this.loading = false;
+      this.loading$.next(false);
       },
     });
   }
