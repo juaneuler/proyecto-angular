@@ -6,6 +6,7 @@ import { StudentsTable } from '../../components/students-table/students-table';
 import { RouterModule, RouterOutlet } from '@angular/router';
 import { AppRoutes } from '../../../../../shared/enums/routes';
 import { AuthService } from '../../../../core/auth/auth-service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-alumnos',
@@ -14,7 +15,7 @@ import { AuthService } from '../../../../core/auth/auth-service';
   styleUrl: './alumnos.scss',
 })
 export class Alumnos implements OnInit {
-  students: Student[] = [];
+  students$: Observable<Student[]>;
   loading: boolean = true;
 
   readonly AppRoutes = AppRoutes;
@@ -22,7 +23,9 @@ export class Alumnos implements OnInit {
   constructor(
     private alumnosState: AlumnosState,
     public authService: AuthService
-  ) {}
+  ) {
+    this.students$ = this.alumnosState.students$;
+  }
 
   ngOnInit(): void {
     if (!this.alumnosState.getStudents().length) {
@@ -32,9 +35,5 @@ export class Alumnos implements OnInit {
     } else {
       this.loading = false;
     }
-
-    this.alumnosState.students$.subscribe((data) => {
-      this.students = data;
-    });
   }
 }
