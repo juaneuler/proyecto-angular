@@ -16,6 +16,7 @@ import { UsuariosState } from '../../usuarios-estado';
 import { RouterModule } from '@angular/router';
 import { AppRoutes } from '../../../../../shared/enums/routes';
 import { User } from '../../../../../shared/entities';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-users-add',
@@ -36,7 +37,7 @@ export class UsersAdd implements OnInit {
   readonly routes = AppRoutes;
 
   userForm!: FormGroup;
-  loading = false;
+  loading$ = new BehaviorSubject<boolean>(false);
   roles: ('admin' | 'usuario')[] = ['admin', 'usuario'];
 
   constructor(
@@ -66,7 +67,7 @@ export class UsersAdd implements OnInit {
       return;
     }
 
-    this.loading = true;
+    this.loading$.next(true);
 
     const formValue = this.userForm.value;
     const userToAdd: Partial<User> = {
@@ -78,12 +79,12 @@ export class UsersAdd implements OnInit {
       next: () => {
         this.showAddedSuccessfully();
         this.onReset();
-        this.loading = false;
+        this.loading$.next(false);
       },
       error: (err: unknown) => {
         console.error('Error al agregar el usuario:', err);
         this.snackbarNotification.error('Error al agregar el usuario');
-        this.loading = false;
+        this.loading$.next(false);
       },
     });
   }
