@@ -6,6 +6,7 @@ import { CursosState } from '../../cursos-estado';
 import { Course } from '../../../../../shared/entities';
 import { AppRoutes } from '../../../../../shared/enums/routes';
 import { AuthService } from '../../../../core/auth/auth-service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-cursos',
@@ -14,14 +15,17 @@ import { AuthService } from '../../../../core/auth/auth-service';
   styleUrl: './cursos.scss',
 })
 export class Cursos implements OnInit {
-  courses: Course[] = [];
+  courses$: Observable<Course[]>;
   loading = true;
 
   readonly AppRoutes = AppRoutes;
 
   constructor(
     private cursosState: CursosState,
-    public authService: AuthService) {}
+    public authService: AuthService
+  ) {
+    this.courses$ = this.cursosState.cursos$;
+  }
 
   ngOnInit(): void {
     if (!this.cursosState.getCourses().length) {
@@ -31,9 +35,5 @@ export class Cursos implements OnInit {
     } else {
       this.loading = false;
     }
-
-    this.cursosState.cursos$.subscribe((data) => {
-      this.courses = data;
-    });
   }
 }

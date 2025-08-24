@@ -1,5 +1,5 @@
 <div *ngIf="!loading; else loadingTpl">
-  <app-courses-table [courses]="courses"></app-courses-table>
+  <app-courses-table [courses]="(courses$ | async) ?? []"></app-courses-table>
 
   <nav class="acciones-navbar">
     <a [routerLink]="[AppRoutes.CursosAgregar]">Agregar curso</a>
