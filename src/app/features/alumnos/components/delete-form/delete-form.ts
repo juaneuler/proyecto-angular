@@ -14,6 +14,9 @@ import { AlumnosState } from '../../alumnos-estado';
 import { SnackbarNotification } from '../../../../../shared/services/snackbar-notification';
 import { RouterModule } from '@angular/router';
 import { AppRoutes } from '../../../../../shared/enums/routes';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { map, tap } from 'rxjs/operators';
+import { Student } from '../../../../../shared/entities';
 
 @Component({
   selector: 'app-delete-form',
@@ -37,9 +40,17 @@ export class DeleteForm implements OnInit {
 
   studentForm!: FormGroup;
 
-  loading = false;
+  students$: Observable<Student[]>;
+  loading$ = new BehaviorSubject<boolean>(false);
 
-  constructor(private fb: FormBuilder) {}
+  private studentsValue: Student[] = [];
+
+  constructor(private fb: FormBuilder) {
+    // Inicializamos el observable
+    this.students$ = this.alumnosState.students$.pipe(
+      tap((students) => (this.studentsValue = students))
+    );
+  }
 
   ngOnInit(): void {
     this.studentForm = this.fb.group({
@@ -57,12 +68,11 @@ export class DeleteForm implements OnInit {
 
   onDelete() {
     if (this.studentForm.valid) {
-      this.loading = true;
+      this.loading$.next(true);
 
       const dni = Number(this.studentForm.value.dni);
-      const student = this.alumnosState
-        .getStudents()
-        .find((s) => s.dni === dni);
+      // Usamos studentsValue en lugar de getStudents()
+      const student = this.studentsValue.find((s) => s.dni === dni);
 
       if (student) {
         this.alumnosState.deleteStudent(student.customId).subscribe({
@@ -71,18 +81,13 @@ export class DeleteForm implements OnInit {
               'Estudiante eliminado con éxito!'
             );
             this.onReset();
-            this.loading = false;
+            this.loading$.next(false);
           },
           error: (err: unknown) => {
             this.snackbarNotification.error('Error al eliminar el estudiante');
-            this.loading = false;
+            this.loading$.next(false);
           },
         });
-      } else {
-        this.snackbarNotification.error(
-          'No se encontró ningún estudiante con ese DNI'
-        );
-        this.loading = false;
       }
     }
   }
