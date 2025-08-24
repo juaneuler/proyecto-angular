@@ -6,7 +6,7 @@ import { CursosState } from '../../cursos-estado';
 import { Course } from '../../../../../shared/entities';
 import { AppRoutes } from '../../../../../shared/enums/routes';
 import { AuthService } from '../../../../core/auth/auth-service';
-import { Observable } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-cursos',
@@ -16,7 +16,8 @@ import { Observable } from 'rxjs';
 })
 export class Cursos implements OnInit {
   courses$: Observable<Course[]>;
-  loading = true;
+  loading$ = new BehaviorSubject<boolean>(true);
+  isAdmin$: Observable<boolean>;
 
   readonly AppRoutes = AppRoutes;
 
@@ -25,15 +26,16 @@ export class Cursos implements OnInit {
     public authService: AuthService
   ) {
     this.courses$ = this.cursosState.cursos$;
+    this.isAdmin$ = this.authService.isAdmin$;
   }
 
   ngOnInit(): void {
     if (!this.cursosState.getCourses().length) {
       this.cursosState.loadCursos().subscribe(() => {
-        this.loading = false;
+        this.loading$.next(false);
       });
     } else {
-      this.loading = false;
+      this.loading$.next(false);
     }
   }
 }
