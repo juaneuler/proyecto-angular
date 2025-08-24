@@ -21,8 +21,8 @@ import * as AuthSelectors from '../../core/auth/store/auth.selectors';
 })
 export class Login implements OnInit {
   loginForm: FormGroup;
-  loading = false;
-  loginError = false;
+  loading$: Observable<boolean>;
+  loginError$: Observable<boolean>;
   user$: Observable<AuthUser | null>;
 
   constructor(
@@ -54,6 +54,8 @@ export class Login implements OnInit {
 
     // Usamos el selector de NgRx para obtener el usuario
     this.user$ = this.store.select(AuthSelectors.selectUser);
+    this.loginError$ = this.store.select(AuthSelectors.selectAuthError);
+    this.loading$ = this.store.select(AuthSelectors.selectAuthLoading);
   }
 
   ngOnInit(): void {
@@ -63,27 +65,13 @@ export class Login implements OnInit {
         this.router.navigate(['']);
       }
     });
-
-    // Observarmos errores y estado de carga
-    this.store.select(AuthSelectors.selectAuthError).subscribe((error) => {
-      this.loginError = error;
-    });
-
-    this.store
-      .select(AuthSelectors.selectAuthLoading)
-      .subscribe((isLoading) => {
-        this.loading = isLoading;
-      });
   }
 
   onSubmit(): void {
     if (this.loginForm.invalid) return;
 
     const { username, password } = this.loginForm.value;
-    const ok = this.authService.login({ username, password });
-
-    // El error ahora lo maneja el store, pero mantenemos esto por compatibilidad
-    this.loginError = !ok;
+    this.authService.login({ username, password });
   }
 
   logout(): void {

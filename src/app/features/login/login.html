@@ -56,7 +56,7 @@
         </div>
 
         <div class="actions">
-            <button type="submit" class="btn-login" [disabled]="loginForm.invalid">Login</button>
+            <button type="submit" class="btn-login" [disabled]="loginForm.invalid || (loading$ | async)">Login</button>
             <!-- Botón de logout solo si hay usuario -->
             <button type="button" (click)="logout()" [disabled]="!(user$ | async)" class="btn-logout">
                 Logout
@@ -65,7 +65,7 @@
     </form>
 
     <!-- Error si las credenciales son inválidas -->
-    <p *ngIf="loginError" class="error">
+    <p *ngIf="loginError$ | async" class="error">
         Usuario o contraseña incorrectos.
     </p>
 </div>
