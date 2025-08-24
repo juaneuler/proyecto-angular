@@ -15,6 +15,8 @@ import { SnackbarNotification } from '../../../../../shared/services/snackbar-no
 import { RouterModule } from '@angular/router';
 import { AppRoutes } from '../../../../../shared/enums/routes';
 import { Course } from '../../../../../shared/entities';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-form-baja',
@@ -38,16 +40,20 @@ export class FormBaja implements OnInit {
 
   courseForm!: FormGroup;
 
-  loading = false;
-  courses: Course[] = [];
+  loading$ = new BehaviorSubject<boolean>(false);
+  courses$: Observable<Course[]>;
 
-  constructor(private fb: FormBuilder) {}
+  private coursesValue: Course[] = [];
+
+  constructor(private fb: FormBuilder) {
+    // Asignamos el observable directamente
+    this.courses$ = this.cursosState.cursos$.pipe(
+      // Guardamos el valor actual para usarlo en métodos
+      tap((courses) => (this.coursesValue = courses))
+    );
+  }
 
   ngOnInit(): void {
-    this.cursosState.cursos$.subscribe((data) => {
-      this.courses = data;
-    });
-
     this.courseForm = this.fb.group({
       code: ['', [Validators.required, Validators.pattern(/^[A-Z]{2}\d{3}$/)]],
       descripcion: [
@@ -63,27 +69,28 @@ export class FormBaja implements OnInit {
 
   onDelete() {
     if (this.courseForm.valid) {
-      this.loading = true;
+      this.loading$.next(true);
       const code = this.courseForm.value.code.trim().toUpperCase();
-      const course = this.courses.find((c) => c.code === code);
+      // Usamos coursesValue en lugar de courses
+      const course = this.coursesValue.find((c) => c.code === code);
 
       if (course) {
         this.cursosState.deleteCurso(course.customId).subscribe({
           next: () => {
             this.snackbarNotification.success('Curso eliminado con éxito!');
             this.onReset();
-            this.loading = false;
+            this.loading$.next(false);
           },
           error: (err: unknown) => {
             this.snackbarNotification.error('Error al eliminar el curso');
-            this.loading = false;
+            this.loading$.next(false);
           },
         });
       } else {
         this.snackbarNotification.error(
           'No se encontró ningún curso con ese código'
         );
-        this.loading = false;
+        this.loading$.next(false);
       }
     }
   }
