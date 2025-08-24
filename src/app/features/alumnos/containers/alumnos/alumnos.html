@@ -1,11 +1,11 @@
-<div *ngIf="!loading; else loadingTpl">
+<div *ngIf="!(loading$ | async); else loadingTpl">
   <app-students-table [students]="(students$ | async) ?? []"></app-students-table>
 
   <nav class="acciones-navbar">
     <a [routerLink]="[AppRoutes.AlumnosAgregar]">Agregar estudiante</a>
     <!-- Solo mostrar estos enlaces si es administrador -->
-    <a *ngIf="(authService.isAdmin$ | async)" [routerLink]="[AppRoutes.AlumnosEditar]">Modificar datos</a>
-    <a *ngIf="(authService.isAdmin$ | async)" [routerLink]="[AppRoutes.AlumnosEliminar]">Eliminar estudiante</a>
+    <a *ngIf="(isAdmin$ | async)" [routerLink]="[AppRoutes.AlumnosEditar]">Modificar datos</a>
+    <a *ngIf="(isAdmin$ | async)" [routerLink]="[AppRoutes.AlumnosEliminar]">Eliminar estudiante</a>
   </nav>
 
   <router-outlet></router-outlet>

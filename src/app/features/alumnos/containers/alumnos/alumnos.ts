@@ -6,7 +6,7 @@ import { StudentsTable } from '../../components/students-table/students-table';
 import { RouterModule, RouterOutlet } from '@angular/router';
 import { AppRoutes } from '../../../../../shared/enums/routes';
 import { AuthService } from '../../../../core/auth/auth-service';
-import { Observable } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-alumnos',
@@ -16,7 +16,8 @@ import { Observable } from 'rxjs';
 })
 export class Alumnos implements OnInit {
   students$: Observable<Student[]>;
-  loading: boolean = true;
+  loading$ = new BehaviorSubject<boolean>(true);
+  isAdmin$: Observable<boolean>;
 
   readonly AppRoutes = AppRoutes;
 
@@ -25,15 +26,16 @@ export class Alumnos implements OnInit {
     public authService: AuthService
   ) {
     this.students$ = this.alumnosState.students$;
+    this.isAdmin$ = this.authService.isAdmin$;
   }
 
   ngOnInit(): void {
     if (!this.alumnosState.getStudents().length) {
       this.alumnosState.loadStudents().subscribe(() => {
-        this.loading = false;
+        this.loading$.next(false);
       });
     } else {
-      this.loading = false;
+      this.loading$.next(false);
     }
   }
 }
