@@ -12,6 +12,7 @@ import { CursosState } from '../../cursos-estado';
 import { RouterModule } from '@angular/router';
 import { AppRoutes } from '../../../../../shared/enums/routes';
 import { Course } from '../../../../../shared/entities';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-form-alta',
@@ -52,12 +53,12 @@ export class FormAlta implements OnInit {
     });
   }
 
-  loading = false;
+loading$ = new BehaviorSubject<boolean>(false);
 
   onSubmit() {
     if (this.courseForm.invalid) return;
 
-    this.loading = true;
+    this.loading$.next(true);
 
     const formValue = this.courseForm.value;
     const courseToAdd: Course = {
@@ -70,11 +71,11 @@ export class FormAlta implements OnInit {
       next: () => {
         this.showAddedSuccessfully();
         this.onReset();
-        this.loading = false;
+        this.loading$.next(false);
       },
       error: (err: unknown) => {
         this.snackbarNotification.error('Ocurrió un error al agregar el curso');
-        this.loading = false;
+        this.loading$.next(false);
       },
     });
   }

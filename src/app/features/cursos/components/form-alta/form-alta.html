@@ -36,9 +36,9 @@
       </div>
     </div>
 
-    <button type="submit" [disabled]="courseForm.invalid || loading" class="boton-submit">
-      <ng-container *ngIf="!loading">Añadir Curso</ng-container>
-      <div *ngIf="loading" class="spinner-border spinner-border-sm text-light" role="status">
+    <button type="submit" [disabled]="courseForm.invalid || (loading$ | async)" class="boton-submit">
+      <ng-container *ngIf="!(loading$ | async)">Añadir Curso</ng-container>
+      <div *ngIf="loading$ | async" class="spinner-border spinner-border-sm text-light" role="status">
         <span class="visually-hidden">Cargando...</span>
       </div>
     </button>
