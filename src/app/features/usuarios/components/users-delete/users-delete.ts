@@ -14,12 +14,12 @@ import { SnackbarNotification } from '../../../../../shared/services/snackbar-no
 import { UsuariosState } from '../../usuarios-estado';
 import { RouterModule } from '@angular/router';
 import { AppRoutes } from '../../../../../shared/enums/routes';
-import { Observable } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { Bigtitle } from '../../../../../shared/directives/bigtitle';
+import { map, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-users-delete',
-  standalone: true,
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -27,17 +27,20 @@ import { Bigtitle } from '../../../../../shared/directives/bigtitle';
     MatButtonModule,
     MatSelectModule,
     RouterModule,
-    Bigtitle
+    Bigtitle,
   ],
   templateUrl: './users-delete.html',
   styleUrl: './users-delete.scss',
 })
 export class UsersDelete implements OnInit {
   readonly routes = AppRoutes;
-  
+
   form: FormGroup;
   users$: Observable<User[]>;
-  
+  loading$ = new BehaviorSubject<boolean>(false);
+
+  private usersValue: User[] = [];
+
   constructor(
     private fb: FormBuilder,
     private usuariosState: UsuariosState,
@@ -46,38 +49,38 @@ export class UsersDelete implements OnInit {
     this.form = this.fb.group({
       userId: ['', Validators.required],
     });
-    
-    this.users$ = this.usuariosState.users$;
+
+    this.users$ = this.usuariosState.users$.pipe(
+      tap((users) => (this.usersValue = users))
+    );
   }
-  
+
   ngOnInit(): void {}
-  
+
   onSubmit(): void {
     if (this.form.valid) {
+      this.loading$.next(true);
       const userId = this.form.value.userId;
       
-      // Buscar el usuario por ID para obtener toda la información
-      const users = this.usuariosState.getUsers();
-      const user = users.find(u => u.id === userId);
+      // Usamos usersValue en lugar de getUsers()
+      const user = this.usersValue.find(u => u.id === userId);
       
       if (user) {
         this.usuariosState.deleteUser(user.id).subscribe({
           next: () => {
             this.snackbar.success('Usuario eliminado con éxito');
-            this.form.reset();
-            this.form.markAsPristine();
-            this.form.markAsUntouched();
+            this.onReset();
+            this.loading$.next(false);
           },
           error: (err: unknown) => {
             this.snackbar.error('Error al eliminar el usuario');
+            this.loading$.next(false);
           }
         });
-      } else {
-        this.snackbar.error('Usuario no encontrado');
       }
     }
   }
-  
+
   onReset(): void {
     this.form.reset();
     this.form.markAsPristine();
