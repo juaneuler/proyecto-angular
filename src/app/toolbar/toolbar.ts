@@ -33,8 +33,12 @@ export class Toolbar implements OnInit {
 
     // Ruta actual, usando el servicio de rutas con NgRx
     this.router.events
-      .pipe(filter((event) => event instanceof NavigationEnd))
-      .subscribe((event: any) => {
+      .pipe(
+        filter(
+          (event): event is NavigationEnd => event instanceof NavigationEnd
+        )
+      )
+      .subscribe((event: NavigationEnd) => {
         const ruta = event.urlAfterRedirects.replace('/', '');
         this.currentRoute = ruta || '';
 
