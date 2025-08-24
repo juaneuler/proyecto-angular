@@ -16,7 +16,8 @@ import { SnackbarNotification } from '../../../../../shared/services/snackbar-no
 import { UsuariosState } from '../../usuarios-estado';
 import { RouterModule } from '@angular/router';
 import { AppRoutes } from '../../../../../shared/enums/routes';
-import { Observable, distinctUntilChanged, map, of } from 'rxjs';
+import { Observable, distinctUntilChanged, BehaviorSubject } from 'rxjs';
+import { map, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-users-edit',
@@ -35,15 +36,15 @@ import { Observable, distinctUntilChanged, map, of } from 'rxjs';
 })
 export class UsersEdit implements OnInit {
   readonly routes = AppRoutes;
-  
+
   form: FormGroup;
   users$: Observable<User[]>;
-  selectedUser: User | null = null;
-  
+  selectedUser$ = new BehaviorSubject<User | null>(null);
   roles: ('admin' | 'usuario')[] = ['admin', 'usuario'];
-  
-  loading = false;
-  
+  loading$ = new BehaviorSubject<boolean>(false);
+
+  private usersValue: User[] = [];
+
   constructor(
     private fb: FormBuilder,
     private usuariosState: UsuariosState,
@@ -53,56 +54,58 @@ export class UsersEdit implements OnInit {
       userId: ['', Validators.required],
       rol: ['', Validators.required],
     });
-    
-    this.users$ = this.usuariosState.users$;
+
+    this.users$ = this.usuariosState.users$.pipe(
+      tap((users) => (this.usersValue = users))
+    );
   }
-  
+
   ngOnInit(): void {
     // Cuando cambie el usuario seleccionado
-    this.form.get('userId')?.valueChanges
-      .pipe(distinctUntilChanged())
-      .subscribe(userId => {
+    this.form
+      .get('userId')
+      ?.valueChanges.pipe(distinctUntilChanged())
+      .subscribe((userId) => {
         if (!userId) {
-          this.selectedUser = null;
+          this.selectedUser$.next(null);
           this.form.get('rol')?.setValue('');
           return;
         }
-        
-        const users = this.usuariosState.getUsers();
-        const user = users.find(u => u.id === userId);
-        
+
+        const user = this.usersValue.find((u) => u.id === userId);
+
         if (user) {
-          this.selectedUser = user;
+          this.selectedUser$.next(user);
           this.form.get('rol')?.setValue(user.rol);
         }
       });
   }
-  
+
   onSubmit() {
-    if (this.form.valid && this.selectedUser) {
-      this.loading = true;
-      
+    if (this.form.valid && this.selectedUser$.value) {
+      this.loading$.next(true);
+
       const editedUser: User = {
-        ...this.selectedUser,
-        rol: this.form.value.rol
+        ...this.selectedUser$.value,
+        rol: this.form.value.rol,
       };
-      
+
       this.usuariosState.editUser(editedUser).subscribe({
         next: () => {
           this.snackbarNotification.success('Usuario editado con éxito!');
           this.onReset();
-          this.loading = false;
+          this.loading$.next(false);
         },
         error: (err: unknown) => {
           this.snackbarNotification.error('Error al editar el usuario');
-          this.loading = false;
-        }
+          this.loading$.next(false);
+        },
       });
     }
   }
-  
+
   onReset() {
     this.form.reset();
-    this.selectedUser = null;
+    this.selectedUser$.next(null);
   }
 }

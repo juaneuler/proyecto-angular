@@ -18,7 +18,7 @@
     </div>
 
     <!-- Selector de rol (aparece solo si hay un usuario seleccionado) -->
-    <div class="form-group" *ngIf="selectedUser">
+    <div class="form-group" *ngIf="selectedUser$ | async">
       <mat-form-field appearance="outline">
         <mat-label>Rol</mat-label>
         <mat-select formControlName="rol">
@@ -33,7 +33,7 @@
     </div>
 
     <!-- Mensaje de ayuda -->
-    <div class="help-text" *ngIf="selectedUser">
+    <div class="help-text" *ngIf="selectedUser$ | async as selectedUser">
       <p>Usuario seleccionado: <strong>{{ selectedUser.nombre }}</strong></p>
       <p>Rol actual: <strong>{{ selectedUser.rol }}</strong></p>
     </div>
@@ -41,10 +41,10 @@
     <!-- Botones de acción -->
     <div class="actions">
       <button type="submit"
-        [disabled]="form.invalid || loading || (selectedUser && selectedUser.rol === form.value.rol)"
+        [disabled]="form.invalid || (loading$ | async) || (selectedUser$ | async)?.rol === form.value.rol"
         class="boton-submit">
-        <ng-container *ngIf="!loading">Guardar Cambios</ng-container>
-        <div *ngIf="loading" class="spinner-border spinner-border-sm text-light" role="status">
+        <ng-container *ngIf="!(loading$ | async)">Guardar Cambios</ng-container>
+        <div *ngIf="loading$ | async" class="spinner-border spinner-border-sm text-light" role="status">
           <span class="visually-hidden">Cargando...</span>
         </div>
       </button>
