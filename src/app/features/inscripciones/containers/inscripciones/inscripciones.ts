@@ -21,13 +21,16 @@ export class Inscripciones implements OnInit {
   AppRoutes = AppRoutes;
 
   inscripcionesDetalladas$!: Observable<InscripcionDetalle[]>;
+  isAdmin$: Observable<boolean>;
 
   constructor(
     private inscripcionesEstado: InscripcionesEstadoService,
     private alumnosState: AlumnosState,
     private cursosState: CursosState,
     public authService: AuthService
-  ) {}
+  ) {
+    this.isAdmin$ = this.authService.isAdmin$;
+  }
 
   ngOnInit(): void {
     this.alumnosState.loadStudents().subscribe();
