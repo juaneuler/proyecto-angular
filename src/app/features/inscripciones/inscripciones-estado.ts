@@ -7,16 +7,20 @@ import { HttpClient } from '@angular/common/http';
   providedIn: 'root',
 })
 export class InscripcionesEstadoService {
-  private apiUrl = 'https://689f921d6e38a02c5816a5d9.mockapi.io/sistema-gestion/inscriptions';
+  private apiUrl =
+    'https://689f921d6e38a02c5816a5d9.mockapi.io/sistema-gestion/inscriptions';
   private inscripcionesSubject = new BehaviorSubject<Inscription[]>([]);
-  inscripciones$: Observable<Inscription[]> = this.inscripcionesSubject.asObservable();
+  inscripciones$: Observable<Inscription[]> =
+    this.inscripcionesSubject.asObservable();
 
   constructor(private http: HttpClient) {}
 
   loadInscripciones(): Observable<Inscription[]> {
-    return this.http.get<Inscription[]>(this.apiUrl).pipe(
-      tap((inscripciones) => this.inscripcionesSubject.next(inscripciones))
-    );
+    return this.http
+      .get<Inscription[]>(this.apiUrl)
+      .pipe(
+        tap((inscripciones) => this.inscripcionesSubject.next(inscripciones))
+      );
   }
 
   checkIfAlreadyInscribed(dni: string, codigoCurso: string): boolean {
@@ -25,7 +29,10 @@ export class InscripcionesEstadoService {
     );
   }
 
-  checkIfIsSameCourse(nuevoCursoCodigo: string, inscripcionActual: Inscription): boolean {
+  checkIfIsSameCourse(
+    nuevoCursoCodigo: string,
+    inscripcionActual: Inscription
+  ): boolean {
     return nuevoCursoCodigo === inscripcionActual.cursoCodigo;
   }
 
@@ -36,7 +43,10 @@ export class InscripcionesEstadoService {
     };
     return this.http.post<Inscription>(this.apiUrl, nueva).pipe(
       tap((inscripcionCreada) => {
-        this.inscripcionesSubject.next([...this.inscripcionesSubject.value, inscripcionCreada]);
+        this.inscripcionesSubject.next([
+          ...this.inscripcionesSubject.value,
+          inscripcionCreada,
+        ]);
       })
     );
   }
@@ -48,7 +58,7 @@ export class InscripcionesEstadoService {
     if (!inscripcion || !inscripcion.id) {
       throw new Error('No se encontró la inscripción para eliminar');
     }
-    const url = `${this.apiUrl}/${(inscripcion as any).id}`;
+    const url = `${this.apiUrl}/${inscripcion.id as string}`;
     return this.http.delete<void>(url).pipe(
       tap(() => {
         const filtradas = this.inscripcionesSubject.value.filter(
@@ -62,7 +72,9 @@ export class InscripcionesEstadoService {
   modificarInscripcion(cambio: CambioInscripcion): Observable<Inscription> {
     const { anterior, nueva } = cambio;
     const inscripcion = this.inscripcionesSubject.value.find(
-      (i) => i.alumnoDNI === anterior.alumnoDNI && i.cursoCodigo === anterior.cursoCodigo
+      (i) =>
+        i.alumnoDNI === anterior.alumnoDNI &&
+        i.cursoCodigo === anterior.cursoCodigo
     );
     if (!inscripcion || !inscripcion.id) {
       throw new Error('No se encontró la inscripción para modificar');
