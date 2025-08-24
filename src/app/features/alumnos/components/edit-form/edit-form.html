@@ -19,10 +19,10 @@
   </form>
 
   <!-- Separador entre los 2 formularios -->
-  <hr *ngIf="selectedStudent" />
+<hr *ngIf="selectedStudent$ | async" />
 
   <!-- Formulario para editar el estudiante encontrado -->
-  <form *ngIf="selectedStudent" [formGroup]="editForm" (ngSubmit)="onEdit()" class="form">
+  <form *ngIf="selectedStudent$ | async" [formGroup]="editForm" (ngSubmit)="onEdit()" class="form">
     <div class="form-group">
       <label for="name">Nombre:</label>
       <input type="text" id="name" formControlName="name" placeholder="Editar nombre">
@@ -65,9 +65,9 @@
     </div>
 
 
-    <button type="submit" [disabled]="editForm.invalid || loading" class="boton-submit">
-      <ng-container *ngIf="!loading">Guardar Cambios</ng-container>
-      <div *ngIf="loading" class="spinner-border spinner-border-sm text-light" role="status">
+    <button type="submit" [disabled]="editForm.invalid || (loading$ | async)" class="boton-submit">
+      <ng-container *ngIf="!(loading$ | async)">Guardar Cambios</ng-container>
+      <div *ngIf="loading$ | async" class="spinner-border spinner-border-sm text-light" role="status">
         <span class="visually-hidden">Cargando...</span>
       </div>
     </button>
