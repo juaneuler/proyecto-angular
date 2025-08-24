@@ -6,12 +6,12 @@
         <li><a [routerLink]="[AppRoutes.Home]">Home</a></li>
         
         <!-- Login solo si NO está logueado (ahora con color verde) -->
-        <li *ngIf="!(authService.user$ | async)">
+        <li *ngIf="!(user$ | async)">
           <a [routerLink]="[AppRoutes.Login]" class="login-btn">Login</a>
         </li>
         
         <!-- Logout solo si está logueado (ahora con color rojo) -->
-        <li *ngIf="(authService.user$ | async)">
+        <li *ngIf="(user$ | async)">
           <a (click)="logout()" class="logout-btn">Logout</a>
         </li>
         
@@ -20,7 +20,7 @@
         <li><a [routerLink]="[AppRoutes.Inscripciones]">Ver lista de inscripciones</a></li>
         
         <!-- Este routerLink solo se muestra si el usuario logueado es administrador! -->
-        <li *ngIf="(authService.user$ | async)?.role === 'admin'">
+        <li *ngIf="isAdmin$ | async">
           <a [routerLink]="[AppRoutes.Usuarios]">Ver lista de usuarios</a>
         </li>
       </ul>

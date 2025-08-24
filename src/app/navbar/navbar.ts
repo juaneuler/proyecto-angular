@@ -5,7 +5,8 @@ import { AppRoutes } from '../../shared/enums/routes';
 import { AuthService } from '../core/auth/auth-service';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-
+import { Observable } from 'rxjs';
+import { AuthUser } from '../core/auth/auth.models';
 @Component({
   selector: 'app-navbar',
   imports: [Bigtitle, RouterModule, CommonModule],
@@ -15,7 +16,16 @@ import { Router } from '@angular/router';
 export class Navbar {
   readonly AppRoutes = AppRoutes;
 
-  constructor(public authService: AuthService, private router: Router) {}
+  isAdmin$: Observable<boolean>;
+  user$: Observable<AuthUser | null>;
+
+  constructor(
+    public authService: AuthService, 
+    private router: Router,
+  ) {
+        this.isAdmin$ = this.authService.isAdmin$;
+    this.user$ = this.authService.user$;
+  }
 
   logout(): void {
     this.authService.logout();
