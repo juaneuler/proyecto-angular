@@ -15,6 +15,8 @@ import { CursosState } from '../../cursos-estado';
 import { RouterModule } from '@angular/router';
 import { AppRoutes } from '../../../../../shared/enums/routes';
 import { Course } from '../../../../../shared/entities';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-form-edicion',
@@ -38,19 +40,20 @@ export class FormEdicion implements OnInit {
 
   searchForm!: FormGroup;
   editForm!: FormGroup;
-  selectedCourse: Course | null = null;
+  selectedCourse$ = new BehaviorSubject<Course | null>(null);
 
-  courses: Course[] = [];
+  courses$: Observable<Course[]>;
+  loading$ = new BehaviorSubject<boolean>(false);
 
-  loading = false;
+  private coursesValue: Course[] = [];
 
-  constructor(private fb: FormBuilder) {}
+  constructor(private fb: FormBuilder) {
+    this.courses$ = this.cursosState.cursos$.pipe(
+      tap((courses) => (this.coursesValue = courses))
+    );
+  }
 
   ngOnInit(): void {
-    this.cursosState.cursos$.subscribe((data) => {
-      this.courses = data;
-    });
-
     this.searchForm = this.fb.group({
       code: ['', [Validators.required, Validators.pattern(/^[A-Z]{2}\d{3}$/)]],
     });
@@ -84,10 +87,11 @@ export class FormEdicion implements OnInit {
     }
 
     const code = this.searchForm.value.code.trim().toUpperCase();
-    const course = this.courses.find((c) => c.code === code);
+    // Usamos coursesValue en lugar de courses
+    const course = this.coursesValue.find((c) => c.code === code);
 
     if (course) {
-      this.selectedCourse = course;
+      this.selectedCourse$.next(course);
       this.editForm.patchValue({
         name: course.name,
         code: course.code,
@@ -95,16 +99,16 @@ export class FormEdicion implements OnInit {
       });
     } else {
       this.snackbarNotification.error('Curso no encontrado.');
-      this.selectedCourse = null;
+      this.selectedCourse$.next(null);
     }
   }
 
   onEdit() {
-    if (this.editForm.valid && this.selectedCourse) {
-      this.loading = true;
+    if (this.editForm.valid && this.selectedCourse$.value) {
+      this.loading$.next(true);
 
       const editedCourse: Course = {
-        ...this.selectedCourse,
+        ...this.selectedCourse$.value,
         ...this.editForm.value,
         customId: this.editForm.value.code.toLowerCase(),
       };
@@ -113,11 +117,11 @@ export class FormEdicion implements OnInit {
         next: () => {
           this.snackbarNotification.success('Curso editado con éxito!');
           this.onReset();
-          this.loading = false;
+          this.loading$.next(false);
         },
         error: (err: unknown) => {
           this.snackbarNotification.error('Error al editar el curso');
-          this.loading = false;
+          this.loading$.next(false);
         },
       });
     }
@@ -126,6 +130,6 @@ export class FormEdicion implements OnInit {
   onReset() {
     this.searchForm.reset();
     this.editForm.reset();
-    this.selectedCourse = null;
+    this.selectedCourse$.next(null);
   }
 }

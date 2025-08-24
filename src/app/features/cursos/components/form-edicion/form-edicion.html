@@ -18,10 +18,10 @@
     <a [routerLink]="['/', routes.Cursos]" class="boton-volver">Volver a la lista</a>
   </form>
 
-  <hr *ngIf="selectedCourse" />
+  <hr *ngIf="(selectedCourse$ | async)" />
 
   <!-- Formulario de edición de curso -->
-  <form *ngIf="selectedCourse" [formGroup]="editForm" (ngSubmit)="onEdit()" class="form">
+  <form *ngIf="(selectedCourse$ | async)" [formGroup]="editForm" (ngSubmit)="onEdit()" class="form">
     <div class="form-group">
       <label for="name">Nombre:</label>
       <input type="text" id="name" formControlName="name" placeholder="Editar nombre del curso">
@@ -54,9 +54,9 @@
       </div>
     </div>
 
-    <button type="submit" [disabled]="editForm.invalid || loading" class="boton-submit">
-      <ng-container *ngIf="!loading">Guardar Cambios</ng-container>
-      <div *ngIf="loading" class="spinner-border spinner-border-sm text-light" role="status">
+    <button type="submit" [disabled]="editForm.invalid || (loading$ | async)" class="boton-submit">
+      <ng-container *ngIf="!(loading$ | async)">Guardar Cambios</ng-container>
+      <div *ngIf="loading$ | async" class="spinner-border spinner-border-sm text-light" role="status">
         <span class="visually-hidden">Cargando...</span>
       </div>
     </button>
