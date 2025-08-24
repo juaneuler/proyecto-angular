@@ -17,6 +17,7 @@ import { AuthService } from '../../../../core/auth/auth-service';
 })
 export class Usuarios implements OnInit {
   users$: Observable<User[]>;
+  isAdmin$: Observable<boolean>;
   readonly AppRoutes = AppRoutes;
 
   constructor(
@@ -24,6 +25,7 @@ export class Usuarios implements OnInit {
     public authService: AuthService
   ) {
     this.users$ = this.usuariosState.users$;
+    this.isAdmin$ = this.authService.isAdmin$;
   }
 
   ngOnInit(): void {

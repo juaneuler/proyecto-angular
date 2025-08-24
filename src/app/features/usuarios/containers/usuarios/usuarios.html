@@ -5,11 +5,11 @@
 
   <div class="actions">
     <!-- Todos los botones solo visibles para admin (módulo completo restringido) -->
-    <a *ngIf="(authService.isAdmin$ | async)" [routerLink]="[AppRoutes.UsuariosAgregar]" class="btn-action">Agregar
+    <a *ngIf="(isAdmin$ | async)" [routerLink]="[AppRoutes.UsuariosAgregar]" class="btn-action">Agregar
       Usuario</a>
-    <a *ngIf="(authService.isAdmin$ | async)" [routerLink]="[AppRoutes.UsuariosEditar]" class="btn-action">Editar
+    <a *ngIf="(isAdmin$ | async)" [routerLink]="[AppRoutes.UsuariosEditar]" class="btn-action">Editar
       Usuario</a>
-    <a *ngIf="(authService.isAdmin$ | async)" [routerLink]="[AppRoutes.UsuariosEliminar]" class="btn-action">Eliminar
+    <a *ngIf="(isAdmin$ | async)" [routerLink]="[AppRoutes.UsuariosEliminar]" class="btn-action">Eliminar
       Usuario</a>
   </div>
 </div>
