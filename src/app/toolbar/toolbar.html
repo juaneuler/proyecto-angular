@@ -5,11 +5,11 @@
     <span class="app-title">Sistema de gestión de alumnos</span>
 
     <!-- Centro -->
-    <span class="route-title">Ruta actual: {{ pageTitle }}</span>
+    <span class="route-title">Ruta actual: {{ pageTitle$ | async }}</span>
 
     <!-- Derecha -->
     <span class="user-info">
-      Usuario logueado: {{ currentUser?.role ?? 'Invitado' }}
+      Usuario logueado: {{ (currentUser$ | async)?.role ?? 'Invitado' }}
     </span>
   </mat-toolbar-row>
 </mat-toolbar>
