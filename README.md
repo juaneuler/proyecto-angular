@@ -1,6 +1,6 @@
-# Proyecto Angular - Gestión de Alumnos, Cursos e Inscripciones
+# Proyecto Angular - Sistema de Gestión
 
-Este proyecto es una aplicación completa desarrollada con **Angular 20**, que implementa un sistema integral para la gestión de alumnos, cursos, inscripciones y usuarios. Fue desarrollado como entrega 3 para el curso de Angular en Coderhouse.
+Este proyecto es una aplicación completa desarrollada con **Angular 20**, que implementa un sistema integral para la gestión de alumnos, cursos, inscripciones y usuarios. Fue desarrollado como entrega final para el curso de Angular en Coderhouse.
 
 
 ## Funcionalidades principales
@@ -14,17 +14,18 @@ Este proyecto es una aplicación completa desarrollada con **Angular 20**, que i
   - Alumnos
   - Cursos
   - Inscripciones
-  - Usuarios (nuevo!)
+  - Usuarios
 
 - **Experiencia de usuario mejorada**:
   - Toolbar dinámico que muestra título contextual según la ruta
   - Manejo de "sin datos" en todas las tablas
   - Footer con información del proyecto
-  - Navegación personalizada según estado de autenticación
+  - Navegación personalizada según estado de autenticación y rol
 
 ## Características técnicas
 
 - **Arquitectura por módulos** con Lazy Loading para optimizar rendimiento
+- **Gestión de Estado Global con NgRx** con actions, reducer y selectors
 - **Comunicación con API REST** (Mock API) para todas las entidades
 - **Formularios Reactivos** con validaciones avanzadas
 - **Tipado estricto** en toda la aplicación (sin uso de `any`)
@@ -40,6 +41,7 @@ Este proyecto es una aplicación completa desarrollada con **Angular 20**, que i
 - Angular 20
 - TypeScript (con tipado estricto)
 - RxJS para programación reactiva
+- NgRx para la gestión de estado global
 - Angular Material (tablas, formularios, inputs, selects)
 - SASS para estilos estructurados
 - Mock API para simulación de backend
