@@ -1,4 +1,4 @@
-<div *ngIf="(loading$ | async); else loadingTpl">
+<div *ngIf="!(loading$ | async); else loadingTpl">
   <app-courses-table [courses]="(courses$ | async) ?? []"></app-courses-table>
 
   <nav class="acciones-navbar">
