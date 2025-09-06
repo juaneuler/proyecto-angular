@@ -23,7 +23,7 @@ export class Alumnos implements OnInit {
 
   constructor(
     private alumnosState: AlumnosState,
-    public authService: AuthService
+    private authService: AuthService
   ) {
     this.students$ = this.alumnosState.students$;
     this.isAdmin$ = this.authService.isAdmin$;
