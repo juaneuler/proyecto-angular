@@ -61,6 +61,21 @@ export class UsersEdit implements OnInit {
   }
 
   ngOnInit(): void {
+    if (!this.usuariosState.getUsers().length) {
+      this.loading$.next(true);
+      this.usuariosState.loadUsers().subscribe({
+        next: (users) => {
+          this.usersValue = users;
+          this.loading$.next(false);
+        },
+        error: () => {
+          this.snackbarNotification.error('Error al cargar los usuarios');
+          this.loading$.next(false);
+        },
+      });
+    } else {
+      this.usersValue = this.usuariosState.getUsers();
+    }
     // Cuando cambie el usuario seleccionado
     this.form
       .get('userId')
