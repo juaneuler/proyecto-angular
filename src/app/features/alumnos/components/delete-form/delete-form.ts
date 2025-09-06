@@ -39,18 +39,11 @@ export class DeleteForm implements OnInit {
   private snackbarNotification = inject(SnackbarNotification);
 
   studentForm!: FormGroup;
-
-  students$: Observable<Student[]>;
   loading$ = new BehaviorSubject<boolean>(false);
 
-  private studentsValue: Student[] = [];
+  students: Student[] = [];
 
-  constructor(private fb: FormBuilder) {
-    // Inicializamos el observable
-    this.students$ = this.alumnosState.students$.pipe(
-      tap((students) => (this.studentsValue = students))
-    );
-  }
+  constructor(private fb: FormBuilder) {}
 
   ngOnInit(): void {
     this.studentForm = this.fb.group({
@@ -64,6 +57,14 @@ export class DeleteForm implements OnInit {
         ],
       ],
     });
+
+    if (!this.alumnosState.getStudents().length) {
+      this.alumnosState.loadStudents().subscribe((students) => {
+        this.students = students;
+      });
+    } else {
+      this.students = this.alumnosState.getStudents();
+    }
   }
 
   onDelete() {
@@ -72,7 +73,7 @@ export class DeleteForm implements OnInit {
 
       const dni = Number(this.studentForm.value.dni);
       // Usamos studentsValue en lugar de getStudents()
-      const student = this.studentsValue.find((s) => s.dni === dni);
+      const student = this.students.find((s) => s.dni === dni);
 
       if (student) {
         this.alumnosState.deleteStudent(student.customId).subscribe({
@@ -88,6 +89,9 @@ export class DeleteForm implements OnInit {
             this.loading$.next(false);
           },
         });
+      } else {
+        this.snackbarNotification.error('Estudiante no encontrado');
+        this.loading$.next(false);
       }
     }
   }
