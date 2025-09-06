@@ -86,7 +86,11 @@ export class DeleteInscripcion implements OnInit {
     );
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.alumnosState.loadStudents().subscribe();
+    this.cursosState.loadCursos().subscribe();
+    this.inscripcionesState.loadInscripciones().subscribe();
+  }
 
   onSubmit(): void {
     if (this.form.valid) {
