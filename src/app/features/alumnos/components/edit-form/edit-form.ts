@@ -16,7 +16,6 @@ import { AlumnosState } from '../../alumnos-estado';
 import { RouterModule } from '@angular/router';
 import { AppRoutes } from '../../../../../shared/enums/routes';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-edit-form',
@@ -43,16 +42,12 @@ export class EditForm implements OnInit {
 
   selectedStudent$ = new BehaviorSubject<Student | null>(null);
   loading$ = new BehaviorSubject<boolean>(false);
-  students$: Observable<Student[]>;
+
+  students: Student[] = [];
 
   private studentsValue: Student[] = [];
 
-  constructor(private fb: FormBuilder) {
-    // Inicializar el observable de students y guardar el valor más reciente
-    this.students$ = this.alumnosState.students$.pipe(
-      tap((students) => (this.studentsValue = students))
-    );
-  }
+  constructor(private fb: FormBuilder) {}
 
   ngOnInit(): void {
     this.searchForm = this.fb.group({
@@ -80,12 +75,20 @@ export class EditForm implements OnInit {
         ],
       ],
     });
+
+    if (!this.alumnosState.getStudents().length) {
+      this.alumnosState.loadStudents().subscribe((students) => {
+        this.students = students;
+      });
+    } else {
+      this.students = this.alumnosState.getStudents();
+    }
   }
 
   onSearch() {
     const dni = Number(this.searchForm.value.dni);
     // Usamos studentsValue en lugar de students
-    const student = this.studentsValue.find((student) => student.dni === dni);
+    const student = this.students.find((student) => student.dni === dni);
 
     if (student) {
       this.selectedStudent$.next(student);
