@@ -10,5 +10,5 @@ export const ALUMNOS_ROUTES: Routes = [
   { path: '', component: Alumnos },
   { path: AppRoutes.AlumnosAgregar, component: AddForm },
   { path: AppRoutes.AlumnosEditar, component: EditForm, canActivate: [adminGuard] },
-  { path: AppRoutes.AlumnosEliminar, component: DeleteForm, canActivate: [adminGuard]  },
+  { path: AppRoutes.AlumnosEliminar, component: DeleteForm, canActivate: [adminGuard] },
 ];
