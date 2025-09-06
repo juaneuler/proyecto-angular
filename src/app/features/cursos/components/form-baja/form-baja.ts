@@ -15,8 +15,7 @@ import { SnackbarNotification } from '../../../../../shared/services/snackbar-no
 import { RouterModule } from '@angular/router';
 import { AppRoutes } from '../../../../../shared/enums/routes';
 import { Course } from '../../../../../shared/entities';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-form-baja',
@@ -39,19 +38,11 @@ export class FormBaja implements OnInit {
   private snackbarNotification = inject(SnackbarNotification);
 
   courseForm!: FormGroup;
-
   loading$ = new BehaviorSubject<boolean>(false);
-  courses$: Observable<Course[]>;
 
   private coursesValue: Course[] = [];
 
-  constructor(private fb: FormBuilder) {
-    // Asignamos el observable directamente
-    this.courses$ = this.cursosState.cursos$.pipe(
-      // Guardamos el valor actual para usarlo en métodos
-      tap((courses) => (this.coursesValue = courses))
-    );
-  }
+  constructor(private fb: FormBuilder) {}
 
   ngOnInit(): void {
     this.courseForm = this.fb.group({
@@ -65,6 +56,22 @@ export class FormBaja implements OnInit {
         ],
       ],
     });
+
+    if (!this.cursosState.getCourses().length) {
+      this.loading$.next(true);
+      this.cursosState.loadCursos().subscribe({
+        next: (courses) => {
+          this.coursesValue = courses;
+          this.loading$.next(false);
+        },
+        error: () => {
+          this.snackbarNotification.error('Error al cargar los cursos');
+          this.loading$.next(false);
+        },
+      });
+    } else {
+      this.coursesValue = this.cursosState.getCourses();
+    }
   }
 
   onDelete() {
