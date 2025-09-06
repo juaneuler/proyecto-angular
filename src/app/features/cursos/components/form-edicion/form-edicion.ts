@@ -15,8 +15,7 @@ import { CursosState } from '../../cursos-estado';
 import { RouterModule } from '@angular/router';
 import { AppRoutes } from '../../../../../shared/enums/routes';
 import { Course } from '../../../../../shared/entities';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-form-edicion',
@@ -41,17 +40,11 @@ export class FormEdicion implements OnInit {
   searchForm!: FormGroup;
   editForm!: FormGroup;
   selectedCourse$ = new BehaviorSubject<Course | null>(null);
-
-  courses$: Observable<Course[]>;
   loading$ = new BehaviorSubject<boolean>(false);
 
   private coursesValue: Course[] = [];
 
-  constructor(private fb: FormBuilder) {
-    this.courses$ = this.cursosState.cursos$.pipe(
-      tap((courses) => (this.coursesValue = courses))
-    );
-  }
+  constructor(private fb: FormBuilder) {}
 
   ngOnInit(): void {
     this.searchForm = this.fb.group({
@@ -79,6 +72,22 @@ export class FormEdicion implements OnInit {
         ],
       ],
     });
+
+    if (!this.cursosState.getCourses().length) {
+      this.loading$.next(true);
+      this.cursosState.loadCursos().subscribe({
+        next: (courses) => {
+          this.coursesValue = courses;
+          this.loading$.next(false);
+        },
+        error: () => {
+          this.snackbarNotification.error('Error al cargar los cursos');
+          this.loading$.next(false);
+        },
+      });
+    } else {
+      this.coursesValue = this.cursosState.getCourses();
+    }
   }
 
   onSearch() {
