@@ -55,16 +55,32 @@ export class UsersDelete implements OnInit {
     );
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    if (!this.usuariosState.getUsers().length) {
+      this.loading$.next(true);
+      this.usuariosState.loadUsers().subscribe({
+        next: (users) => {
+          this.usersValue = users;
+          this.loading$.next(false);
+        },
+        error: () => {
+          this.snackbar.error('Error al cargar los usuarios');
+          this.loading$.next(false);
+        },
+      });
+    } else {
+      this.usersValue = this.usuariosState.getUsers();
+    }
+  }
 
   onSubmit(): void {
     if (this.form.valid) {
       this.loading$.next(true);
       const userId = this.form.value.userId;
-      
+
       // Usamos usersValue en lugar de getUsers()
-      const user = this.usersValue.find(u => u.id === userId);
-      
+      const user = this.usersValue.find((u) => u.id === userId);
+
       if (user) {
         this.usuariosState.deleteUser(user.id).subscribe({
           next: () => {
@@ -75,7 +91,7 @@ export class UsersDelete implements OnInit {
           error: (err: unknown) => {
             this.snackbar.error('Error al eliminar el usuario');
             this.loading$.next(false);
-          }
+          },
         });
       }
     }
