@@ -101,6 +101,10 @@ export class EditInscripcion implements OnInit {
   }
 
   ngOnInit(): void {
+    this.alumnosState.loadStudents().subscribe();
+    this.cursosState.loadCursos().subscribe();
+    this.inscripcionesState.loadInscripciones().subscribe();
+
     this.form
       .get('alumnoDNI')
       ?.valueChanges.pipe(
