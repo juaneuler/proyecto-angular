@@ -39,18 +39,18 @@
       </mat-form-field>
     </div>
 
-    <button type="submit" [disabled]="userForm.invalid || (loading$ | async)" class="boton-submit">
-      <ng-container *ngIf="!(loading$ | async)">Agregar Usuario</ng-container>
-      <div *ngIf="loading$ | async" class="spinner-border spinner-border-sm text-light" role="status">
-        <span class="visually-hidden">Cargando...</span>
-      </div>
-    </button>
+    <div class="button-container">
+      <button mat-raised-button color="primary" type="submit" [disabled]="userForm.invalid || (loading$ | async)">
+        {{(loading$ | async) ? 'Guardando...' : 'Agregar Usuario'}}
+      </button>
 
-    <button type="button" (click)="onReset()" class="boton-reset">
-      Limpiar Formulario
-    </button>
+      <button mat-raised-button color="warn" type="button" (click)="onReset()">
+        Limpiar Formulario
+      </button>
 
-    <a [routerLink]="['/', routes.Usuarios]" class="boton-volver">Volver a la lista</a>
-
+      <a mat-stroked-button [routerLink]="['/', routes.Usuarios]">
+        Volver a la lista
+      </a>
+    </div>
   </form>
 </div>
