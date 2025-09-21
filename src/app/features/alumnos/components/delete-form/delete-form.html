@@ -1,44 +1,37 @@
 <div class="delete-form">
     <h2 appBigtitle>Eliminar Estudiante</h2>
 
-    <form [formGroup]="studentForm" (ngSubmit)="onDelete()">
+    <form [formGroup]="studentForm" (ngSubmit)="onDelete()" class="form">
+        <mat-form-field appearance="fill">
+            <mat-label>Seleccionar Estudiante</mat-label>
+            <mat-select formControlName="dni">
+                <mat-option *ngFor="let student of students$ | async" [value]="student.dni">
+                    {{ student.name }} {{ student.surname }} (DNI: {{ student.dni }})
+                </mat-option>
+            </mat-select>
+            <mat-error *ngIf="studentForm.get('dni')?.hasError('required')">
+                Debe seleccionar un estudiante
+            </mat-error>
+        </mat-form-field>
 
-        <div class="form-group">
-            <label for="dni">DNI:</label>
-            <input type="number" id="dni" formControlName="dni" min="0" step="1">
-            <div *ngIf="studentForm.get('dni')?.touched && studentForm.get('dni')?.invalid" class="error">
-                <div *ngIf="studentForm.get('dni')?.errors?.['required']">
-                    Ingresar el número de DNI es obligatorio.
-                </div>
-                <div *ngIf="studentForm.get('dni')?.errors?.['pattern']">
-                    El DNI debe tener entre 7 y 8 dígitos y no puede comenzar con 0.
-                </div>
-            </div>
+        <mat-form-field appearance="fill">
+            <mat-label>Motivo de la baja</mat-label>
+            <textarea matInput formControlName="descripcion" placeholder="Describa el motivo de la baja"></textarea>
+            <mat-error *ngIf="studentForm.get('descripcion')?.invalid">
+                {{studentForm.get('descripcion')?.hasError('required') ? 'El motivo es obligatorio' :
+                studentForm.get('descripcion')?.hasError('minlength') ? 'Mínimo 10 caracteres' :
+                'Máximo 50 caracteres'}}
+            </mat-error>
+        </mat-form-field>
+
+        <div class="button-container">
+            <button mat-raised-button color="warn" type="submit" [disabled]="studentForm.invalid || (loading$ | async)">
+                {{(loading$ | async) ? 'Eliminando...' : 'Eliminar Estudiante'}}
+            </button>
+
+            <a mat-stroked-button [routerLink]="['/', routes.Alumnos]">
+                Volver a la lista
+            </a>
         </div>
-
-        <div class="form-group">
-            <label for="descripcion">Motivo de la baja:</label>
-            <input type="text" id="descripcion" formControlName="descripcion">
-            <div *ngIf="studentForm.get('descripcion')?.invalid && studentForm.get('descripcion')?.touched"
-                class="error">
-                <div *ngIf="studentForm.get('descripcion')?.errors?.['required']">
-                    Ingresar el motivo por el cual se da de baja es requerido.
-                </div>
-                <div *ngIf="studentForm.get('descripcion')?.errors?.['minlength']">
-                    El motivo de la baja debe tener al menos 10 caracteres.
-                </div>
-                <div *ngIf="studentForm.get('descripcion')?.errors?.['maxlength']">
-                    El motivo de la baja no puede exceder los 50 caracteres.
-                </div>
-            </div>
-        </div>
-
-        <button type="submit" [disabled]="studentForm.invalid || (loading$ | async)" class="boton-borrar">
-            <ng-container *ngIf="!(loading$ | async)">Eliminar Estudiante</ng-container>
-            <div *ngIf="loading$ | async" class="spinner-border spinner-border-sm text-light" role="status">
-                <span class="visually-hidden">Cargando...</span>
-            </div>
-        </button>
-
-        <a [routerLink]="['/', routes.Alumnos]" class="boton-volver">Volver a la lista</a>
     </form>
+</div>

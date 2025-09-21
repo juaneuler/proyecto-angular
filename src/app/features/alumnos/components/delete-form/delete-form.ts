@@ -9,13 +9,13 @@ import {
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
 import { Bigtitle } from '../../../../../shared/directives/bigtitle';
 import { AlumnosState } from '../../alumnos-estado';
 import { SnackbarNotification } from '../../../../../shared/services/snackbar-notification';
 import { RouterModule } from '@angular/router';
 import { AppRoutes } from '../../../../../shared/enums/routes';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { BehaviorSubject } from 'rxjs';
 import { Student } from '../../../../../shared/entities';
 
 @Component({
@@ -26,6 +26,7 @@ import { Student } from '../../../../../shared/entities';
     MatButtonModule,
     MatInputModule,
     MatFormFieldModule,
+    MatSelectModule,
     Bigtitle,
     RouterModule,
   ],
@@ -41,29 +42,39 @@ export class DeleteForm implements OnInit {
   studentForm!: FormGroup;
   loading$ = new BehaviorSubject<boolean>(false);
 
-  students: Student[] = [];
+  students$ = this.alumnosState.students$;
+
+  private studentsValue: Student[] = [];
 
   constructor(private fb: FormBuilder) {}
 
   ngOnInit(): void {
     this.studentForm = this.fb.group({
-      dni: ['', [Validators.required, Validators.pattern(/^[1-9]\d{6,7}$/)]],
+      dni: ['', Validators.required],
       descripcion: [
         '',
         [
           Validators.required,
-          Validators.minLength(10), // Motivo de la baja: al menos 10 caracteres
-          Validators.maxLength(50), // Motivo de la baja: máximo 50 caracteres
+          Validators.minLength(10),
+          Validators.maxLength(50),
         ],
       ],
     });
 
     if (!this.alumnosState.getStudents().length) {
-      this.alumnosState.loadStudents().subscribe((students) => {
-        this.students = students;
+      this.loading$.next(true);
+      this.alumnosState.loadStudents().subscribe({
+        next: (students) => {
+          this.studentsValue = students;
+          this.loading$.next(false);
+        },
+        error: () => {
+          this.snackbarNotification.error('Error al cargar los estudiantes');
+          this.loading$.next(false);
+        }
       });
     } else {
-      this.students = this.alumnosState.getStudents();
+      this.studentsValue = this.alumnosState.getStudents();
     }
   }
 
@@ -73,7 +84,7 @@ export class DeleteForm implements OnInit {
 
       const dni = Number(this.studentForm.value.dni);
       // Usamos studentsValue en lugar de getStudents()
-      const student = this.students.find((s) => s.dni === dni);
+      const student = this.studentsValue.find((s) => s.dni === dni);
 
       if (student) {
         this.alumnosState.deleteStudent(student.customId).subscribe({
