@@ -7,6 +7,7 @@ import {
   ReactiveFormsModule,
 } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { Student } from '../../../../../shared/entities';
@@ -15,7 +16,7 @@ import { SnackbarNotification } from '../../../../../shared/services/snackbar-no
 import { AlumnosState } from '../../alumnos-estado';
 import { RouterModule } from '@angular/router';
 import { AppRoutes } from '../../../../../shared/enums/routes';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-edit-form',
@@ -23,6 +24,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
     CommonModule,
     ReactiveFormsModule,
     MatFormFieldModule,
+    MatSelectModule,
     MatInputModule,
     MatButtonModule,
     Bigtitle,
@@ -44,6 +46,8 @@ export class EditForm implements OnInit {
   loading$ = new BehaviorSubject<boolean>(false);
 
   students: Student[] = [];
+
+  students$ = this.alumnosState.students$
 
   private studentsValue: Student[] = [];
 
