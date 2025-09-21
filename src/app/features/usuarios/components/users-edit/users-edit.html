@@ -40,20 +40,16 @@
 
     <!-- Botones de acción -->
     <div class="actions">
-      <button type="submit"
-        [disabled]="form.invalid || (loading$ | async) || (selectedUser$ | async)?.rol === form.value.rol"
-        class="boton-submit">
-        <ng-container *ngIf="!(loading$ | async)">Guardar Cambios</ng-container>
-        <div *ngIf="loading$ | async" class="spinner-border spinner-border-sm text-light" role="status">
-          <span class="visually-hidden">Cargando...</span>
-        </div>
+      <button mat-raised-button color="primary" type="submit"
+        [disabled]="form.invalid || (loading$ | async) || (selectedUser$ | async)?.rol === form.value.rol">
+        {{(loading$ | async) ? 'Guardando...' : 'Guardar Cambios'}}
       </button>
 
-      <button type="button" (click)="onReset()" class="boton-reset">
+      <button mat-raised-button color="warn" type="button" (click)="onReset()">
         Limpiar formulario
       </button>
 
-      <a [routerLink]="['/', routes.Usuarios]" class="boton-volver">
+      <a mat-stroked-button [routerLink]="['/', routes.Usuarios]">
         Volver a la lista
       </a>
     </div>
