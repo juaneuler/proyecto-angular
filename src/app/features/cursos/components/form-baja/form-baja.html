@@ -1,38 +1,37 @@
 <div class="delete-form">
   <h2 appBigtitle>Eliminar Curso</h2>
 
-  <form [formGroup]="courseForm" (ngSubmit)="onDelete()">
+  <form [formGroup]="courseForm" (ngSubmit)="onDelete()" class="form">
+    <mat-form-field appearance="fill">
+      <mat-label>Seleccionar Curso</mat-label>
+      <mat-select formControlName="code">
+        <mat-option *ngFor="let curso of courses$ | async" [value]="curso.code">
+          {{ curso.name }} ({{ curso.code }})
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="courseForm.get('code')?.hasError('required')">
+        Debe seleccionar un curso
+      </mat-error>
+    </mat-form-field>
 
-    <div class="form-group">
-      <label for="code">Código:</label>
-      <input type="text" id="code" formControlName="code" placeholder="Ingrese el código del curso">
-      <div *ngIf="courseForm.get('code')?.touched && courseForm.get('code')?.invalid" class="error">
-        <div *ngIf="courseForm.get('code')?.errors?.['required']">El código es obligatorio.</div>
-        <div *ngIf="courseForm.get('code')?.errors?.['pattern']">
-          El código debe tener el formato "XX000" (dos letras mayúsculas y tres números).
-        </div>
-      </div>
+    <mat-form-field appearance="fill">
+      <mat-label>Motivo de la baja</mat-label>
+      <textarea matInput formControlName="descripcion" placeholder="Describa el motivo de la baja"></textarea>
+      <mat-error *ngIf="courseForm.get('descripcion')?.invalid">
+        {{courseForm.get('descripcion')?.hasError('required') ? 'El motivo es obligatorio' :
+        courseForm.get('descripcion')?.hasError('minlength') ? 'Mínimo 10 caracteres' :
+        'Máximo 50 caracteres'}}
+      </mat-error>
+    </mat-form-field>
+
+    <div class="button-container">
+      <button mat-raised-button color="warn" type="submit" [disabled]="courseForm.invalid || (loading$ | async)">
+        {{(loading$ | async) ? 'Eliminando...' : 'Eliminar Curso'}}
+      </button>
+
+      <a mat-stroked-button [routerLink]="['/', routes.Cursos]">
+        Volver a la lista
+      </a>
     </div>
-
-    <div class="form-group">
-      <label for="descripcion">Motivo de la baja:</label>
-      <input type="text" id="descripcion" formControlName="descripcion" placeholder="Motivo de la baja">
-      <div *ngIf="courseForm.get('descripcion')?.invalid && courseForm.get('descripcion')?.touched" class="error">
-        <div *ngIf="courseForm.get('descripcion')?.errors?.['required']">El motivo es obligatorio.</div>
-        <div *ngIf="courseForm.get('descripcion')?.errors?.['minlength']">El motivo debe tener al menos 10 caracteres.
-        </div>
-        <div *ngIf="courseForm.get('descripcion')?.errors?.['maxlength']">El motivo no puede exceder los 50 caracteres.
-        </div>
-      </div>
-    </div>
-
-    <button type="submit" [disabled]="courseForm.invalid || (loading$ | async)" class="boton-borrar">
-      <ng-container *ngIf="!(loading$ | async)">Eliminar Curso</ng-container>
-      <div *ngIf="loading$ | async" class="spinner-border spinner-border-sm text-light" role="status">
-        <span class="visually-hidden">Cargando...</span>
-      </div>
-    </button>
-
-    <a [routerLink]="['/', routes.Cursos]" class="boton-volver">Volver a la lista</a>
   </form>
 </div>

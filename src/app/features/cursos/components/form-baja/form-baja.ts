@@ -9,6 +9,7 @@ import {
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
 import { Bigtitle } from '../../../../../shared/directives/bigtitle';
 import { CursosState } from '../../cursos-estado';
 import { SnackbarNotification } from '../../../../../shared/services/snackbar-notification';
@@ -25,6 +26,7 @@ import { BehaviorSubject } from 'rxjs';
     MatButtonModule,
     MatInputModule,
     MatFormFieldModule,
+    MatSelectModule,
     Bigtitle,
     RouterModule,
   ],
@@ -40,13 +42,15 @@ export class FormBaja implements OnInit {
   courseForm!: FormGroup;
   loading$ = new BehaviorSubject<boolean>(false);
 
+  courses$ = this.cursosState.cursos$;
+
   private coursesValue: Course[] = [];
 
   constructor(private fb: FormBuilder) {}
 
   ngOnInit(): void {
     this.courseForm = this.fb.group({
-      code: ['', [Validators.required, Validators.pattern(/^[A-Z]{2}\d{3}$/)]],
+      code: ['', Validators.required],
       descripcion: [
         '',
         [
