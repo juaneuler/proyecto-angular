@@ -23,11 +23,13 @@
     Este alumno ya está inscrito en este curso! Debe elegir otro diferente para continuar
   </div>
 
-  <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid">
-    Inscribir Alumno
-  </button>
+  <div class="button-container">
+    <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid">
+      Inscribir Alumno
+    </button>
 
-  <a [routerLink]="['/', routes.Inscripciones]" class="boton-volver">
-    Volver a la lista
-  </a>
+    <a mat-stroked-button [routerLink]="['/', routes.Inscripciones]">
+      Volver a la lista
+    </a>
+  </div>
 </form>
