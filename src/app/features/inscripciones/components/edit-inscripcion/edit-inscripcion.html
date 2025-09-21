@@ -22,16 +22,18 @@
             </mat-select>
         </mat-form-field>
 
-        <button mat-raised-button color="primary" type="submit" [disabled]="
-    form.invalid || 
-    form.get('nuevoCursoCodigo')?.value === inscripcionActual?.cursoCodigo
-  ">
-            Modificar inscripción
-        </button>
+        <div class="button-container">
+            <button mat-raised-button color="primary" type="submit" [disabled]="
+      form.invalid || 
+      form.get('nuevoCursoCodigo')?.value === inscripcionActual?.cursoCodigo
+    ">
+                Modificar inscripción
+            </button>
 
-        <a [routerLink]="['/', routes.Inscripciones]" class="boton-volver">
-            Volver a la lista
-        </a>
+            <a mat-stroked-button [routerLink]="['/', routes.Inscripciones]">
+                Volver a la lista
+            </a>
+        </div>
 
     </form>
 </div>
