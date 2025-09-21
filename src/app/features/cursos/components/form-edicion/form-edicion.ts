@@ -7,6 +7,7 @@ import {
   ReactiveFormsModule,
 } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { Bigtitle } from '../../../../../shared/directives/bigtitle';
@@ -23,6 +24,7 @@ import { BehaviorSubject } from 'rxjs';
     CommonModule,
     ReactiveFormsModule,
     MatFormFieldModule,
+    MatSelectModule,
     MatInputModule,
     MatButtonModule,
     Bigtitle,
@@ -42,13 +44,15 @@ export class FormEdicion implements OnInit {
   selectedCourse$ = new BehaviorSubject<Course | null>(null);
   loading$ = new BehaviorSubject<boolean>(false);
 
+  courses$ = this.cursosState.cursos$;
+
   private coursesValue: Course[] = [];
 
   constructor(private fb: FormBuilder) {}
 
   ngOnInit(): void {
     this.searchForm = this.fb.group({
-      code: ['', [Validators.required, Validators.pattern(/^[A-Z]{2}\d{3}$/)]],
+      code: ['', Validators.required],
     });
 
     this.editForm = this.fb.group({

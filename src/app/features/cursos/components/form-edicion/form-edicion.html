@@ -2,65 +2,68 @@
   <h2 appBigtitle>Editar Curso</h2>
 
   <form [formGroup]="searchForm" (ngSubmit)="onSearch()" class="form">
-    <div class="form-group">
-      <label for="code">Buscar por Código:</label>
-      <input type="text" id="code" formControlName="code" placeholder="Ingrese el código del curso">
-      <div *ngIf="searchForm.get('code')?.touched && searchForm.get('code')?.invalid" class="error">
-        <div *ngIf="searchForm.get('code')?.hasError('required')">El código es obligatorio.</div>
-        <div *ngIf="searchForm.get('code')?.hasError('pattern')">
-          El código debe tener el formato "XX000" (dos letras mayúsculas y tres números).
-        </div>
-      </div>
-    </div>
+    <mat-form-field appearance="fill">
+      <mat-label>Seleccionar Curso</mat-label>
+      <mat-select formControlName="code">
+        <mat-option *ngFor="let curso of courses$ | async" [value]="curso.code">
+          {{ curso.name }} ({{ curso.code }})
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
 
-    <button type="submit" [disabled]="searchForm.invalid" class="boton-submit">Buscar</button>
-    <button type="button" (click)="onReset()" class="boton-reset">Limpiar</button>
-    <a [routerLink]="['/', routes.Cursos]" class="boton-volver">Volver a la lista</a>
+    <div class="button-container">
+      <button mat-raised-button color="primary" type="submit" [disabled]="searchForm.invalid">
+        Buscar
+      </button>
+      <button mat-raised-button color="warn" type="button" (click)="onReset()">
+        Limpiar
+      </button>
+      <a mat-stroked-button [routerLink]="['/', routes.Cursos]">
+        Volver a la lista
+      </a>
+    </div>
   </form>
 
-  <hr *ngIf="(selectedCourse$ | async)" />
+  <hr *ngIf="selectedCourse$ | async" />
 
-  <!-- Formulario de edición de curso -->
-  <form *ngIf="(selectedCourse$ | async)" [formGroup]="editForm" (ngSubmit)="onEdit()" class="form">
-    <div class="form-group">
-      <label for="name">Nombre:</label>
-      <input type="text" id="name" formControlName="name" placeholder="Editar nombre del curso">
-      <div *ngIf="editForm.get('name')?.touched && editForm.get('name')?.invalid" class="error">
-        <div *ngIf="editForm.get('name')?.hasError('required')">El nombre es obligatorio.</div>
-        <div *ngIf="editForm.get('name')?.hasError('minlength')">El nombre debe tener al menos 3 caracteres.</div>
-        <div *ngIf="editForm.get('name')?.hasError('maxlength')">El nombre no puede exceder los 50 caracteres.</div>
-        <div *ngIf="editForm.get('name')?.hasError('pattern')">Solo se permiten letras, números y espacios.</div>
-      </div>
+  <!-- Formulario de edición -->
+  <form *ngIf="selectedCourse$ | async" [formGroup]="editForm" (ngSubmit)="onEdit()" class="form">
+    <mat-form-field appearance="fill">
+      <mat-label>Nombre del Curso</mat-label>
+      <input matInput formControlName="name" placeholder="Nombre del curso">
+      <mat-error *ngIf="editForm.get('name')?.invalid">
+        {{editForm.get('name')?.hasError('required') ? 'El nombre es obligatorio' :
+        editForm.get('name')?.hasError('minlength') ? 'Mínimo 3 caracteres' :
+        'Máximo 50 caracteres'}}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Código</mat-label>
+      <input matInput formControlName="code" placeholder="XX000">
+      <mat-error *ngIf="editForm.get('code')?.invalid">
+        El código debe tener formato XX000
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Créditos</mat-label>
+      <input matInput type="number" formControlName="credits" min="1" max="10">
+      <mat-error *ngIf="editForm.get('credits')?.invalid">
+        Los créditos deben estar entre 1 y 10
+      </mat-error>
+    </mat-form-field>
+
+    <div class="button-container">
+      <button mat-raised-button color="primary" type="submit" [disabled]="editForm.invalid || (loading$ | async)">
+        {{(loading$ | async) ? 'Guardando...' : 'Guardar Cambios'}}
+      </button>
+      <button mat-raised-button color="warn" type="button" (click)="onReset()">
+        Cancelar
+      </button>
+      <a mat-stroked-button [routerLink]="['/', routes.Cursos]">
+        Volver a la lista
+      </a>
     </div>
-
-    <div class="form-group">
-      <label for="code">Código:</label>
-      <input type="text" id="code" formControlName="code" placeholder="Ej: NG105">
-      <div *ngIf="editForm.get('code')?.touched && editForm.get('code')?.invalid" class="error">
-        <div *ngIf="editForm.get('code')?.hasError('required')">El código es obligatorio.</div>
-        <div *ngIf="editForm.get('code')?.hasError('pattern')">El código debe tener el formato "XX000".</div>
-      </div>
-    </div>
-
-    <div class="form-group">
-      <label for="credits">Créditos:</label>
-      <input type="number" id="credits" formControlName="credits" min="1" max="10" step="1"
-        placeholder="Cantidad de créditos">
-      <div *ngIf="editForm.get('credits')?.touched && editForm.get('credits')?.invalid" class="error">
-        <div *ngIf="editForm.get('credits')?.hasError('required')">Los créditos son obligatorios.</div>
-        <div *ngIf="editForm.get('credits')?.hasError('min')">Los créditos deben ser al menos 1.</div>
-        <div *ngIf="editForm.get('credits')?.hasError('max')">Los créditos no pueden exceder de 10.</div>
-        <div *ngIf="editForm.get('credits')?.hasError('pattern')">Solo se permiten números enteros.</div>
-      </div>
-    </div>
-
-    <button type="submit" [disabled]="editForm.invalid || (loading$ | async)" class="boton-submit">
-      <ng-container *ngIf="!(loading$ | async)">Guardar Cambios</ng-container>
-      <div *ngIf="loading$ | async" class="spinner-border spinner-border-sm text-light" role="status">
-        <span class="visually-hidden">Cargando...</span>
-      </div>
-    </button>
-    <button type="button" (click)="onReset()" class="boton-reset">Cancelar</button>
-    <a [routerLink]="['/', routes.Cursos]" class="boton-volver">Volver a la lista</a>
   </form>
 </div>
