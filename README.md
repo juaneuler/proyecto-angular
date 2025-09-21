@@ -22,6 +22,7 @@ Este proyecto es una aplicación completa desarrollada con **Angular 20**, que i
   - Footer con información del proyecto
   - Navegación personalizada según estado de autenticación y rol
 
+
 ## Características técnicas
 
 - **Arquitectura por módulos** con Lazy Loading para optimizar rendimiento
@@ -35,6 +36,14 @@ Este proyecto es una aplicación completa desarrollada con **Angular 20**, que i
 - **Guards** para proteger rutas según rol de usuario
 - **Notificaciones** con Angular Material Snackbar
 - **Testing unitario** con Karma y Jasmine
+
+
+## SEO y Social Sharing
+
+- Meta tags para SEO
+- Open Graph y Twitter Card con imagen representativa del proyecto
+- Deploy en Netlify: [https://sistema-gestion-angular.netlify.app](https://sistema-gestion-angular.netlify.app)
+
 
 ## Tecnologías utilizadas
 
@@ -55,6 +64,7 @@ Este proyecto es una aplicación completa desarrollada con **Angular 20**, que i
 - cd proyecto-angular
 - npm install
 - ng serve
+
 
 ## Autor
 
