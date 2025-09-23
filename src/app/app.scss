@@ -1,6 +1,6 @@
 .container {
   display: grid;
-  grid-template-areas: 
+  grid-template-areas:
     'toolbar toolbar'
     'navbar content'
     'footer footer';
@@ -19,8 +19,38 @@
 
 .content {
   grid-area: content;
+  padding: 20px;
 }
 
 .footer {
   grid-area: footer;
+}
+
+// Media queries
+@media (max-width: 992px) {
+  .container {
+    grid-template-areas:
+      "toolbar"
+      "navbar"
+      "content"
+      "footer";
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto 1fr auto;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .content {
+    width: 100%;
+    max-width: 100%;
+    padding: 20px;
+    margin: 0 auto;
+    box-sizing: border-box;
+  }
+
+  .navbar {
+    width: 100%;
+    padding: 0 20px;
+    box-sizing: border-box;
+  }
 }
