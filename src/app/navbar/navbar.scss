@@ -84,3 +84,19 @@ header {
         }
     }
 }
+
+// Media queries 
+
+@media screen and (max-width: 992px) {
+    header {
+        nav {
+            .navbar {
+                flex-direction: row;
+
+                ul {
+                    flex-direction: row;
+                }
+            }
+        }
+    }
+}
